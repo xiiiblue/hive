@@ -1,0 +1,31 @@
+{
+  "name": "hive-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "蜂巢：企业内网员工数字分身平台，产品、架构与使用文档",
+  "engines": {
+    "node": ">=24.18.0"
+  },
+  "packageManager": "npm@11.16.0",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "check": "astro check && npm run build && node --test tests/site.test.mjs",
+    "import:manuals": "node scripts/import-manuals.mjs",
+    "check:browser": "node scripts/check-browser.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "astro": "7.4.0",
+    "markdown-it": "15.0.2",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@types/markdown-it": "14.1.2",
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  }
+}

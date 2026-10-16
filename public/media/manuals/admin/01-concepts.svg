@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+<title id="title">管理员要准备什么，员工任务怎样使用这些配置</title><desc id="desc">人员身份、可用能力、执行条件三组配置共同支持员工任务，任务和调用、费用、事件审计与备份帮助管理员管理结果。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#7d929e" stroke-width="1.5"/></marker></defs>
+<rect width="1280" height="760" rx="18" fill="#f4f7f9"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" fill="#243848">
+<text x="46" y="57" font-size="28" font-weight="700">先准备人员、能力和执行条件，再开展员工任务</text>
+<text x="46" y="91" font-size="17" fill="#607583">三个问题分别配置；管理员负责配置，员工使用自己的身份工作。</text>
+<g fill="#fff" stroke="#ccd8df"><rect x="44" y="123" width="372" height="275" rx="12"/><rect x="454" y="123" width="372" height="275" rx="12"/><rect x="864" y="123" width="372" height="275" rx="12"/></g>
+<g font-size="22" font-weight="650"><text x="70" y="165">谁来工作</text><text x="480" y="165">可以使用什么</text><text x="890" y="165">怎样执行工作</text></g>
+<g font-size="19"><text x="70" y="211">员工账号：身份与登录</text><text x="70" y="253">部门：归类，不自动授予权限</text><text x="70" y="295">工作规范：任务应遵守的要求</text><text x="70" y="337">管理员账号：维护整个平台</text>
+<text x="480" y="211">业务系统：使用资格和公共信息</text><text x="480" y="253">企业Skill：做法和配套文件</text><text x="480" y="295">业务面板：业务操作页面</text><text x="480" y="337">MCP：任务能够调用的工具</text>
+<text x="890" y="211">执行引擎：推进任务、调用工具</text><text x="890" y="253">模型：理解、推理和生成</text><text x="890" y="295">工作空间：保存员工资产</text><text x="890" y="337">运行环境：执行程序的容器</text></g>
+<g stroke="#7d929e" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M230 399V429H500V459"/><path d="M640 399V459"/><path d="M1050 399V429H780V459"/><path d="M640 553V607"/></g>
+<rect x="326" y="462" width="628" height="90" rx="12" fill="#e5f1ee" stroke="#8fb5a8"/><text x="640" y="498" text-anchor="middle" font-size="23" font-weight="650">员工提出任务 → 引擎使用模型与已授权能力</text><text x="640" y="531" text-anchor="middle" font-size="18">一个任务可能包含多次模型调用，文件保存在员工工作空间</text>
+<rect x="44" y="610" width="1192" height="110" rx="12" fill="white" stroke="#ccd8df"/><text x="70" y="649" font-size="22" font-weight="650">怎样管理结果</text><text x="70" y="686" font-size="19">任务与模型调用：查执行过程　　用量与费用：核对消耗　　运营事件与审计：查问题和操作　　备份：恢复员工资产</text>
+</g></svg>

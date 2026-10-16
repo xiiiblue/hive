@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /hive/
+Sitemap: https://www.bluexiii.com/hive/sitemap-index.xml

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="740" viewBox="0 0 1280 740" role="img" aria-labelledby="title desc">
+<title id="title">从一项工作出发理解员工工作台</title><desc id="desc">先选业务范围，再描述要求并使用文件、技能与工具，最后检查结果。工作空间保留资料，技能、记忆与自动化帮助复用工作。</desc>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#6d9287" stroke-width="1.5"/></marker></defs>
+<rect width="1280" height="740" rx="18" fill="#f3f7f6"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" fill="#243b38">
+<text x="46" y="58" font-size="28" font-weight="700">把工作讲清楚，把结果保留下来</text><text x="46" y="94" font-size="18" fill="#637c74">管理员准备账号与企业能力；你选择场景、提出要求、检查结果，并决定怎样复用。</text>
+<g fill="white" stroke="#cbdcd6"><rect x="44" y="135" width="350" height="224" rx="12"/><rect x="465" y="135" width="350" height="224" rx="12"/><rect x="886" y="135" width="350" height="224" rx="12"/></g>
+<g font-size="22" font-weight="650"><text x="70" y="177">1　先选工作场景</text><text x="491" y="177">2　描述并执行任务</text><text x="912" y="177">3　检查工作结果</text></g>
+<g font-size="19"><text x="70" y="223">业务范围：综合或具体系统</text><text x="70" y="265">对话：用文字讲清目标</text><text x="70" y="307">业务面板：按页面流程操作</text>
+<text x="491" y="223">文件：提供需要处理的资料</text><text x="491" y="265">技能：复用做法与配套文件</text><text x="491" y="307">模型与工具：推进实际工作</text>
+<text x="912" y="223">查看文字、文件与业务结果</text><text x="912" y="265">核对来源、异常和完成状态</text><text x="912" y="307">必要时补充要求或取消任务</text></g>
+<g stroke="#6d9287" stroke-width="2" fill="none" marker-end="url(#a)"><path d="M396 247H451"/><path d="M817 247H872"/><path d="M1062 361V410H640V450"/></g>
+<rect x="44" y="452" width="1192" height="100" rx="12" fill="#e6f1eb" stroke="#9ebfac"/><text x="70" y="492" font-size="22" font-weight="650">工作空间：保存你的资料和个人资产</text><text x="70" y="527" font-size="19">文件管理器用于整理资料，终端用于运行程序；程序停止不等于持久文件已经删除。</text>
+<rect x="44" y="586" width="1192" height="112" rx="12" fill="white" stroke="#cbdcd6"/><text x="70" y="627" font-size="22" font-weight="650">下次怎样少做重复工作</text><text x="70" y="664" font-size="19">对话分组与星标：找回记录　　个人记忆：保留长期背景　　技能：保存做法　　自动化：按时执行</text>
+</g></svg>

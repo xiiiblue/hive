@@ -1,0 +1,6 @@
+---
+import {docUrl,type Doc,sections} from '../lib/content';import Icon from './Icon.astro';
+interface Props {docs:Doc[];compact?:boolean;}
+const {docs,compact=false}=Astro.props;
+---
+<div class:list={['doc-card-grid',{'compact':compact}]}>{docs.map(doc=><a class="doc-card" href={docUrl(doc)}><span class="card-kicker">{sections.find(s=>s.id===doc.section)?.label}<span>{doc.minutes}分钟</span></span><h3>{doc.title}</h3><p>{doc.description}</p><span class="card-bottom">阅读全文<Icon name="arrow" size={18}/></span></a>)}</div>

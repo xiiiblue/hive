@@ -1,0 +1,31 @@
+// 静态网站浏览器验证；不调用蜂巢后端。运行方法见docs/内容维护.md。
+import {pathToFileURL} from 'node:url';
+if(!process.env.HIVE_SITE_PLAYWRIGHT||!process.env.HIVE_SITE_CHROME)throw new Error('请设置HIVE_SITE_PLAYWRIGHT和HIVE_SITE_CHROME，分别指向Playwright模块和Chrome可执行文件。');
+const {chromium}=await import(pathToFileURL(process.env.HIVE_SITE_PLAYWRIGHT).href);
+import {resolve} from 'node:path';
+import {mkdir,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const root=process.cwd(),origin=process.env.HIVE_SITE_PREVIEW??'http://127.0.0.1:4328',errors=[],requests=[];
+await mkdir(resolve(root,'.verification'),{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.HIVE_SITE_CHROME});
+const context=await browser.newContext({viewport:{width:1440,height:1050},locale:'zh-CN',reducedMotion:'reduce',colorScheme:'light'});
+const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)requests.push({status:r.status(),url:r.url()});});
+async function shot(name){await page.screenshot({path:resolve(root,'.verification/'+name+'-viewport.png'),fullPage:false,animations:'disabled'});await page.screenshot({path:resolve(root,'.verification/'+name+'.png'),fullPage:true,animations:'disabled'});}
+async function go(path){await page.goto(origin+'/hive'+path,{waitUntil:'networkidle'});await page.locator('main h1').first().waitFor();}
+try {
+await go('/');await shot('home-desktop');
+for(const [route,name] of [['/product/','product-desktop'],['/architecture/','architecture-desktop'],['/handbooks/','handbooks-desktop'],['/developers/','developers-desktop'],['/docs/','docs-desktop'],['/docs/employee/02-conversations/','employee-desktop'],['/docs/developers/open-api/','api-desktop']]){await go(route);await shot(name);}
+await go('/');await page.getByRole('tab',{name:/把做法变成技能/}).click();assert(await page.locator('#example-skills').isVisible());await page.getByRole('tab',{name:/用面板处理业务/}).focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.getByRole('tab',{name:/把做法变成技能/}).getAttribute('aria-selected'),'true');
+await go('/architecture/');await page.getByRole('tab',{name:/模型访问/}).click();assert(await page.locator('#layer-panel-model').isVisible());await go('/');
+await page.getByRole('button',{name:'搜索全部文档'}).click();await page.getByRole('searchbox').fill('绑定');await page.locator('.search-result').first().waitFor();await shot('search-results');assert((await page.locator('.search-result').count())>3);await page.keyboard.press('ArrowDown');assert(await page.locator('.search-result.is-selected').count()===1);await page.getByRole('searchbox').fill('不存在的蜂巢检索词ZZZZ');await page.getByText('没有找到相关内容',{exact:true}).waitFor();await page.keyboard.press('Escape');assert.equal(await page.locator('#site-search').isVisible(),false);
+await page.keyboard.press('Meta+k');await page.locator('#site-search').waitFor();await page.getByRole('searchbox').fill('Idempotency-Key');await page.locator('.search-result').first().waitFor();assert((await page.locator('.search-result').count())>0);await page.keyboard.press('Escape');
+await go('/docs/employee/02-conversations/');await page.locator('[data-image-zoom]').first().click();await page.locator('#image-lightbox').waitFor();assert((await page.locator('#lightbox-image').getAttribute('src')).includes('/hive/media/'));await page.keyboard.press('Escape');
+const toc=page.locator('.doc-toc a').first();await toc.click();await page.waitForTimeout(80);assert(await page.evaluate(()=>!!location.hash));
+await page.emulateMedia({media:'print'});assert.equal(await page.locator('.site-header').isVisible(),false);assert.equal(await page.locator('.doc-sidebar').isVisible(),false);assert(await page.locator('.doc-content').isVisible());await page.emulateMedia({media:'screen'});
+for(const width of [320,768,1024]){await page.setViewportSize({width,height:1000});await go('/');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'首页无整页溢出：'+width);await page.screenshot({path:resolve(root,'.verification/home-width-'+width+'.png'),fullPage:true,animations:'disabled'});}
+await page.setViewportSize({width:390,height:844});for(const [route,name] of [['/','home-mobile'],['/architecture/','architecture-mobile'],['/handbooks/','handbooks-mobile'],['/docs/employee/02-conversations/','employee-mobile'],['/docs/developers/identity/','identity-mobile']]){await go(route);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'手机无整页溢出：'+route);await shot(name);}
+await go('/');await page.getByRole('button',{name:'展开导航'}).click();assert(await page.getByRole('navigation',{name:'手机导航'}).isVisible());await shot('mobile-navigation');await page.getByRole('button',{name:'展开导航'}).click();await page.getByRole('button',{name:'切换明暗主题'}).click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');await shot('home-dark-mobile');await page.reload();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+await page.setViewportSize({width:1440,height:1050});await go('/docs/architecture/security/');await shot('reading-dark-desktop');
+await page.setViewportSize({width:1200,height:630});await page.goto(origin+'/hive/media/social-cover.svg');await page.screenshot({path:resolve(root,'public/media/social-cover.png')});
+assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);await writeFile(resolve(root,'.verification/browser-result.json'),JSON.stringify({result:'passed',checks:['八类页面桌面阅读','手机无整页横向溢出','场景与架构切换和键盘','全文搜索/无结果/快捷键','图片放大和Esc关闭','章节目录定位','打印正文','手机导航','暗色主题保存'],errors,requests},null,2));console.log('浏览器检查通过');
+} finally {await browser.close();}

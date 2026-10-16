@@ -1,0 +1,4 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';import {url} from '../lib/content';
+---
+<SiteLayout title="页面未找到 · 蜂巢"><section class="not-found container"><span class="eyebrow">404 / PAGE NOT FOUND</span><h1>这里还没有<br/>你要找的那一页。</h1><p>链接可能已经调整。可以回到文档中心，或搜索功能名称。</p><div class="button-row"><a class="button primary" href={url('/docs/')}>前往文档中心 →</a><button class="button" type="button" data-open-search>搜索文档</button></div></section></SiteLayout>

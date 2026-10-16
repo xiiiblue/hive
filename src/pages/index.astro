@@ -1,0 +1,58 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Icon from '../components/Icon.astro';
+import HeroWorkspace from '../components/HeroWorkspace.astro';
+import ArchitectureGraph from '../components/ArchitectureGraph.astro';
+import DocCards from '../components/DocCards.astro';
+import {url,getDocs} from '../lib/content';
+import '../styles/home.css';
+const examples=[
+  {key:'report',label:'把资料整理成周报',title:'交代目标，查看过程，\n带走一份工作成果。',text:'提供工单、纪要或表格，让智能体读取资料、调用工具、整理报告。核对内容后，结果文件留在自己的工作空间，下一次还能接着用。',image:'employee/02-answer-files.png',link:'/docs/employee/02-conversations/',tags:['对话与工具调用','文件与结果核对']},
+  {key:'skills',label:'把做法变成技能',title:'做成一次的工作，\n成为下一次的起点。',text:'从技能广场选择可用方法，在技能市场安装同事共享的版本，或把自己的成功做法整理为个人Skill。让工作经验有一个可以保存、复用和改进的载体。',image:'employee/04-square.png',link:'/docs/employee/04-skills/',tags:['个人与企业Skill','安装与版本管理']},
+  {key:'panels',label:'用面板处理业务',title:'适合点选的工作，\n放到自己的业务页面。',text:'查看列表、筛选记录、处理事项。保存个人副本后，用聊天调整布局，预览并保存，让页面更符合自己的工作习惯。',image:'employee/06-panel-home.png',link:'/docs/employee/06-panels/',tags:['企业业务系统','个人面板与预览']}
+];
+const docs=getDocs();
+const featured=docs.filter(d=>['product/digital-twin','architecture/task-lifecycle','insights/design-choices'].includes(d.slug));
+---
+<SiteLayout>
+  <section class="home-hero container">
+    <div class="home-hero-copy">
+      <p class="hero-category"><span aria-hidden="true"></span>企业内网中的员工数字分身</p>
+      <h1>每个人的AI，<br/>都有自己的<br/>工作空间。</h1>
+      <p class="home-hero-description">对话、文件、技能与业务系统，在这里连接。<br/>让AI熟悉你的工作方式，也让每一次工作<br class="desktop-only"/>都能留下下一次的起点。</p>
+      <div class="button-row"><a class="button primary" href={url('/product/')}>认识蜂巢<Icon name="external" size={18}/></a><a class="button" href={url('/handbooks/')}><Icon name="book" size={18}/>阅读操作手册</a></div>
+      <a class="hero-developer-link" href={url('/developers/')}><Icon name="code" size={17}/>开发者，从这里连接业务系统<Icon name="arrow" size={16}/></a>
+    </div>
+    <HeroWorkspace/>
+  </section>
+  <div class="capability-ribbon"><div class="container"><p>把AI能力，放进真实的工作环境</p><div><span>Hive Pi / OpenCode</span><i></i><span>持久文件空间</span><i></i><span>Skill与MCP</span><i></i><span>企业身份与授权</span></div></div></div>
+  <section class="home-work section container">
+    <div class="home-heading"><div><p class="section-label">看看它怎样工作</p><h2>从一句要求，<br/>到一份可以继续使用的成果。</h2></div><p>不止生成一段回答。<br/>在工作环境里处理资料、复用方法、连接业务。</p></div>
+    <div class="work-showcase" data-tabs>
+      <div class="work-tabs" role="tablist" aria-label="工作场景">{examples.map((example,i)=><button id={'tab-'+example.key} type="button" role="tab" aria-selected={i===0?'true':'false'} aria-controls={'example-'+example.key} tabindex={i===0?0:-1}><Icon name={i===0?'file':i===1?'layers':'grid'} size={20}/>{example.label}</button>)}</div>
+      {examples.map((example,i)=><div class="work-panel" id={'example-'+example.key} role="tabpanel" aria-labelledby={'tab-'+example.key} hidden={i!==0}>
+        <div class="work-copy"><div class="work-tags">{example.tags.map(tag=><span>{tag}</span>)}</div><h3>{example.title.split('\n').map(line=><>{line}<br/></>)}</h3><p>{example.text}</p><a class="inline-link" href={url(example.link)}>查看操作步骤<Icon name="arrow" size={18}/></a><small>当前产品真实界面，图中为合成教学数据。</small></div>
+        <div class="work-screen"><div class="work-screen-bar"><span><i></i><i></i><i></i></span><small>蜂巢员工工作台</small><Icon name="workspace" size={14}/></div><button type="button" data-image-zoom aria-label={'放大'+example.label+'界面'}><img src={url('/media/manuals/'+example.image)} alt={example.label+'的员工工作台演示界面'} width="1440" height="1100" loading="lazy"/></button></div>
+      </div>)}
+    </div>
+  </section>
+  <section class="home-foundation"><div class="container">
+    <div class="home-heading"><div><p class="section-label">为什么是“数字分身”</p><h2>有自己的空间，<br/>才有持续工作的基础。</h2></div><a class="inline-link" href={url('/docs/product/digital-twin/')}>理解蜂巢的核心概念<Icon name="arrow" size={18}/></a></div>
+    <div class="foundation-grid">
+      <article class="foundation-space"><div class="foundation-text"><Icon name="workspace" size={26}/><h3>工作积累，不随对话结束。</h3><p>每名员工有自己的持久文件与执行环境。多段对话共享工作资料，文件、脚本和依赖可以继续使用。</p><a class="inline-link" href={url('/docs/architecture/workspace/')}>了解工作空间<Icon name="arrow" size={17}/></a></div><div class="file-landscape" aria-label="工作空间文件示意"><div class="file-folder"><Icon name="workspace" size={19}/><strong>我的工作空间</strong><small>持久保留</small></div><div class="file-tree"><span><Icon name="file" size={16}/>本周工单.csv<small>原始资料</small></span><span><Icon name="file" size={16}/>工单周报.md<small>工作成果</small></span><span><Icon name="code" size={16}/>整理脚本.py<small>可以复用</small></span><span><Icon name="book" size={16}/>我的周报Skill<small>工作方法</small></span></div><p>文件关系示意，非实时业务数据</p></div></article>
+      <article class="foundation-tools"><div class="tool-orbit" aria-hidden="true"><span>Skill</span><b>AI</b><span>MCP</span><span>Shell</span><span>文件</span></div><h3>方法与工具，<br/>各有所长。</h3><p>模型负责理解和生成，Skill保存做法，MCP提供工具；智能体在员工环境中把它们用起来。</p><a class="inline-link" href={url('/docs/developers/skills/')}>理解能力如何扩展<Icon name="arrow" size={17}/></a></article>
+      <article class="foundation-identity"><div><Icon name="shield" size={26}/><h3>知道是谁，<br/>也知道能做什么。</h3><p>蜂巢证明员工身份，业务系统关联账号并决定业务权限。平台能力与业务授权分别管理。</p><a class="inline-link" href={url('/docs/developers/identity/')}>了解身份与授权<Icon name="arrow" size={17}/></a></div><div class="identity-path"><span><Icon name="person" size={20}/>员工身份</span><Icon name="arrow" size={20}/><span><Icon name="shield" size={20}/>业务授权</span></div></article>
+    </div>
+  </div></section>
+  <section class="home-architecture section"><div class="container"><div class="home-heading"><div><p class="section-label">看得懂的架构</p><h2>能力连接起来，<br/>边界也清楚地画出来。</h2></div><div><p>平台控制、员工执行、模型访问与业务访问，<br/>每一条路径都有自己的职责。</p><a class="inline-link" href={url('/architecture/')}>探索架构与设计<Icon name="arrow" size={18}/></a></div></div><ArchitectureGraph/><div class="architecture-takeaways"><p><span>控制与执行</span>Core管理状态，Runtime负责员工工作。</p><p><span>模型与业务</span>模型经过网关，业务系统决定自身权限。</p><p><span>部署与范围</span>面向单企业内网，当前为单节点部署。</p></div></div></section>
+  <section class="home-guides section container">
+    <div class="home-heading"><div><p class="section-label">从了解，到真正用起来</p><h2>找到你的入口。</h2></div><a class="inline-link" href={url('/docs/')}>浏览全部{docs.length}篇文档<Icon name="arrow" size={18}/></a></div>
+    <div class="guide-grid">
+      <a class="guide-book employee-book" href={url('/docs/employee/overview/')}><div class="book-spine" aria-hidden="true"></div><div class="book-header"><Icon name="person" size={25}/><span>使用者手册</span></div><h3>员工<br/>工作台</h3><p>从第一段对话开始，<br/>把工作逐步做起来。</p><div class="book-bottom"><span>10个章节 / 71张界面截图</span><Icon name="external" size={25}/></div></a>
+      <a class="guide-book admin-book" href={url('/docs/admin/overview/')}><div class="book-spine" aria-hidden="true"></div><div class="book-header"><Icon name="grid" size={25}/><span>管理者手册</span></div><h3>管理员<br/>控制台</h3><p>准备人员、模型与企业能力，<br/>理解每项管理的影响。</p><div class="book-bottom"><span>10个章节 / 60张界面截图</span><Icon name="external" size={25}/></div></a>
+      <div class="guide-developer"><Icon name="code" size={30}/><h3>连接你的<br/>业务系统。</h3><p>选择合适的接入方式，从接口契约走到实际集成。</p><div class="integration-links">{[['开放API','/docs/developers/open-api/'],['身份与授权','/docs/developers/identity/'],['Skill与MCP','/docs/developers/skills/'],['业务面板','/docs/developers/panels/']].map(([label,href])=><a href={url(href)}>{label}<Icon name="arrow" size={17}/></a>)}</div><a class="inline-link" href={url('/developers/')}>进入开发者指南<Icon name="arrow" size={17}/></a></div>
+    </div>
+  </section>
+  <section class="home-reading section"><div class="container"><div class="home-heading"><div><p class="section-label">把设计讲清楚</p><h2>多了解一点，使用时就少一点猜测。</h2></div><a class="inline-link" href={url('/library/')}>交流与实践<Icon name="arrow" size={18}/></a></div><DocCards docs={featured}/></div></section>
+  <section class="home-start container"><div><h2>先了解，再开始。</h2><p>蜂巢当前面向单企业内网、单节点部署与受控验证。<br/>正式生产使用需结合实际环境完成安全、容量和恢复验证。</p></div><a class="button" href={url('/docs/product/get-started/')}>阅读入门路线<Icon name="arrow" size={18}/></a></section>
+</SiteLayout>

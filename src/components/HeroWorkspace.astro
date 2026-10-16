@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+import {url} from '../lib/content';
+---
+<div class="hero-workspace">
+  <div class="workspace-stage-label"><span class="workspace-emblem" aria-hidden="true">H</span><span>一个属于员工的工作空间</span><Icon name="layers" size={20}/></div>
+  <svg class="workspace-lines" viewBox="0 0 660 580" fill="none" aria-hidden="true"><path d="M-40 408 330 195 720 420M-40 448 330 235 720 460M-40 488 330 275 720 500M-40 528 330 315 720 540M-40 568 330 355 720 580M-40 608 330 395 720 620"/><path d="M68 348v230M133 310v268M198 273v305M263 235v343M330 195v383M396 233v345M462 272v306M528 310v268M594 348v230"/></svg>
+  <div class="hero-product-window"><div class="hero-window-chrome"><span><i></i><i></i><i></i></span><small>员工工作台 / 对话与成果</small><Icon name="workspace" size={14}/></div><button type="button" data-image-zoom aria-label="放大员工工作台周报界面"><img src={url('/media/manuals/employee/02-answer-files.png')} alt="员工工作台中的工单周报，展示已加载Skill、报告、待办和结果文件，均为合成教学数据" width="1440" height="1100" fetchpriority="high"/></button></div>
+  <div class="hero-skill-label"><Icon name="book" size={18}/><span>我的周报整理<small>个人Skill，把做法留下来</small></span></div>
+  <div class="hero-file-label"><div class="file-symbol"><Icon name="file" size={25}/></div><div><small>生成的工作成果</small><strong>工单周报.md</strong><span>保留在自己的工作空间</span></div><Icon name="check" size={18}/></div>
+  <div class="workspace-stage-footer"><span>真实工作台局部 · 合成教学数据</span><a href={url('/docs/employee/02-conversations/')} aria-label="了解对话与成果"><Icon name="external" size={19}/></a></div>
+</div>

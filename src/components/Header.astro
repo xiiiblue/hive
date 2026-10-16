@@ -1,0 +1,6 @@
+---
+import Icon from './Icon.astro';import Logo from './Logo.astro';import {url} from '../lib/content';
+const path=Astro.url.pathname;
+const links=[['产品','/product/'],['架构','/architecture/'],['操作手册','/handbooks/'],['开发对接','/developers/'],['文档中心','/docs/']];
+---
+<header class="site-header" id="site-header"><div class="nav-wrap"><a class="brand" href={url('/')} aria-label="蜂巢首页"><Logo/><span>蜂巢<small>HIVEOS</small></span></a><nav class="desktop-nav" aria-label="主导航">{links.map(([label,href])=><a href={url(href)} class:list={{active:path.startsWith(url(href))}}>{label}</a>)}</nav><div class="nav-actions"><button class="search-trigger" type="button" data-open-search aria-label="搜索全部文档"><Icon name="search" size={17}/><span>搜索文档</span><kbd>⌘ K</kbd></button><button type="button" class="icon-button theme-toggle" data-theme-toggle aria-label="切换明暗主题"><Icon name="sun"/></button><button type="button" class="icon-button mobile-menu-button" data-menu-toggle aria-label="展开导航" aria-expanded="false"><Icon name="menu"/></button></div></div><nav class="mobile-nav" aria-label="手机导航" hidden>{links.map(([label,href])=><a href={url(href)}>{label}<Icon name="arrow" size={17}/></a>)}</nav></header>
