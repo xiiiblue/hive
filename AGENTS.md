@@ -1,7 +1,7 @@
 # 蜂巢网站维护约定
 
 - 本仓库是蜂巢公开网站的独立源码，目标地址为https://www.bluexiii.com/hive/，GitHub仓库为xiiiblue/hive。
-- 蜂巢产品源码位于同级hive-os。默认只读，不修改、提交或部署产品仓库。
+- 蜂巢产品源码位于本仓库相对路径`../../telchina/hive-os`。默认只读，不修改、提交或部署产品仓库。
 - 使用Astro静态生成、npm及package-lock.json。Node版本见.nvmrc；不混用其它锁文件。
 - 正文放content/，一篇Markdown生成一个稳定/docs/路径。前置信息至少有title、description、section、order、updated、sources。
 - 面向公开读者整理内容，不整库镜像内部文档，不包含真实地址、凭据、员工资料、部署记录或测试销毁步骤。保留当前产品适用限制，不把演示、设计和生产验收混为一谈。
