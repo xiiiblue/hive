@@ -65,6 +65,8 @@ sources:
 
 `.github/workflows/pages.yml`在`main`推送后安装锁定依赖、检查并上传`dist/`，再发布GitHub Pages。仓库Pages来源使用GitHub Actions。
 
-项目路径固定为`/hive`，继承账号用户站点的`www.bluexiii.com`域名，无需单独CNAME，不修改博客和ACDL仓库。后续迁移域名时，同时修改`astro.config.mjs`、`src/lib/content.ts`中的基础路径、规范URL、分享图地址、`public/robots.txt`与测试中的站点身份，再核对全部站内链接。
+项目路径固定为`/hive`，继承账号用户站点的`www.bluexiii.com`域名，无需单独CNAME，不修改博客和ACDL仓库。后续迁移域名时，同时修改`astro.config.mjs`、`src/lib/content.ts`中的基础路径、`src/styles/home.css`中的字体地址、规范URL、分享图地址、`public/robots.txt`与测试中的站点身份，再核对全部站内链接。
 
 这项配置遵循[GitHub项目站点继承用户域名](https://docs.github.com/zh/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)和[Astro的GitHub Pages发布说明](https://docs.astro.build/en/guides/deploy/github/)。发布结果与实际检查记录在[建设与上线记录](docs/建设与上线记录.md)。
+
+首页的Latin字体使用本地Outfit可变字体，中文使用系统字体。字体版权和授权见[OFL许可](public/fonts/OFL-Outfit.txt)，来源与视觉约定见[视觉设计](docs/视觉设计.md)。

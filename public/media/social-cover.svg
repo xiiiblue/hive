@@ -1,56 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
-  <defs>
-    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse"><stop stop-color="#071c48"/><stop offset="1" stop-color="#143c86"/></linearGradient>
-    <linearGradient id="glow" x1="730" y1="110" x2="1110" y2="540" gradientUnits="userSpaceOnUse"><stop stop-color="#335cff" stop-opacity=".65"/><stop offset="1" stop-color="#93c9ff" stop-opacity=".1"/></linearGradient>
-    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0v36" stroke="#93c9ff" stroke-opacity=".07"/></pattern>
-    <filter id="shadow" x="681" y="90" width="519" height="505" filterUnits="userSpaceOnUse"><feDropShadow dy="18" stdDeviation="20" flood-color="#020b21" flood-opacity=".28"/></filter>
-  </defs>
-  <rect width="1200" height="630" fill="url(#background)"/>
-  <rect width="1200" height="630" fill="url(#grid)"/>
-  <circle cx="1020" cy="307" r="266" fill="url(#glow)"/>
-  <path d="M76 543h1048" stroke="#93c9ff" stroke-opacity=".22"/>
-  <g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
-    <path d="m94 49 20 11.5v23L94 95 74 83.5v-23Z" fill="#335cff"/>
-    <path d="M83 62h6v7h10v-7h6v20h-6v-7H89v7h-6Z" fill="#f8faff"/>
-    <text x="132" y="82" fill="#f8faff" font-size="31" font-weight="700">蜂巢</text>
-    <text x="220" y="80" fill="#93c9ff" font-size="13" font-weight="600" letter-spacing="3">HIVEOS</text>
-    <rect x="76" y="156" width="163" height="29" rx="14.5" fill="#335cff" fill-opacity=".3" stroke="#93c9ff" stroke-opacity=".3"/>
-    <text x="157.5" y="175" text-anchor="middle" fill="#c9e2ff" font-size="12" font-weight="600" letter-spacing="1">企业AI工作空间</text>
-    <text x="72" y="270" fill="#f8faff" font-size="57" font-weight="750" letter-spacing="-1.5">每个人的AI，</text>
-    <text x="72" y="350" fill="#f8faff" font-size="55" font-weight="750" letter-spacing="-1.5">都有自己的工作空间。</text>
-    <path d="M77 381h84" stroke="#93c9ff" stroke-width="4" stroke-linecap="round"/>
-    <text x="76" y="431" fill="#c0d7ff" font-size="20">让对话、文件、技能与业务连接持续积累。</text>
-    <text x="76" y="581" fill="#93c9ff" font-size="14">产品 · 架构 · 图文操作手册 · 开发对接</text>
-    <text x="923" y="581" fill="#c0d7ff" font-size="13">www.bluexiii.com/hive</text>
-    <g filter="url(#shadow)">
-      <rect x="736" y="163" width="388" height="302" rx="25" fill="#f8faff"/>
-      <path d="M758 225h344" stroke="#dce7ff"/>
-      <rect x="760" y="183" width="25" height="25" rx="7" fill="#335cff"/>
-      <path d="M766 189h4v4h6v-4h4v13h-4v-5h-6v5h-4Z" fill="#f8faff"/>
-      <text x="797" y="202" fill="#071c48" font-size="18" font-weight="700">个人工作空间</text>
-      <text x="1067" y="201" text-anchor="middle" fill="#56719a" font-size="10">概念示意</text>
-      <rect x="758" y="247" width="153" height="118" rx="15" fill="#e8efff"/>
-      <path d="M778 266h12l4 5h25v24h-41Z" fill="#335cff"/><path d="M778 278h41l-4 17h-37Z" fill="#93c9ff"/>
-      <text x="778" y="326" fill="#071c48" font-size="17" font-weight="650">持久文件</text>
-      <text x="778" y="347" fill="#56719a" font-size="11">资料 · 代码 · 成果</text>
-      <rect x="925" y="247" width="177" height="52" rx="13" fill="#ffffff" stroke="#dce7ff"/>
-      <path d="M941 261h19v13h-10l-5 4v-4h-4Z" stroke="#335cff" stroke-width="1.7" stroke-linejoin="round"/>
-      <text x="974" y="279" fill="#071c48" font-size="15" font-weight="650">持续对话</text>
-      <rect x="925" y="313" width="177" height="52" rx="13" fill="#ffffff" stroke="#dce7ff"/>
-      <path d="m950 325 10 5.5v11l-10 5.5-10-5.5v-11Z" fill="#335cff"/>
-      <text x="974" y="345" fill="#071c48" font-size="15" font-weight="650">Skill与工具</text>
-      <rect x="758" y="384" width="344" height="57" rx="13" fill="#071c48"/>
-      <circle cx="781" cy="413" r="4" fill="#93c9ff"/>
-      <text x="796" y="418" fill="#f8faff" font-size="13">提出要求</text>
-      <path d="M866 413h24m-5-4 5 4-5 4" stroke="#93c9ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="908" y="418" fill="#f8faff" font-size="13">核对并保留工作成果</text>
-    </g>
-    <path d="M930 145v18M930 465v22" stroke="#93c9ff" stroke-width="2" stroke-dasharray="4 4"/>
-    <rect x="821" y="98" width="218" height="47" rx="15" fill="#335cff"/>
-    <circle cx="849" cy="116" r="5" stroke="#f8faff" stroke-width="1.7"/>
-    <path d="M841 131a8 8 0 0 1 16 0" stroke="#f8faff" stroke-width="1.7" stroke-linecap="round"/>
-    <text x="872" y="128" fill="#f8faff" font-size="15" font-weight="650">属于每一位员工</text>
-    <rect x="792" y="487" width="276" height="38" rx="12" fill="#93c9ff"/>
-    <text x="930" y="511" text-anchor="middle" fill="#071c48" font-size="13" font-weight="600">按员工身份与业务权限连接系统</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="cover-title cover-description">
+  <title id="cover-title">蜂巢——每位员工的AI工作空间</title>
+  <desc id="cover-description">黑白版面上的蜂巢大字，与蓝色、橙色和白色六边形工作单元。</desc>
+  <rect width="1200" height="630" fill="#fff"/>
+  <path d="M832 0h368v630H832Z" fill="#111"/>
+  <path d="M64 108h704M64 502h704" stroke="#111" stroke-width="2"/>
+  <g transform="translate(58 30) scale(1.25)" fill="#2454ff">
+    <path d="m5.4 6.4 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m5.4 16.8 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m5.4 27.2 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m5.4 37.6 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 6.4 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 16.8 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 27.2 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 37.6 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m14.4 22 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z" fill="#ff6a2a"/>
   </g>
+  <g font-family="'Avenir Next','PingFang SC','Microsoft YaHei',sans-serif" fill="#111">
+    <text x="125" y="68" font-size="22" font-weight="800" letter-spacing="1">HIVEOS</text>
+    <text x="768" y="67" text-anchor="end" font-size="18" font-weight="600">企业内网中的员工数字分身</text>
+    <text x="53" y="340" font-size="252" font-weight="800" letter-spacing="-12">蜂巢</text>
+    <text x="64" y="421" font-size="40" font-weight="650" letter-spacing="-1">每位员工的AI工作空间</text>
+    <text x="64" y="554" font-size="20" font-weight="600">产品、架构、操作手册与开发对接</text>
+    <text x="64" y="590" font-size="17" font-weight="500">www.bluexiii.com/hive/</text>
+  </g>
+  <path d="M64 459h88" stroke="#2454ff" stroke-width="12"/>
+  <g transform="translate(900 131) scale(5.8)" fill="#fff">
+    <path d="m5.4 6.4 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m5.4 16.8 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m5.4 27.2 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m5.4 37.6 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 6.4 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 16.8 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 27.2 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m23.4 37.6 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z"/>
+    <path d="m14.4 22 2.8-4.85h5.6l2.8 4.85-2.8 4.85h-5.6Z" fill="#ff6a2a"/>
+  </g>
+  <path d="m942 509 25-43.3h50l25 43.3-25 43.3h-50Z" stroke="#2454ff" stroke-width="12"/>
+  <path d="m1083 478 9-15.6h18l9 15.6-9 15.6h-18Z" stroke="#fff" stroke-width="2"/>
+  <path d="m1083 80 10-17.3h20l10 17.3-10 17.3h-20Z" fill="#2454ff"/>
 </svg>
