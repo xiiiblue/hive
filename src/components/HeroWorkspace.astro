@@ -1,51 +1,12 @@
 ---
 import Icon from './Icon.astro';
+import {url} from '../lib/content';
 ---
-<div class="hive-field">
-  <svg class="hive-field-art" viewBox="0 0 680 610" fill="none" role="img" aria-labelledby="hive-field-title hive-field-desc">
-    <title id="hive-field-title">一项周报工作怎样在蜂巢中积累</title>
-    <desc id="hive-field-desc">员工工作空间连接输入文件本周工单、个人周报Skill、获准查询工具和结果文件工单周报。六边形代表工作单元，这是关系示意，不是实时执行状态。</desc>
-    <defs><pattern id="hive-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><path d="M0 0v7" class="field-hatch"/></pattern></defs>
-    <path class="field-outline" d="m547 8 113 65v131l-113 65-113-65V73Zm-273 99 125 72v146l-125 72-125-72V179Z"/>
-    <path d="m92 53 69 40v80l-69 40-69-40V93Z" class="field-offset"/>
-    <path d="m92 40 69 40v80l-69 40-69-40V80Z" class="field-paper"/>
-    <path d="m475 36 57 33v66l-57 33-57-33V69Z" class="field-offset"/>
-    <path d="m475 24 57 33v66l-57 33-57-33V57Z" class="field-paper"/>
-    <path d="m124 394 68 39v80l-68 39-68-39v-80Z" class="field-offset"/>
-    <path d="m124 380 68 39v80l-68 39-68-39v-80Z" class="field-paper"/>
-    <path d="m274 126 125 72v146l-125 72-125-72V198Z" class="field-core-shadow"/>
-    <path d="m274 107 125 72v146l-125 72-125-72V179Z" class="field-core"/>
-    <path d="m535 279 97 56v112l-97 56-97-56V335Z" class="field-output-shadow"/>
-    <path d="m535 264 97 56v112l-97 56-97-56V320Z" class="field-output"/>
-    <path d="M160 148h27l28 28M448 153l-37 23h-18M192 440l29-17v-57" class="field-connection"/>
-    <path d="M356 293h56l45 44" class="field-workflow"/>
-    <circle cx="160" cy="148" r="5" class="field-path-dot"/><circle cx="215" cy="176" r="5" class="field-path-dot"/>
-    <circle cx="356" cy="293" r="5" class="field-path-dot"/><path d="m448 338 12 2-2-12" class="field-workflow"/>
-    <g class="field-on-paper">
-      <path d="M80 78h17l12 12v32H80Z" class="field-file"/><path d="M97 78v13h12M86 102h16M86 110h12" class="field-icon-blue"/>
-      <text x="92" y="149" text-anchor="middle" class="field-filename">本周工单.csv</text><text x="92" y="171" text-anchor="middle" class="field-small">输入的工作资料</text>
-      <text x="475" y="94" text-anchor="middle" class="field-skill">Skill</text><text x="475" y="119" text-anchor="middle" class="field-small">我的周报整理</text>
-      <rect x="103" y="415" width="42" height="34" rx="2" class="field-terminal"/><path d="m112 425 7 7-7 7m12 0h13" class="field-icon-white"/>
-      <text x="124" y="477" text-anchor="middle" class="field-filename">查询工具</text><text x="124" y="500" text-anchor="middle" class="field-small">获准的业务能力</text>
-    </g>
-    <g class="field-on-blue">
-      <circle cx="274" cy="191" r="17" class="field-user"/><path d="M242 235v-4a32 32 0 0 1 64 0v4" class="field-user"/>
-      <text x="274" y="267" text-anchor="middle" class="field-core-label">员工的工作空间</text>
-      <path d="M207 289h134" class="field-core-divider"/>
-      <text x="274" y="321" text-anchor="middle" class="field-core-small">文件与方法，持续保留</text>
-    </g>
-    <g class="field-on-orange">
-      <path d="M519 309h24l14 14v34h-38Z" class="field-output-icon"/><path d="M543 309v15h14M527 337h21M527 346h16" class="field-output-icon"/>
-      <text x="535" y="390" text-anchor="middle" class="field-result">工单周报.md</text><text x="535" y="416" text-anchor="middle" class="field-result-small">核对后留下工作成果</text>
-    </g>
-    <path d="m338 450 55 32v64l-55 32-55-32v-64Z" fill="url(#hive-hatch)"/>
-    <path d="M420 520h212M420 529h96" class="field-caption-lines"/>
-    <text x="420" y="556" class="field-note">资料、方法、成果，各有归属。</text>
-  </svg>
-  <ol class="hive-mobile-flow" aria-label="周报工作示例">
-    <li><span class="flow-icon"><Icon name="file" size={23}/></span><div><small>带入工作资料</small><strong>本周工单.csv</strong></div></li>
-    <li><span class="flow-icon"><Icon name="workspace" size={23}/></span><div><small>在自己的空间处理</small><strong>使用Skill与获准工具</strong></div></li>
-    <li><span class="flow-icon"><Icon name="file" size={23}/></span><div><small>核对并保留成果</small><strong>工单周报.md</strong></div></li>
-  </ol>
-  <p class="hive-field-caption">周报工作的关系示意，非实时执行状态</p>
+<div class="hero-workspace">
+  <div class="workspace-stage-label"><span class="workspace-emblem" aria-hidden="true">H</span><span>一个属于员工的工作空间</span><Icon name="layers" size={20}/></div>
+  <svg class="workspace-lines" viewBox="0 0 660 580" fill="none" aria-hidden="true"><path d="M-40 408 330 195 720 420M-40 448 330 235 720 460M-40 488 330 275 720 500M-40 528 330 315 720 540M-40 568 330 355 720 580M-40 608 330 395 720 620"/><path d="M68 348v230M133 310v268M198 273v305M263 235v343M330 195v383M396 233v345M462 272v306M528 310v268M594 348v230"/></svg>
+  <div class="hero-product-window"><div class="hero-window-chrome"><span><i></i><i></i><i></i></span><small>员工工作台 / 对话与成果</small><Icon name="workspace" size={14}/></div><button type="button" data-image-zoom aria-label="放大员工工作台周报界面"><img src={url('/media/manuals/employee/02-answer-files.png')} alt="员工工作台中的工单周报，展示已加载Skill、报告、待办和结果文件，均为合成教学数据" width="1440" height="1100" fetchpriority="high"/></button></div>
+  <div class="hero-skill-label"><Icon name="book" size={18}/><span>我的周报整理<small>个人Skill，把做法留下来</small></span></div>
+  <div class="hero-file-label"><div class="file-symbol"><Icon name="file" size={25}/></div><div><small>生成的工作成果</small><strong>工单周报.md</strong><span>保留在自己的工作空间</span></div><Icon name="check" size={18}/></div>
+  <div class="workspace-stage-footer"><span>真实工作台局部 · 合成教学数据</span><a href={url('/docs/employee/02-conversations/')} aria-label="了解对话与成果"><Icon name="external" size={19}/></a></div>
 </div>
