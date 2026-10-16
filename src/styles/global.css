@@ -112,6 +112,12 @@ small{font-size:12px}
 .footer-grid>div>a:hover{color:var(--accent)}
 .footer-bottom{display:flex;justify-content:space-between;gap:25px;padding-block:23px;border-top:1px solid var(--line);color:var(--muted);font-size:10px}
 .footer-bottom a{margin-left:20px;text-decoration:underline;text-underline-offset:4px}
+.footer-site-info{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px 22px;padding-bottom:26px;color:var(--muted);font-size:12px;line-height:1.8}
+.footer-site-info>a:hover{color:var(--accent)}
+.site-counter{display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:14px}
+.site-counter>span{display:none}
+.site-counter strong{font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+
 
 .page-intro{padding-top:80px;padding-bottom:67px}
 .page-intro>.eyebrow{margin-bottom:27px}
