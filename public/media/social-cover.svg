@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
   <defs>
+    <image id="hive-logo" width="94" height="94" href="./hive-logo.png"/>
     <linearGradient id="background" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse"><stop stop-color="#071c48"/><stop offset="1" stop-color="#143c86"/></linearGradient>
     <linearGradient id="glow" x1="730" y1="110" x2="1110" y2="540" gradientUnits="userSpaceOnUse"><stop stop-color="#335cff" stop-opacity=".65"/><stop offset="1" stop-color="#93c9ff" stop-opacity=".1"/></linearGradient>
     <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0v36" stroke="#93c9ff" stroke-opacity=".07"/></pattern>
@@ -10,8 +11,8 @@
   <circle cx="1020" cy="307" r="266" fill="url(#glow)"/>
   <path d="M76 543h1048" stroke="#93c9ff" stroke-opacity=".22"/>
   <g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
-    <path d="m94 49 20 11.5v23L94 95 74 83.5v-23Z" fill="#335cff"/>
-    <path d="M83 62h6v7h10v-7h6v20h-6v-7H89v7h-6Z" fill="#f8faff"/>
+    <rect x="72" y="49" width="46" height="46" rx="10" fill="#f8faff"/>
+    <use href="#hive-logo" transform="translate(75 52) scale(.425532)"/>
     <text x="132" y="82" fill="#f8faff" font-size="31" font-weight="700">蜂巢</text>
     <text x="220" y="80" fill="#93c9ff" font-size="13" font-weight="600" letter-spacing="3">HIVEOS</text>
     <rect x="76" y="156" width="163" height="29" rx="14.5" fill="#335cff" fill-opacity=".3" stroke="#93c9ff" stroke-opacity=".3"/>
@@ -25,8 +26,7 @@
     <g filter="url(#shadow)">
       <rect x="736" y="163" width="388" height="302" rx="25" fill="#f8faff"/>
       <path d="M758 225h344" stroke="#dce7ff"/>
-      <rect x="760" y="183" width="25" height="25" rx="7" fill="#335cff"/>
-      <path d="M766 189h4v4h6v-4h4v13h-4v-5h-6v5h-4Z" fill="#f8faff"/>
+      <use href="#hive-logo" transform="translate(760 183) scale(.265957)"/>
       <text x="797" y="202" fill="#071c48" font-size="18" font-weight="700">个人工作空间</text>
       <text x="1067" y="201" text-anchor="middle" fill="#56719a" font-size="10">概念示意</text>
       <rect x="758" y="247" width="153" height="118" rx="15" fill="#e8efff"/>

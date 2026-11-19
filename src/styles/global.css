@@ -47,7 +47,8 @@ small{font-size:12px}
 .site-header{position:sticky;top:0;z-index:40;background:var(--nav);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .nav-wrap{height:var(--header-height);width:min(1400px,calc(100% - 112px));margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}
 .brand{display:inline-flex;align-items:center;gap:11px;line-height:1.1}
-.brand-mark{flex-shrink:0}
+.brand-mark{display:block;flex-shrink:0;object-fit:contain}
+:root[data-theme="dark"] .brand > .brand-mark{padding:3px;border-radius:9px;background:#f8faff}
 .brand>span{font-size:25px;font-weight:650;letter-spacing:.04em;white-space:nowrap}
 .brand small{display:block;font-size:8px;font-weight:600;letter-spacing:.32em;margin-top:8px}
 .desktop-nav{display:flex;align-items:center;gap:clamp(14px,2vw,28px);margin-left:auto;font-size:.875rem}
@@ -352,7 +353,7 @@ small{font-size:12px}
 :root{--header-height:62px}
 .nav-wrap{gap:16px}
 .brand>span{font-size:23px}
-.brand-mark{width:30px;height:34px}
+.brand-mark{width:32px;height:32px}
 .brand small{font-size:7px;margin-top:6px}
 .nav-actions{gap:7px}
 .desktop-nav{display:none}
