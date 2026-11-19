@@ -3,7 +3,7 @@ title: 提交和管理异步长任务
 description: 提交后保存任务标识，通过轮询读取结果，并明确处理取消与HTTP等待超时。
 section: developers
 order: 30
-updated: '2026-10-16'
+updated: '2026-11-20'
 sources:
   - apps/hive-core/src/mainline/server.ts
   - apps/hive-core/src/mainline/open-api/postgres-open-api.ts
@@ -30,7 +30,7 @@ curl --silent --show-error --fail-with-body \
   }'
 ```
 
-该入口不接受`stream`字段，即使值为`false`也会拒绝。模型和单条用户文本规则与同步入口一致。
+该入口不接受`stream`字段，即使值为`false`也会拒绝。模型、单条用户文本和可选的对话标题、分组字段与[同步入口](/docs/developers/open-api/#请求只支持这些字段)一致。
 
 HTTP202表示提交已接受，结果包含`agent_run_id`、`conversation_id`、`run_status`、`deadline_at`和`status_url`，响应头也提供`Location`。它不表示智能体已经执行成功。调用程序应保存任务ID、原Key归属和本次幂等标识，再开始查询。
 

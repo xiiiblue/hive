@@ -1,5 +1,68 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';import Icon from '../components/Icon.astro';import ArchitectureGraph from '../components/ArchitectureGraph.astro';import DocCards from '../components/DocCards.astro';import {url,sectionDocs} from '../lib/content';
-const layers=[{key:'control',label:'控制与状态',title:'先确定谁在做什么。',text:'Core维护员工、对话、任务、资源分配和运行状态，把需要一致处理的事实留在数据库中，再把容器相关操作交给Runtime Manager。',detail:'Core · PostgreSQL · 任务调度',link:'overview'},{key:'runtime',label:'员工执行',title:'短时任务，长期工作空间。',text:'每名员工拥有独占的执行环境。Hive Pi或OpenCode为单次任务推进工作，文件、依赖和会话数据在任务结束后继续保留。',detail:'Runtime Manager · Docker · Workspace',link:'workspace'},{key:'model',label:'模型访问',title:'模型Key留在受控入口。',text:'Model Gateway负责模型路由、运行身份核验和调用归因。模型上游Key不会直接发进员工运行环境。',detail:'模型访问码 · 固定路由 · 用量记录',link:'model-gateway'},{key:'business',label:'业务身份',title:'身份由蜂巢证明，权限由业务方判断。',text:'Skill或业务面板直接访问业务系统；业务网关在线核验蜂巢短期身份，关联本系统账号，再检查角色和数据权限。',detail:'系统资格 · 短期身份 · 业务权限',link:'security'}];
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ArchitectureGraph from '../components/ArchitectureGraph.astro';
+import DocCards from '../components/DocCards.astro';
+import { url, sectionDocs } from '../lib/content';
+
+const layers = [
+  { key: 'control', label: '平台核心', title: '确认身份，管理资源和任务', text: '平台核心维护员工、资源分配、对话和任务状态。需要启停或检查员工执行环境的操作，由运行环境管理服务负责。', link: 'overview' },
+  { key: 'runtime', label: '员工工作空间', title: '一项任务结束，资料继续保留', text: 'Hive Pi或OpenCode在员工的独立执行环境中推进任务。员工可以在下一次任务继续使用自己的文件和已安装依赖。', link: 'workspace' },
+  { key: 'model', label: '模型访问', title: '由模型网关访问模型服务', text: '模型网关核验运行身份、选择配置好的访问路由，并记录调用归属与用量。上游凭据由平台管理。', link: 'model-gateway' },
+  { key: 'business', label: '业务权限', title: '由业务系统决定操作权限', text: '业务系统可核验蜂巢提供的短期身份，把它关联到本系统的账号，再按用户角色和数据范围授权。', link: 'security' },
+];
+
+const stages = [
+  ['接收要求', '员工在对话中发起一项工作，或者由已授权的外部系统通过开放API发起。'],
+  ['核对与准备', '平台检查身份、使用范围和运行条件，再安排任务等待或执行。'],
+  ['执行与记录', '智能体根据任务调用模型和工具，平台持续记录过程。'],
+  ['结束与保留', '任务记为完成、失败或取消。员工可以在原对话查看记录，在文件目录找保留下来的结果。'],
+];
 ---
-<SiteLayout title="架构与设计 · 蜂巢" description="了解蜂巢四层架构、任务生命周期、持久工作空间、模型网关与企业业务身份边界。"><section class="page-intro container"><span class="eyebrow">ARCHITECTURE / 把结构讲明白</span><h1>让能力自由发挥，<br/><em>让边界清楚可见。</em></h1><div class="page-intro-bottom"><p>模块化单体控制面，独立宿主编排，员工独占执行环境。<br/>模型访问与业务访问分开，状态与工作资产各有归属。</p><a class="button primary" href={url('/docs/architecture/overview/')}>阅读架构导读<Icon name="arrow" size={18}/></a></div></section><section class="container"><ArchitectureGraph/></section><section class="section container" data-tabs><div class="section-heading"><div><span class="eyebrow">FOUR RESPONSIBILITIES</span><h2>不必先记住所有组件，<br/>先看它们各自负责什么。</h2></div></div><div class="architecture-explorer"><div role="tablist" aria-label="架构职责">{layers.map((layer,i)=><button type="button" role="tab" id={'layer-'+layer.key} aria-controls={'layer-panel-'+layer.key} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1}><span>0{i+1}</span>{layer.label}<Icon name="arrow" size={18}/></button>)}</div>{layers.map((layer,i)=><div role="tabpanel" id={'layer-panel-'+layer.key} aria-labelledby={'layer-'+layer.key} hidden={i!==0}><span class="eyebrow">{layer.detail}</span><h3>{layer.title}</h3><p>{layer.text}</p><a class="inline-link" href={url('/docs/architecture/'+layer.link+'/')}>深入理解这一部分<Icon name="arrow" size={18}/></a></div>)}</div></section><section class="principles section"><div class="container lifecycle"><div><span class="eyebrow">A TASK, END TO END</span><h2>一次任务的旅程。</h2><p>对话保存上下文，任务记录一次执行。<br/>浏览器短暂断线，与任务是否结束，是两件事。</p><a class="inline-link" href={url('/docs/architecture/task-lifecycle/')}>逐步理解任务生命周期<Icon name="arrow" size={18}/></a></div><ol>{[['接收要求','员工在对话或通过开放API发起一项工作。'],['核对与准备','检查身份、资源、模型与工作空间，进入等待或运行。'],['执行与记录','智能体调用模型和工具，过程事件持续写回。'],['结束与保留','记录完成、失败或取消状态，文件与会话继续保留。']].map(([title,text],i)=><li><span>0{i+1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol></div></section><section class="section container"><div class="section-heading"><h2>从一张图，读到设计细节。</h2></div><DocCards docs={sectionDocs('architecture')}/></section></SiteLayout>
+<SiteLayout title="架构与设计 · 蜂巢" description="了解蜂巢的平台核心、员工工作空间、模型网关和企业业务权限。">
+  <section class="page-intro container">
+    <h1>系统架构</h1>
+    <div class="page-intro-bottom">
+      <p>身份和任务由平台管理，工作在员工自己的执行环境中完成。</p>
+      <a class="button" href={url('/docs/product/capabilities/')}>查看功能目录</a>
+    </div>
+  </section>
+  <section class="container"><ArchitectureGraph /></section>
+  <section class="section container" data-tabs>
+    <div class="section-heading"><h2>各部分负责什么</h2></div>
+    <div class="architecture-explorer">
+      <div role="tablist" aria-label="架构职责">
+        {layers.map((layer, index) => (
+          <button type="button" role="tab" id={'layer-' + layer.key} aria-controls={'layer-panel-' + layer.key} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1}>{layer.label}</button>
+        ))}
+      </div>
+      {layers.map((layer, index) => (
+        <div role="tabpanel" id={'layer-panel-' + layer.key} aria-labelledby={'layer-' + layer.key} hidden={index !== 0}>
+          <h3>{layer.title}</h3><p>{layer.text}</p>
+          <a class="inline-link" href={url('/docs/architecture/' + layer.link + '/')}>阅读相关设计</a>
+        </div>
+      ))}
+    </div>
+  </section>
+  <section class="principles section">
+    <div class="container lifecycle">
+      <div>
+        <h2>一项任务如何开始和结束</h2>
+        <p>对话保存交流的上下文。每次要求智能体执行工作，都会留下独立的任务记录。</p>
+        <a class="inline-link" href={url('/docs/architecture/task-lifecycle/')}>阅读任务执行说明</a>
+      </div>
+      <ol>{stages.map(([title, text], index) => <li><span>{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol>
+    </div>
+  </section>
+  <section class="section container">
+    <div class="section-heading"><h2>架构文档</h2></div>
+    <DocCards docs={sectionDocs('architecture')} />
+  </section>
+</SiteLayout>
+
+<style>
+.architecture-explorer [role=tabpanel] { min-height: 250px; }
+.architecture-explorer h3 { margin-top: 0; }
+.architecture-explorer p, .lifecycle > div p { font-size: 1rem; }
+.lifecycle > div h2 { margin-top: 0; }
+.lifecycle li p { font-size: .9375rem; }
+</style>

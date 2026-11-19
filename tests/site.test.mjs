@@ -81,7 +81,7 @@ async function readDocument(file) {
 function routeForHtml(file) {
   const relative = path.relative(dist, file).replaceAll(path.sep, '/');
   if (relative === 'index.html') return base;
-  if (relative === '404.html') return base + '404.html';
+  if (relative === '404.html' || relative.startsWith('media/')) return base + relative;
   if (relative.endsWith('/index.html')) return base + relative.slice(0, -'index.html'.length);
   return base + relative.replace(/\.html$/, '') + '/';
 }

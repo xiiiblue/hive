@@ -1,5 +1,98 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';import Icon from '../components/Icon.astro';import {url,sectionDocs,docUrl} from '../lib/content';
-const books=[{id:'employee',label:'EMPLOYEE WORKBENCH',title:'员工工作台',description:'从一项具体工作出发，学会对话、技能、文件、面板和自动化。',image:'employee/02-answer-files.png',number:'01',screens:71},{id:'admin',label:'ADMIN CONSOLE',title:'管理员控制台',description:'先理解为什么要管理，再掌握人员、企业能力、模型和平台运行。',image:'admin/01-overview.png',number:'02',screens:60}];
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Icon from '../components/Icon.astro';
+import { url, sectionDocs, docUrl } from '../lib/content';
+
+const books = [
+  {
+    id: 'employee',
+    title: '员工工作台',
+    description: '先学会发起对话和查看结果，再找资料、用技能、处理业务或设置自动化。',
+    image: 'employee/01-navigation.png',
+    icon: 'workspace',
+  },
+  {
+    id: 'admin',
+    title: '管理员控制台',
+    description: '从开通员工账号开始，逐步管理企业资源、模型用量、接入和运行。',
+    image: 'admin/01-overview.png',
+    icon: 'shield',
+  },
+];
 ---
-<SiteLayout title="图文操作手册 · 蜂巢" description="图文讲解蜂巢员工工作台与管理员控制台，说明为什么有这个功能、怎样操作及如何判断结果。"><section class="page-intro container"><span class="eyebrow">HANDBOOKS / 从理解到操作</span><h1>先明白为什么，<br/><em>再掌握怎样做。</em></h1><p>不需要先了解系统架构，也能找到自己的第一步。<br/>两类角色，两本图文手册，把操作、影响和结果讲清楚。</p></section><div class="container handbook-shelves">{books.map(book=><section class={'handbook-volume '+book.id}><div class="volume-cover"><span>{book.label}</span><h2>{book.title}<br/>操作手册</h2><p>{book.description}</p><div><strong>{book.number}</strong><small>10个使用章节<br/>{book.screens}张界面截图</small></div><a class="button" href={url('/docs/'+book.id+'/overview/')}>开始阅读<Icon name="arrow" size={18}/></a></div><div class="volume-contents"><div class="volume-preview"><img src={url('/media/manuals/'+book.image)} alt={book.title+'演示界面'} width="1440" height="1100" loading="lazy"/></div><ol>{sectionDocs(book.id).filter(d=>d.order>0).map(doc=><li><a href={docUrl(doc)}><span>{String(doc.order).padStart(2,'0')}</span>{doc.title}<Icon name="arrow" size={15}/></a></li>)}</ol></div></section>)}</div><section class="end-note container"><span class="eyebrow">关于图片与适用范围</span><p>两册共131张界面截图和2张概念图，均按当前页面整理。<br/>图中人员、模型、文件、渠道和业务记录为合成资料；操作结果仍需在自己的部署中核对。</p><a class="inline-link" href={url('/docs/')}><Icon name="search" size={17}/>也可以按关键词搜索具体操作</a></section></SiteLayout>
+<SiteLayout title="操作手册 · 蜂巢" description="按角色阅读蜂巢员工工作台与管理员控制台手册，查看当前界面、操作步骤和结果。">
+  <section class="page-intro container">
+    <h1>操作手册</h1>
+    <div class="page-intro-bottom">
+      <p>按你的角色选一本手册。第一次使用可以从导读开始，有明确问题时直接打开对应章节。</p>
+      <button class="button" type="button" data-open-search><Icon name="search" size={18} />搜索操作</button>
+    </div>
+  </section>
+  <div class="container handbook-grid">
+    {books.map(book => (
+      <section class="handbook-card">
+        <div class="handbook-card-heading">
+          <Icon name={book.icon} size={24} />
+          <h2>{book.title}</h2>
+          <p>{book.description}</p>
+          <a class="inline-link" href={url('/docs/' + book.id + '/overview/')}>从导读开始</a>
+        </div>
+        <figure class="handbook-preview">
+          <button type="button" data-image-zoom aria-label={'放大' + book.title + '界面'}>
+            <img src={url('/media/manuals/' + book.image)} alt={book.title + '演示界面'} loading="lazy" decoding="async" />
+          </button>
+          <figcaption>真实界面 · 合成示例</figcaption>
+        </figure>
+        <ul class="handbook-chapters">
+          {sectionDocs(book.id).filter(doc => !doc.slug.endsWith('/overview')).map(doc => (
+            <li><a href={docUrl(doc)}>{doc.title}<Icon name="chevron" size={16} /></a></li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+  <section class="end-note container">
+    <p>功能与权限以你所在企业的部署为准。</p>
+    <a class="inline-link" href={url('/docs/product/capabilities/')}>按功能查找相关章节</a>
+  </section>
+</SiteLayout>
+
+<style>
+.handbook-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 3vw, 28px); }
+.handbook-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  overflow: clip;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+.handbook-card-heading { padding: clamp(19px, 3vw, 32px); background: var(--soft); border-bottom: 1px solid var(--line); }
+.handbook-card-heading > :global(svg) { color: var(--accent); }
+.handbook-card-heading h2 { margin-block: 4px 7px; font-size: clamp(1.55rem, 3vw, 2.35rem); }
+.handbook-card-heading p { min-height: 3.35em; color: var(--muted); line-height: 1.65; }
+.handbook-card-heading a { margin-top: 14px; }
+.handbook-preview { margin: 0; padding: clamp(13px, 2vw, 25px); border-bottom: 1px solid var(--line); }
+.handbook-preview button {
+  width: 100%;
+  display: block;
+  cursor: zoom-in;
+  aspect-ratio: 1.66;
+  padding: 0;
+  background: #f5f7fb;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.handbook-preview img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.handbook-preview figcaption { font-size: .8125rem; color: var(--muted); margin-top: 7px; }
+.handbook-chapters { list-style: none; padding: 5px clamp(15px, 2vw, 29px) 15px; margin: 0; }
+.handbook-chapters li:not(:last-child) { border-bottom: 1px solid var(--line); }
+.handbook-chapters a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 11px; }
+.handbook-chapters a:hover { color: var(--accent); }
+.end-note { padding-top: 34px; }
+@media (max-width: 700px) {
+  .handbook-grid { grid-template-columns: minmax(0, 1fr); }
+  .handbook-card-heading p { min-height: 0; }
+}
+</style>

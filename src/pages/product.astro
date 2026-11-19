@@ -1,4 +1,67 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';import Icon from '../components/Icon.astro';import WorkspaceIllustration from '../components/WorkspaceIllustration.astro';import DocCards from '../components/DocCards.astro';import {url,sectionDocs} from '../lib/content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Icon from '../components/Icon.astro';
+import WorkspaceIllustration from '../components/WorkspaceIllustration.astro';
+import DocCards from '../components/DocCards.astro';
+import { url, sectionDocs } from '../lib/content';
+
+const scenarios = [
+  { icon: 'file', title: '把分散资料整理成报告', text: '提供工单、纪要或表格，写清时间范围和格式。核对数字和来源后，保留结果文件。', link: '/docs/employee/02-conversations/' },
+  { icon: 'book', title: '把成功的方法留给下一次', text: '使用已有Skill，或把自己的处理过程整理成一份可以复用的操作说明。', link: '/docs/employee/04-skills/' },
+  { icon: 'layers', title: '让重复工作按时开展', text: '在普通对话中试好做法，设置定时任务，再检查执行历史。', link: '/docs/employee/03-automation/' },
+  { icon: 'grid', title: '从面板处理业务', text: '按授权打开业务面板查看记录。按操作入口保存个人副本，并用聊天调整页面。', link: '/docs/employee/06-panels/' },
+];
 ---
-<SiteLayout title="产品与场景 · 蜂巢" description="理解蜂巢员工数字分身，了解持续工作空间、技能复用、企业系统连接和适用场景。"><section class="page-intro container"><span class="eyebrow">PRODUCT / 工作有了连续性</span><h1>一位员工，<br/><em>一处长期工作的空间。</em></h1><p>蜂巢是部署在单个企业内网中的员工数字分身平台。<br/>让智能体使用员工的资料、方法和已获准业务能力，持续推进工作。</p></section><section class="container product-overview"><WorkspaceIllustration/><div><span class="eyebrow">WHAT MAKES A DIGITAL TWIN</span><h2>数字分身，<br/>从“我是谁”开始。</h2><p>它由员工身份、持久文件、执行环境、对话和获分配的能力共同组成。你可以继续上一项工作，也可以积累自己的做法。</p><p>蜂巢提供身份与平台能力；业务账号和操作权限仍由业务系统管理。它不创建一个能够代替所有员工的高权限账号。</p><a class="inline-link" href={url('/docs/product/digital-twin/')}>理解核心对象与关系<Icon name="arrow" size={18}/></a></div></section><section class="section container"><div class="section-heading"><div><span class="eyebrow">EVERYDAY SCENARIOS</span><h2>从熟悉的工作，<br/>找到合适的起点。</h2></div><a class="inline-link" href={url('/docs/product/scenarios/')}>阅读场景指南<Icon name="arrow" size={18}/></a></div><div class="scenario-list">{[{n:'01',title:'把分散资料整理成报告',text:'上传工单、纪要或表格，写清时间范围和格式，核对数字和来源，再保留结果文件。',tags:'对话 · 文件 · 结果核对',link:'/docs/employee/02-conversations/'},{n:'02',title:'把成功的方法留给下一次',text:'从技能广场选择做法，或把自己的处理过程整理为Skill。安装、启用、版本和权限分别管理。',tags:'个人Skill · 企业Skill · 技能市场',link:'/docs/employee/04-skills/'},{n:'03',title:'让重复工作按时开展',text:'先在普通对话中确认工作方式，再设置定时任务，查看执行历史和失败提醒。',tags:'自动化 · 专用对话 · 执行历史',link:'/docs/employee/03-automation/'},{n:'04',title:'让业务页面更符合自己的习惯',text:'从业务面板查看列表与处理事项，保存个人副本，用聊天调整页面，再预览和保存版本。',tags:'业务面板 · 个人副本 · 草稿预览',link:'/docs/employee/06-panels/'}].map(item=><a href={url(item.link)}><span>{item.n}</span><h3>{item.title}<small>{item.tags}</small></h3><p>{item.text}</p><Icon name="external" size={24}/></a>)}</div></section><section class="section principles"><div class="container"><div class="section-heading"><div><span class="eyebrow">CAPABILITY WITH BOUNDARIES</span><h2>用得起来，<br/>也说得清楚。</h2></div><p>能力、身份、权限与结果，<br/>需要分别理解。</p></div><div class="boundary-grid"><article><h3>内网部署</h3><p>平台部署在企业自己的环境中。模型上游与业务系统连接仍可能涉及外部网络，数据范围需要按实际部署核对。</p></article><article><h3>原生工作方式</h3><p>智能体可以使用文件、Shell、脚本、CLI和Skill，不必把每个业务动作改写成平台专用工具。</p></article><article><h3>结果需要核对</h3><p>任务完成表示智能体执行已结束。业务是否成功、取消是否来得及，以及已发生的修改，都要按实际结果判断。</p></article></div></div></section><section class="section container"><div class="section-heading"><h2>继续认识蜂巢。</h2></div><DocCards docs={sectionDocs('product')}/></section></SiteLayout>
+<SiteLayout title="认识蜂巢 · 蜂巢" description="了解蜂巢的员工数字分身、持久工作空间、业务权限和常见使用场景。">
+  <section class="page-intro container">
+    <h1>认识蜂巢</h1>
+    <div class="page-intro-bottom">
+      <p>蜂巢在企业内网为员工提供独立的AI工作空间。员工可以使用自己的资料和获准的工具，让智能体协助完成工作。</p>
+      <a class="button primary" href={url('/docs/product/capabilities/')}>查看功能目录</a>
+    </div>
+  </section>
+  <section class="container product-overview">
+    <WorkspaceIllustration />
+    <div>
+      <h2>数字分身怎样工作</h2>
+      <p>员工登录后进入自己的工作空间，能继续使用先前保存的文件和做法。每项任务都在本人的执行环境里运行。</p>
+      <p>蜂巢提供平台能力和员工身份。访问业务系统时，实际可用的功能与数据由业务系统授权。</p>
+      <a class="inline-link" href={url('/docs/product/digital-twin/')}>理解几个常用概念</a>
+    </div>
+  </section>
+  <section class="section container">
+    <div class="section-heading">
+      <h2>从熟悉的工作开始</h2>
+      <a class="inline-link" href={url('/docs/product/scenarios/')}>阅读场景指南</a>
+    </div>
+    <div class="scenario-list">
+      {scenarios.map(scenario => (
+        <a href={url(scenario.link)}><Icon name={scenario.icon} size={24} /><h3>{scenario.title}</h3><p>{scenario.text}</p><Icon name="chevron" size={19} /></a>
+      ))}
+    </div>
+  </section>
+  <section class="section principles">
+    <div class="container">
+      <div class="section-heading"><h2>使用前需要确认什么</h2></div>
+      <div class="boundary-grid">
+        <article><h3>部署范围</h3><p>蜂巢面向单企业内网。模型和业务系统的访问范围由部署与配置决定。</p></article>
+        <article><h3>使用权限</h3><p>只有已分配给员工的模型、知识库、工具和系统可以使用。实际业务操作还要经过目标系统授权。</p></article>
+        <article><h3>执行结果</h3><p>任务状态说明智能体执行到哪一步。关键数据、生成的文件和业务写入结果仍要核对。</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="section container">
+    <div class="section-heading"><h2>产品文档</h2></div>
+    <DocCards docs={sectionDocs('product')} />
+  </section>
+</SiteLayout>
+
+<style>
+.product-overview p, .boundary-grid p, .scenario-list p { font-size: 1rem; }
+.product-overview h2 { margin-top: 0; }
+.scenario-list a > :global(svg:first-child) { color: var(--accent); }
+@media (max-width: 950px) {
+  .scenario-list a > :global(svg:first-child) { grid-column: 1; grid-row: 1; }
+  .scenario-list a > :global(svg:last-child) { grid-column: 3; grid-row: 1; }
+}
+</style>

@@ -1,1 +1,118 @@
-<div class="architecture-map"><p class="map-mobile-hint">左右滑动查看完整架构图 →</p><svg viewBox="0 0 1160 540" role="img" aria-labelledby="arch-title arch-desc"><title id="arch-title">蜂巢总体架构：控制、执行、模型与业务访问</title><desc id="arch-desc">员工和管理员通过不同页面访问Core；Core保存状态并委托Runtime Manager管理员工执行环境。模型请求经过Model Gateway，业务请求直接访问企业业务系统。PostgreSQL和对象存储保存平台状态及不可变资产。</desc><defs><marker id="arrow-map" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#7196cf"/></marker></defs><rect class="map-region" x="280" y="24" width="545" height="482" rx="18"/><rect class="map-region-inner" x="575" y="185" width="224" height="173" rx="13"/><g class="map-eyebrow"><text x="304" y="54">蜂巢平台</text><text x="598" y="213">员工独占执行环境</text><text x="30" y="54">使用入口</text><text x="896" y="54">外部服务</text></g><g class="map-line" marker-end="url(#arrow-map)"><path d="M209 118H319"/><path d="M209 220h55V147h55"/><path d="M513 132h62"/><path d="M415 167v71"/><path d="M511 274h63"/><path d="M687 358v55"/><path d="M800 449h86"/><path d="M800 275h86"/></g><g class="map-node"><rect x="29" y="82" width="180" height="73" rx="10"/><rect x="29" y="184" width="180" height="73" rx="10"/><rect x="319" y="96" width="194" height="73" rx="10"/><rect x="575" y="96" width="224" height="73" rx="10"/><rect x="319" y="238" width="194" height="73" rx="10"/><rect class="map-runtime" x="596" y="234" width="181" height="100" rx="10"/><rect x="575" y="413" width="224" height="73" rx="10"/><rect x="886" y="238" width="239" height="73" rx="10"/><rect x="886" y="413" width="239" height="73" rx="10"/></g><g class="map-title"><text x="50" y="112">员工工作台</text><text x="50" y="214">管理员控制台</text><text x="340" y="127">Hive Core</text><text x="595" y="127">PostgreSQL / 对象存储</text><text x="340" y="268">Runtime Manager</text><text x="615" y="266">Hive Pi / OpenCode</text><text x="595" y="444">Model Gateway</text><text x="907" y="268">企业业务系统</text><text x="907" y="444">模型服务</text></g><g class="map-small"><text x="50" y="136">对话、文件、技能与面板</text><text x="50" y="238">人员、能力、模型与运行</text><text x="340" y="151">身份、授权、状态与调度</text><text x="595" y="151">平台事实与持久资产</text><text x="340" y="292">容器生命周期与受控操作</text><text x="615" y="293">文件 · Shell · Skill · MCP</text><text x="615" y="315">个人文件与依赖持续保留</text><text x="595" y="468">模型路由、访问码与调用用量</text><text x="907" y="292">在线核验身份，自行决定业务权限</text><text x="907" y="468">按企业选择的路由提供模型</text></g><g class="map-caption"><text x="433" y="210">管理与编排</text><text x="833" y="263">业务访问</text><text x="702" y="389">模型请求</text></g></svg><div class="map-legend"><span><i></i>模型请求经过Model Gateway</span><span><i class="accent-dot"></i>业务访问由业务系统授权</span><span>架构示意 · 单企业、单节点部署范围</span></div></div>
+---
+import Icon from './Icon.astro';
+import { url } from '../lib/content';
+---
+<figure class="system-map" aria-label="蜂巢总体架构">
+  <div class="map-main">
+    <section class="map-column" aria-label="使用入口">
+      <h3>使用入口</h3>
+      <div class="map-nodes">
+        <a class="map-node" href={url('/docs/employee/overview/')}><Icon name="workspace" size={20} /><span><strong>员工工作台与手机聊天</strong><small>发起任务、查看结果</small></span></a>
+        <a class="map-node" href={url('/docs/admin/overview/')}><Icon name="shield" size={20} /><span><strong>管理员控制台</strong><small>分配资源、管理运行</small></span></a>
+        <a class="map-node" href={url('/docs/developers/open-api/')}><Icon name="code" size={20} /><span><strong>开放API</strong><small>已获准的系统代员工发起任务</small></span></a>
+      </div>
+    </section>
+    <div class="map-connector" aria-hidden="true"></div>
+    <section class="map-column map-column-core" aria-label="蜂巢平台">
+      <h3>蜂巢平台</h3>
+      <div class="map-nodes">
+        <a class="map-node" href={url('/docs/architecture/overview/')}><Icon name="layers" size={20} /><span><strong>平台核心 Hive Core</strong><small>核对身份、管理授权和任务状态</small></span></a>
+        <div class="map-internal"><small>数据库和对象存储保留平台状态与资源</small><small>运行环境管理服务负责启停执行环境</small></div>
+      </div>
+    </section>
+    <div class="map-connector" aria-hidden="true"></div>
+    <section class="map-column map-column-runtime" aria-label="员工工作空间">
+      <h3>员工工作空间</h3>
+      <div class="map-nodes">
+        <a class="map-node" href={url('/docs/architecture/workspace/')}><Icon name="workspace" size={20} /><span><strong>个人执行环境</strong><small>Hive Pi或OpenCode推进当前任务</small></span></a>
+        <div class="map-internal"><small>个人文件、技能与工具按权限使用</small><small>工作资料留在相应的文件目录</small></div>
+      </div>
+    </section>
+  </div>
+  <div class="map-paths">
+    <div class="map-path">
+      <span class="map-path-name"><Icon name="layers" size={18} />模型请求</span>
+      <a href={url('/docs/architecture/model-gateway/')}>通过模型网关访问模型服务</a>
+    </div>
+    <div class="map-path">
+      <span class="map-path-name"><Icon name="shield" size={18} />业务访问</span>
+      <a href={url('/docs/developers/identity/')}>业务系统核验身份并检查权限</a>
+    </div>
+  </div>
+  <figcaption>执行环境中的模型请求通过模型网关转发。业务工具或面板按所在系统的授权访问对应业务。</figcaption>
+</figure>
+
+<style>
+.system-map {
+  margin: 0;
+  padding: clamp(16px, 3vw, 34px);
+  border: 1px solid #2d4568;
+  border-radius: 22px;
+  background: #0d1b33;
+  color: #f6f8ff;
+}
+.map-main { display: grid; grid-template-columns: 1fr 42px 1.12fr 42px 1.08fr; align-items: start; }
+.map-column {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid #35496b;
+  border-radius: 13px;
+  background: #142441;
+}
+.map-column-core { background: #182b4b; }
+.map-column-runtime { background: #1b345b; border-color: #5277a6; }
+.map-column h3 { font-size: 15px; letter-spacing: 0; margin: 0 0 13px; color: #bbd0f0; }
+.map-nodes { display: grid; gap: 8px; }
+.map-node {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding: 10px;
+  background: #0d1b32;
+  border: 1px solid #365279;
+  border-radius: 8px;
+  transition: background .18s, border-color .18s;
+}
+.map-node:hover { border-color: #a2c8ff; background: #213b61; }
+.map-node > :global(svg) { color: #b0d0ff; }
+.map-node strong, .map-node small { display: block; }
+.map-node strong { font-size: 15px; font-weight: 650; line-height: 1.55; }
+.map-node small, .map-internal small { color: #b7c9e5; font-size: 13px; line-height: 1.6; margin-top: 3px; }
+.map-internal { display: grid; gap: 8px; padding: 6px 2px 1px; }
+.map-internal small { border-left: 2px solid #668fc8; padding-left: 10px; }
+.map-connector { position: relative; background: #7596c7; height: 1px; margin-top: 84px; }
+.map-connector::after {
+  position: absolute;
+  content: "";
+  right: 2px;
+  width: 7px;
+  height: 7px;
+  top: -3px;
+  transform: rotate(45deg);
+  border-top: 1px solid #aad0ff;
+  border-right: 1px solid #aad0ff;
+}
+.map-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.map-path {
+  border: 1px solid #365279;
+  border-radius: 10px;
+  padding: 12px 13px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  font-size: 14px;
+}
+.map-path-name { display: inline-flex; align-items: center; gap: 7px; font-weight: 650; color: #b4d3ff; }
+.map-path a { text-decoration: underline; text-underline-offset: 4px; }
+.system-map figcaption { margin-top: 14px; color: #b7c9e5; font-size: 13px; }
+.system-map :is(a, button):focus-visible { outline-color: #b4d3ff; }
+@media (max-width: 820px) {
+  .map-main { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .map-connector { margin: 0 auto; width: 1px; height: 23px; }
+  .map-connector::after { right: -3px; top: auto; bottom: 2px; transform: rotate(135deg); }
+}
+@media (max-width: 500px) {
+  .map-paths { grid-template-columns: 1fr; }
+}
+</style>

@@ -3,7 +3,7 @@ title: 调用蜂巢开放API
 description: 用服务端Key提交智能体任务，正确读取普通回答和SSE流式结果。
 section: developers
 order: 20
-updated: '2026-10-16'
+updated: '2026-11-20'
 sources:
   - apps/hive-core/src/mainline/server.ts
   - apps/hive-core/src/mainline/open-api/postgres-open-api.ts
@@ -21,7 +21,7 @@ sources:
 
 1. 管理员在“集成与接入→开放API”创建Key，选择普通员工、执行引擎、业务范围和可选任务时限。
 2. 管理员分别为该员工配置所需模型、系统资格和资源。
-3. 调用程序在后端安全配置中读取`HIVE_API_KEY`。完整Key只展示一次，不写入浏览器代码、公开仓库或日志。
+3. 调用程序在后端安全配置中读取`HIVE_API_KEY`。管理员可以再次查看新版创建的完整Key，查看会记录审计。升级前的旧Key仍可使用，完整值无法还原。Key只放在服务端安全配置中。
 4. 用只读且输出容易核对的任务完成首次调用。
 
 Key固定员工、执行引擎和业务范围，请求不能改变这些绑定。每次新请求通常创建独立对话；同一员工的调用仍共享文件与依赖。需要连续对话、多轮历史或指定已有会话时，不能自行追加未支持的请求字段。
@@ -56,6 +56,8 @@ curl --silent --show-error --fail-with-body \
 |`messages[0].role`|必须为`user`|
 |`messages[0].content`|字符串，不接受图片或内容数组|
 |`stream`|可省略；默认`false`，`true`使用SSE|
+|`conversation_title`|可省略；标题去掉首尾空白后须有1至200个UTF-16代码单元。控制字符、换行分隔符和无法配对的代理项会被拒绝|
+|`conversation_group_name`|可省略；只匹配员工在当前业务范围内的唯一同名分组。没有唯一匹配时，对话在根目录创建|
 
 不要传`temperature`、`tools`、`response_format`、自报员工或业务凭据等字段。未知字段会明确拒绝，接口不承诺完整OpenAI兼容，也没有供调用方执行的工具回调协议。
 

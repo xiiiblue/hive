@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用一张图理解蜂巢如何接收任务、使用资料和连接业务，再按身份查找系统功能。">
+  <link rel="canonical" href="https://www.bluexiii.com/hive/media/diagrams/capabilities.html">
+  <meta property="og:url" content="https://www.bluexiii.com/hive/media/diagrams/capabilities.html">
+  <title>蜂巢功能架构与目录</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --page: #f2f6fc; --surface: #fff; --ink: #10223c; --muted: #48617e;
+      --line: #c9d8ed; --accent: #164eaf; --soft: #eaf1fd;
+      --core: #12346b; --core-ink: #fff; --core-sub: #d8e7ff;
+      --teal: #09655b; --teal-soft: #e4f4f1;
+      --violet: #594289; --violet-soft: #f1ebfb;
+      --shadow: 0 18px 40px #193e7310;
+      font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    @supports (color: light-dark(white, black)) {
+      :root {
+        --page: light-dark(#f2f6fc, #0e182a); --surface: light-dark(#fff, #15233a);
+        --ink: light-dark(#10223c, #ecf3ff); --muted: light-dark(#48617e, #bccce5);
+        --line: light-dark(#c9d8ed, #384f70); --accent: light-dark(#164eaf, #b0cbff);
+        --soft: light-dark(#eaf1fd, #203658); --core: light-dark(#12346b, #234a86);
+        --core-sub: light-dark(#d8e7ff, #e1ecff);
+        --teal: light-dark(#09655b, #a1e4d9); --teal-soft: light-dark(#e4f4f1, #173b3c);
+        --violet: light-dark(#594289, #dfc8ff); --violet-soft: light-dark(#f1ebfb, #342a51);
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; line-height: 1.65; background: var(--page); color: var(--ink); }
+    main { max-width: 78rem; padding: clamp(1rem, 4vw, 3.5rem); margin: auto; }
+    h1, h2, h3, h4, p { margin: 0; }
+    h1 { font-size: clamp(1.85rem, 4vw, 3.3rem); line-height: 1.15; letter-spacing: -.035em; }
+    h2 { font-size: clamp(1.35rem, 2.6vw, 1.85rem); line-height: 1.3; }
+    h3 { font-size: 1.11rem; line-height: 1.4; }
+    h4 { font-size: 1rem; line-height: 1.45; }
+    p { color: var(--muted); }
+    header { margin-bottom: 1.6rem; }
+    header p, .section-head p { margin-top: .6rem; }
+    .jump-to-features { display: inline-block; margin-top: .65rem; font-weight: 650; }
+    main > section + section { margin-top: 2.4rem; }
+    .section-head { margin-bottom: 1rem; }
+    .architecture { margin: 0; padding: clamp(.85rem, 3vw, 1.65rem); border: 1px solid var(--line); border-radius: 1.25rem; background: var(--surface); box-shadow: var(--shadow); }
+    .diagram-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+    .node { display: grid; grid-template-columns: 2rem 1fr; align-items: start; gap: .65rem; padding: .88rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--soft); }
+    .node p, .storage p { font-size: .9rem; margin-top: .2rem; }
+    .symbol { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid currentColor; border-radius: .58rem; color: var(--accent); font-size: .89rem; font-weight: 700; }
+    .core { grid-template-columns: 2rem 1fr; color: var(--core-ink); background: var(--core); border-color: transparent; }
+    .core .symbol, .core p { color: var(--core-sub); }
+    .work { background: var(--teal-soft); }
+    .work .symbol { color: var(--teal); }
+    .outside { background: var(--violet-soft); }
+    .outside .symbol { color: var(--violet); }
+    .flow { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 2.4rem; color: var(--muted); text-align: center; font-size: .82rem; }
+    .flow::before { content: ""; height: .85rem; width: .65rem; flex: 0 0 .65rem; background: currentColor; clip-path: polygon(43% 0, 57% 0, 57% 70%, 100% 70%, 50% 100%, 0 70%, 43% 70%); }
+    .storage { margin-top: .85rem; padding: .85rem .95rem; border: 1px dashed var(--line); border-radius: .8rem; }
+    figcaption { margin-top: .8rem; color: var(--muted); font-size: .9rem; }
+    .filters { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; align-items: end; gap: .75rem; margin-bottom: .8rem; }
+    [hidden] { display: none !important; }
+    label { display: grid; gap: .25rem; font-size: .9rem; font-weight: 650; }
+    input, select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: .55rem; min-height: 2.8rem; width: 100%; padding: .45rem .65rem; }
+    button { cursor: pointer; min-width: 5em; }
+    button:hover { color: var(--accent); border-color: var(--accent); }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .result { margin-bottom: .85rem; font-size: .9rem; min-height: 1.5em; }
+    .jump-list { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+    .jump-list a { display: inline-block; padding: .25rem .65rem; border-radius: 1rem; background: var(--soft); font-size: .9rem; }
+    .catalog { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: .9rem; }
+    .bucket { scroll-margin-top: 1rem; overflow: hidden; border: 1px solid var(--line); border-radius: .9rem; background: var(--surface); }
+    .bucket > h3 { padding: .75rem .95rem; color: var(--accent); background: var(--soft); }
+    .entries { margin: 0; padding: 0; list-style: none; }
+    .entry { padding: .65rem .95rem; }
+    .entry + .entry { border-top: 1px solid var(--line); }
+    .entry p { font-size: .93rem; margin-top: .2rem; }
+    .back { margin-top: 1rem; font-size: .9rem; }
+    @media (max-width: 45rem) {
+      .diagram-row, .catalog { grid-template-columns: 1fr; }
+      .node { padding: .65rem; }
+    }
+    @media (max-width: 32rem) {
+      .filters { grid-template-columns: minmax(0, 1fr) auto; }
+      .filters label:first-child { grid-column: 1 / -1; }
+      .architecture { padding: .65rem; }
+    }
+    @media print {
+      :root { color-scheme: light !important; --page: #fff; --surface: #fff; --ink: #172338; --muted: #36445c; --line: #b4c1d2; --accent: #183c78; --soft: #eaf1fd; --core: #12346b; --core-ink: #fff; --core-sub: #e8effa; }
+      main { padding: 0; }
+      .filters, .result, .jump-list, .jump-to-features, .back { display: none; }
+      .catalog [hidden] { display: revert !important; }
+      .architecture, .entry { break-inside: avoid; print-color-adjust: exact; }
+      .architecture { box-shadow: none; }
+      .bucket { overflow: visible; }
+      .bucket > h3 { break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main id="top">
+    <header>
+      <h1>蜂巢功能架构与目录</h1>
+      <p>先看一项工作从哪里开始、在哪里执行，再按自己的角色查找功能。</p>
+      <a class="jump-to-features" href="#features">直接查找功能</a>
+    </header>
+
+    <section aria-labelledby="architecture">
+      <div class="section-head">
+        <h2 id="architecture">一项工作怎样经过蜂巢</h2>
+      </div>
+      <figure class="architecture" aria-labelledby="architecture">
+        <div class="diagram-row">
+          <div class="node"><span class="symbol" aria-hidden="true">用</span><div><h3>员工入口</h3><p>电脑和手机工作台、已连接的消息渠道。任务也可以由定时计划或来信规则触发。</p></div></div>
+          <div class="node"><span class="symbol" aria-hidden="true">管</span><div><h3>管理员控制台</h3><p>维护人员、模型、企业资料和业务能力，查看任务、用量和运行状态。</p></div></div>
+          <div class="node"><span class="symbol" aria-hidden="true">接</span><div><h3>业务系统接入</h3><p>外部系统可通过获配的开放接口提交任务，也可接入统一身份、工具和业务面板。</p></div></div>
+        </div>
+        <div class="flow">提交任务、变更配置或核对身份</div>
+        <div class="node core"><span class="symbol" aria-hidden="true">核</span><div><h3>平台核心服务</h3><p>确认身份和授权，保存会话和任务，安排执行，记录结果与关键管理操作。</p></div></div>
+        <div class="flow">运行环境管理服务准备员工的独立环境并启动执行引擎</div>
+        <div class="node work"><span class="symbol" aria-hidden="true">工</span><div><h3>员工工作空间</h3><p>Hive Pi和OpenCode是两种执行引擎。它们使用获配的文件、资料、技能和工具处理任务。个人文件可跨会话使用，团队目录按授权共享。</p></div></div>
+        <div class="flow">执行期间按需要连接模型、业务和资料</div>
+        <div class="diagram-row">
+          <div class="node outside"><span class="symbol" aria-hidden="true">模</span><div><h3>模型网关</h3><p>按本次任务允许的模型路由访问上游，记录调用和用量。执行环境使用短期模型访问身份。</p></div></div>
+          <div class="node outside"><span class="symbol" aria-hidden="true">业</span><div><h3>企业业务系统</h3><p>员工工具按授权调用业务接口。业务系统核验身份、决定数据和操作权限。</p></div></div>
+          <div class="node outside"><span class="symbol" aria-hidden="true">资</span><div><h3>资料与工作成果</h3><p>执行过程中查阅获授权的知识库和工作文件。结果回到会话，生成的文件可留在工作空间。</p></div></div>
+        </div>
+        <div class="storage">
+          <h3>各类数据保存在哪里</h3>
+          <p>数据库保存账号、授权、会话、任务状态和调用记录；个人与团队目录保存工作文件；对象存储保存资源包、备份和导出等归档文件。</p>
+        </div>
+        <figcaption>个人邮箱、机器人渠道、模型和企业资源的可见性取决于部署配置和账号授权。浏览器可从业务面板直接走获准的业务接口。</figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="features">
+      <div class="section-head">
+        <h2 id="features">查找系统功能</h2>
+        <p>Skill是一份可重复使用的工作方法，MCP是连接外部工具的协议，业务面板是工作台中的业务网页。开放API是业务系统调用蜂巢的接口。</p>
+      </div>
+      <div class="filters" id="filters" hidden>
+        <label for="query">按关键词搜索
+          <input id="query" type="search" placeholder="例如知识库、邮箱或备份" autocomplete="off">
+        </label>
+        <label for="role">按角色筛选
+          <select id="role">
+            <option value="">所有角色</option>
+            <option value="employee">员工</option>
+            <option value="admin">管理员</option>
+            <option value="developer">接入开发者</option>
+          </select>
+        </label>
+        <button id="clear" type="button">清除筛选</button>
+      </div>
+      <p id="result" class="result" role="status" hidden></p>
+      <nav aria-label="跳到功能分组">
+        <ul class="jump-list">
+          <li><a href="#chat">对话与执行</a></li>
+          <li><a href="#resources">技能与知识</a></li>
+          <li><a href="#workspace">工作空间</a></li>
+          <li><a href="#connections">业务与消息</a></li>
+          <li><a href="#automate">自动化与个人设置</a></li>
+          <li><a href="#management">组织和企业能力</a></li>
+          <li><a href="#models">模型与费用</a></li>
+          <li><a href="#operations">运营和运维</a></li>
+          <li><a href="#integration">系统接入</a></li>
+        </ul>
+      </nav>
+      <div class="catalog">
+        <section class="bucket" id="chat" aria-labelledby="chat-title"><h3 id="chat-title">对话与执行</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="employee"><h4>新建与继续对话</h4><p>核对业务范围和可用模型，提交问题；新对话沿用个人默认引擎，已保存的会话可从历史继续。</p></li>
+            <li class="entry" data-roles="employee"><h4>引用工具与资料</h4><p>在输入框用“/”打开快捷操作，用“@”选工作空间文件、知识库文档或工具，也可通过加号添加。</p></li>
+            <li class="entry" data-roles="employee"><h4>上传与集中查看文件</h4><p>随消息上传附件，打开聊天文件栏预览、下载或再次引用本轮附件、已用资料与结果文件。</p></li>
+            <li class="entry" data-roles="employee"><h4>看进度与取消</h4><p>查看排队、执行、结束状态和过程；取消要等页面确认停止，已完成的外部操作仍应到业务系统核对。</p></li>
+            <li class="entry" data-roles="employee"><h4>查找、分组与归档</h4><p>搜索旧对话、分组整理会话，在设置中查阅已归档内容与任务记录。</p></li>
+            <li class="entry" data-roles="employee"><h4>管理上下文</h4><p>查看上下文用量，按需压缩较早内容以继续长对话；完整聊天记录保留，关键要求可重新补充。</p></li>
+            <li class="entry" data-roles="employee"><h4>本轮调试与模型正文</h4><p>电脑端可查看工具调用、耗时、模型与用量；按需开启本轮正文记录，完成后在调试栏查看可用的请求和响应。</p></li>
+            <li class="entry" data-roles="employee"><h4>手机工作台</h4><p>移动网页提供助手、技能、记录和我的入口，适合发送消息、阅读结果与继续会话。桌面手册另说明完整管理入口。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="resources" aria-labelledby="resources-title"><h3 id="resources-title">技能与知识</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="employee"><h4>技能广场</h4><p>按业务范围查看已获配的企业技能、个人技能、市场技能和可用工具，选用适合当前任务的能力。</p></li>
+            <li class="entry" data-roles="employee"><h4>维护个人技能</h4><p>上传ZIP、编辑资料和标签、按标签筛选、整包替换内容；核对更新后的技能版本和适用范围。</p></li>
+            <li class="entry" data-roles="employee"><h4>安装或共享市场技能</h4><p>查看说明与版本，安装同事共享的技能；发布或更新以市场审核和版本状态为准。</p></li>
+            <li class="entry" data-roles="employee"><h4>企业技能个人版</h4><p>从可复制的企业Skill创建个人副本，在聊天中改进自己的版本并在确认后切换。</p></li>
+            <li class="entry" data-roles="employee"><h4>采纳聊天学习建议</h4><p>有合适的学习建议时，先查看拟保留的做法，再确认创建或更新个人技能。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>知识库</h4><p>管理员维护资料并通过能力组分配。员工从“资料与规范”查阅或在聊天引用，助手可搜索获授权资料。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>工作规范</h4><p>管理员维护适用的企业规范；员工可以查看已适用的内容，在对话中结合规范工作。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="workspace" aria-labelledby="workspace-title"><h3 id="workspace-title">工作空间</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="employee"><h4>管理个人文件</h4><p>在个人空间查看目录、上传与下载文件，常见类型可预览。文件可以跨会话继续使用。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>团队共享目录</h4><p>管理员设置访问成员及权限；获配员工在团队目录里协作，继续使用各自的独立运行环境。</p></li>
+            <li class="entry" data-roles="employee"><h4>使用终端</h4><p>电脑端可用终端检查文件、运行脚本和准备依赖。实际操作以账号权限和环境状态为准。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>运行环境与资源</h4><p>查看运行环境状态与资源；管理员可按权限启停和维护配额，容量是否生效以控台实际状态为准。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>备份、恢复与导出</h4><p>员工查看恢复点和导出自己的资料；管理员按权限发起恢复，先核对目标与覆盖范围。</p></li>
+            <li class="entry" data-roles="admin"><h4>空间容量与访问</h4><p>查看个人和团队空间用量、运行状态及所用存储；变更资源后核对实际配额与挂载状态。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="connections" aria-labelledby="connections-title"><h3 id="connections-title">业务与消息</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="employee admin"><h4>业务范围与系统目录</h4><p>员工在个人菜单切换业务范围、查看获配系统。管理员维护系统资料与能力授权，业务权限仍由业务系统决定。</p></li>
+            <li class="entry" data-roles="employee admin developer"><h4>MCP工具</h4><p>管理员登记远程服务并验证连接，开发者提供工具，员工在获授权的业务范围内选择工具。</p></li>
+            <li class="entry" data-roles="employee admin developer"><h4>企业业务面板</h4><p>管理员登记和发布业务网页，获授权员工可打开、切换和整理面板。业务方负责页面与接口。</p></li>
+            <li class="entry" data-roles="employee"><h4>个人业务面板</h4><p>将可复制的面板保存为个人版，通过聊天改动页面，预览确认后保存，也可查看历史版本。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>机器人消息渠道</h4><p>部署启用后，员工可以连接企业微信、微信、Telegram、钉钉或飞书个人机器人，在单聊中使用。管理台可查看企业微信、微信和Telegram的接入状态。</p></li>
+            <li class="entry" data-roles="employee"><h4>个人邮箱</h4><p>在设置验证并保存本人邮箱，聊天可按授权读取邮箱或准备发信草稿。发送前核对收件人和正文，并在记录中确认结果。</p></li>
+            <li class="entry" data-roles="employee"><h4>来信触发任务</h4><p>按发件人、标题或正文建立规则，用样例试判后再启用。命中后系统提交任务，可查看触发记录。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="automate" aria-labelledby="automate-title"><h3 id="automate-title">自动化与个人设置</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="employee admin"><h4>定时任务</h4><p>员工按北京时间设置执行时间、频率、指令和结果推送入口，查看每次执行。管理员可从定时计划总览核对状态。</p></li>
+            <li class="entry" data-roles="employee"><h4>在对话中管理个人事项</h4><p>用对话查找本人旧会话、查看可用能力，或请求调整回答语言、时区和本人定时事项，之后复核保存结果。</p></li>
+            <li class="entry" data-roles="employee"><h4>账号和语言</h4><p>查看账号信息、按权限修改密码，设置地区、时区和回答语言。</p></li>
+            <li class="entry" data-roles="employee"><h4>聊天默认项和显示</h4><p>管理聊天偏好、回答显示主题与字号，按页面可用项调整相关默认设置。</p></li>
+            <li class="entry" data-roles="employee"><h4>记忆与学习</h4><p>查看和整理个人记忆，调整相关选项和学习设置，方便后续任务沿用适用背景。</p></li>
+            <li class="entry" data-roles="employee"><h4>个人用量</h4><p>查看自己的模型调用记录、用量和已计价费用，并按页面支持的条件筛选。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>用户反馈</h4><p>员工提交问题、建议或截图并查看处理进度；管理员回复和记录处理结果。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="management" aria-labelledby="management-title"><h3 id="management-title">组织和企业能力</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="admin"><h4>平台概览与企业品牌</h4><p>查看平台概况，维护企业展示名称、标识及适用的登录页等展示内容。</p></li>
+            <li class="entry" data-roles="admin"><h4>员工和管理员</h4><p>创建账号、修改员工资料、重置密码或停用账号。操作前核对身份与账号类型。</p></li>
+            <li class="entry" data-roles="admin"><h4>组织与部门</h4><p>维护部门层级和人员归属，按组织关系查找员工。企业资源另由能力组明确分配。</p></li>
+            <li class="entry" data-roles="admin"><h4>能力组</h4><p>组合业务系统、企业Skill、面板、MCP和知识库等资源，再按员工分配并查看实际可用内容。</p></li>
+            <li class="entry" data-roles="admin"><h4>业务系统资料</h4><p>登记企业系统、功能入口和公共属性，查看人员资格与关联资源。</p></li>
+            <li class="entry" data-roles="admin"><h4>企业Skill与面板版本</h4><p>上传资源包、查看文件或版本，发布后再按人员和业务范围验证可见性。</p></li>
+            <li class="entry" data-roles="admin"><h4>企业MCP与知识库</h4><p>登记远程工具与认证，查看连接结果；维护知识库文件、转换状态和预览，更新后核对员工可见范围。</p></li>
+            <li class="entry" data-roles="admin"><h4>工作规范与市场审核</h4><p>编辑适用规范并核对内容；审理市场提交、查看版本并按影响进行下架或紧急禁用。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="models" aria-labelledby="models-title"><h3 id="models-title">模型与费用</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="employee"><h4>选择个人模型</h4><p>按部署规则配置可用的个人模型，为支持的使用场景选择默认项，保存前检查连接。</p></li>
+            <li class="entry" data-roles="admin"><h4>平台模型和渠道</h4><p>维护模型渠道、访问配置、模型目录、路由与价格，检查后启用；下线前核对仍在使用的默认项。</p></li>
+            <li class="entry" data-roles="admin"><h4>个人模型管理视图</h4><p>按员工查阅个人模型配置状态，结合平台模型与任务记录排查可用性。</p></li>
+            <li class="entry" data-roles="admin"><h4>执行引擎</h4><p>维护Hive Pi和OpenCode可用性、默认条件与模型设置。执行引擎负责调用模型、工具和文件。</p></li>
+            <li class="entry" data-roles="admin"><h4>任务并行度与时限</h4><p>设置全局值或员工单独并行度，查看用户实际继承值。调低并行上限影响后续调度。</p></li>
+            <li class="entry" data-roles="admin"><h4>模型调用记录</h4><p>按员工、模型和时间查阅调用结果、用量、耗时及错误摘要，结合任务状态定位问题。</p></li>
+            <li class="entry" data-roles="admin"><h4>费用与预算</h4><p>查看归集的用量、已计价费用及预算使用情况，核对价格覆盖范围和限额影响。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="operations" aria-labelledby="operations-title"><h3 id="operations-title">运营和运维</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="admin"><h4>任务管理</h4><p>按员工、状态查找任务，检查任务来源和执行结果，按权限取消仍可停止的任务。</p></li>
+            <li class="entry" data-roles="admin"><h4>定时计划与渠道总览</h4><p>查看员工计划和最近状态，核对消息渠道绑定与可用性；需要员工操作的绑定或规则从本人工作台处理。</p></li>
+            <li class="entry" data-roles="admin"><h4>平台运行与服务器监控</h4><p>查看服务和运行环境状态，以及CPU、内存、磁盘等资源趋势。按时间范围关联异常。</p></li>
+            <li class="entry" data-roles="admin"><h4>运营事件与审计</h4><p>处理站内告警与运营事件，查阅管理员操作和接入事件；必要时结合业务系统日志核对结果。</p></li>
+            <li class="entry" data-roles="admin"><h4>空间备份与恢复</h4><p>选择对应员工、恢复点和可恢复范围，核对恢复前后状态及记录。部署级恢复由运维按环境流程执行。</p></li>
+            <li class="entry" data-roles="admin"><h4>反馈处理</h4><p>查看待处理反馈、已有沟通和员工补充，公开给该员工的回复与处理结果以页面记录为准。</p></li>
+          </ul>
+        </section>
+        <section class="bucket" id="integration" aria-labelledby="integration-title"><h3 id="integration-title">系统接入</h3>
+          <ul class="entries">
+            <li class="entry" data-roles="admin developer"><h4>统一身份</h4><p>登记接入方及回调等信息，配置员工统一身份。业务方核验短期身份并将其关联到自己的账号与授权。</p></li>
+            <li class="entry" data-roles="admin developer"><h4>开放API</h4><p>管理员创建和管理调用Key及允许范围，外部系统可提交会话任务、查询结果或取消任务，并核对使用记录。</p></li>
+            <li class="entry" data-roles="developer"><h4>同步、流式与异步结果</h4><p>按场景用普通响应、SSE事件流或异步任务。对可能重复提交的请求使用幂等标识并跟踪原任务。</p></li>
+            <li class="entry" data-roles="developer"><h4>Skill与MCP接入</h4><p>把可复用的操作封装成Skill，或把远程工具封装为MCP服务。使用接入范围内的测试账号检查实际可用性。</p></li>
+            <li class="entry" data-roles="developer"><h4>业务面板接入</h4><p>将静态资源打包，使用面板接口取得会话允许的业务上下文，按业务接口授权查询。核对跨域、跳转条件及响应。</p></li>
+            <li class="entry" data-roles="admin developer"><h4>接入验证与排查</h4><p>结合统一身份或开放API使用情况、任务状态、调用时间和请求标识查证。业务写入结果由业务方核对。</p></li>
+          </ul>
+        </section>
+      </div>
+      <p class="back"><a href="#top">返回页首</a></p>
+    </section>
+  </main>
+  <script>
+    const filters = document.querySelector('#filters');
+    const query = document.querySelector('#query');
+    const role = document.querySelector('#role');
+    const result = document.querySelector('#result');
+    const buckets = [...document.querySelectorAll('.bucket')].map((element) => ({
+      element,
+      link: document.querySelector(`.jump-list a[href="#${element.id}"]`).parentElement,
+      entries: [...element.querySelectorAll('.entry')].map((item) => ({
+        item,
+        text: item.textContent.toLowerCase().replace(/\s+/g, ' '),
+        roles: item.dataset.roles.split(' '),
+      })),
+    }));
+
+    function applyFilters() {
+      const words = query.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let total = 0;
+      for (const bucket of buckets) {
+        let matches = 0;
+        for (const entry of bucket.entries) {
+          const visible = (!role.value || entry.roles.includes(role.value))
+            && words.every((word) => entry.text.includes(word));
+          entry.item.hidden = !visible;
+          if (visible) matches += 1;
+        }
+        bucket.element.hidden = bucket.link.hidden = matches === 0;
+        total += matches;
+      }
+      result.textContent = total ? `显示${total}项功能` : '没有找到符合条件的功能，请试试更短的关键词或清除筛选。';
+    }
+
+    query.addEventListener('input', applyFilters);
+    role.addEventListener('change', applyFilters);
+    document.querySelector('#clear').addEventListener('click', () => {
+      query.value = '';
+      role.value = '';
+      applyFilters();
+      query.focus();
+    });
+    filters.hidden = result.hidden = false;
+    applyFilters();
+  </script>
+</body>
+</html>
