@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从使用入口追踪一项任务，查看平台服务、员工执行环境、模型和业务访问路径以及三类存储的职责。">
+  <link rel="canonical" href="https://www.bluexiii.com/hive/media/diagrams/system-architecture.html">
+  <meta property="og:url" content="https://www.bluexiii.com/hive/media/diagrams/system-architecture.html">
+  <link rel="stylesheet" href="diagram-atlas.css">
+  <title>蜂巢总体架构图</title>
+</head>
+<body class="atlas-sheet">
+<main>
+<figure class="hive-atlas system-atlas" aria-labelledby="system-atlas-title">
+  <figcaption class="atlas-head">
+    <h1 class="atlas-title" id="system-atlas-title">蜂巢总体架构图</h1>
+    <p>一次员工请求，从进入平台到执行，再到结果保存。</p>
+    <span class="atlas-legend">虚线框表示平台外部服务</span>
+  </figcaption>
+  <div class="atlas-field">
+    <section class="atlas-band">
+      <h2 class="atlas-label">使用入口</h2>
+      <div class="atlas-entries">
+        <div><a href="https://www.bluexiii.com/hive/docs/employee/overview/">员工工作台</a><p>电脑或手机发起任务、查看进度，也可通过已绑定的机器人提交消息。</p></div>
+        <div><a href="https://www.bluexiii.com/hive/docs/admin/overview/">管理控制台</a><p>管理员维护人员、可用资源、模型和运行设置。</p></div>
+        <div><a href="https://www.bluexiii.com/hive/docs/developers/open-api/">开放接口</a><p>获准的外部应用可以代表指定员工提交任务、查询结果。</p></div>
+      </div>
+    </section>
+    <section class="atlas-band">
+      <h2 class="atlas-label">平台与执行</h2>
+      <div class="atlas-stage">
+        <div class="atlas-node">
+          <span class="atlas-codename" lang="en">Hive Core</span>
+          <a href="https://www.bluexiii.com/hive/docs/architecture/overview/">平台核心</a>
+          <p>核对身份和资源分配，为员工消息建立任务记录，安排执行。</p>
+        </div>
+        <span class="atlas-edge"><span>调度</span></span>
+        <div class="atlas-node">
+          <span class="atlas-codename" lang="en">Runtime Manager</span>
+          <strong>运行环境管理服务</strong>
+          <p>准备这名员工的环境，同步获配资源，启动或恢复智能体。</p>
+        </div>
+        <span class="atlas-edge"><span>启动</span></span>
+        <div class="atlas-node atlas-execution">
+          <span class="atlas-codename" lang="en">Workspace Runtime</span>
+          <a href="https://www.bluexiii.com/hive/docs/architecture/workspace/">员工执行环境</a>
+          <p>每人独立。智能体（Hive Pi或OpenCode）在这里使用文件、运行技能和工具。</p>
+        </div>
+        <div class="atlas-return"><span>执行进度与结果回到平台核心，员工重新打开对话也能接着看。</span></div>
+      </div>
+    </section>
+    <section class="atlas-band">
+      <h2 class="atlas-label">从执行环境<br>向外访问</h2>
+      <div class="atlas-routes">
+        <div class="atlas-route">
+          <div><span class="atlas-route-name">调用模型</span><a href="https://www.bluexiii.com/hive/docs/architecture/model-gateway/">模型网关</a><p>校验本次任务的模型访问码和预算，按已选路线转发。</p></div>
+          <span class="atlas-arrow" aria-hidden="true">→</span>
+          <div class="atlas-outside"><strong>模型服务</strong><p>处理请求并返回模型输出。</p></div>
+        </div>
+        <div class="atlas-route">
+          <div><span class="atlas-route-name">办理业务</span><a href="https://www.bluexiii.com/hive/docs/developers/identity/">员工工具或脚本</a><p>直接调用业务接口。目标系统接入蜂巢身份时，工具可为当前员工申请短期身份证明。</p></div>
+          <span class="atlas-arrow" aria-hidden="true">→</span>
+          <div class="atlas-outside"><strong>企业业务系统</strong><p>核验员工身份，按业务账号决定可读数据和可做操作。</p></div>
+        </div>
+        <p class="atlas-aside"><strong>面板另有一条路</strong>员工打开业务面板时，面板从浏览器直连业务接口，查看或刷新无需启动智能体。</p>
+      </div>
+    </section>
+    <section class="atlas-band">
+      <h2 class="atlas-label">数据落点</h2>
+      <div class="atlas-stores">
+        <div><strong>平台数据库</strong><span class="atlas-codename" lang="en">PostgreSQL</span><p>账号与分配关系、任务状态、事件和模型调用记录。</p></div>
+        <div><strong>员工个人目录</strong><span class="atlas-codename">每名员工一份</span><p>工作文件、个人技能和依赖，跨任务保留。</p></div>
+        <div><strong>对象存储</strong><span class="atlas-codename">兼容S3</span><p>版本固定的技能包、备份和导出文件。</p></div>
+      </div>
+    </section>
+  </div>
+</figure>
+</main>
+</body>
+</html>

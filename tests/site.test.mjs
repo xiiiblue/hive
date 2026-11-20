@@ -161,6 +161,28 @@ test('内容完整，首页和各主入口已生成', async () => {
   }
 });
 
+test('首页、架构页和产品页展示手册原图的完整正文与样式', () => {
+  for (const [file, pages] of [
+    ['system-architecture.html', ['index.html', 'architecture/index.html']],
+    ['employee-digital-twin.html', ['product/index.html']],
+  ]) {
+    const figureText = (html) => {
+      const figures = html.match(/<figure\b[^>]*class="hive-atlas [^"]+"[^>]*>[\s\S]*?<\/figure>/gi) ?? [];
+      assert.equal(figures.length, 1);
+      return visibleText(figures[0]);
+    };
+    const original = htmlPages.get(path.join(dist, 'media/diagrams', file));
+    assert.ok(original, `缺少手册原图：${file}`);
+    const text = figureText(original);
+    for (const page of pages) {
+      const html = htmlPages.get(path.join(dist, page));
+      assert.equal(figureText(html), text, `${page}与${file}的原图正文不一致`);
+      assert.ok(html.includes(`href="/hive/media/diagrams/${file}"`));
+      assert.ok(html.includes('href="/hive/media/diagrams/diagram-atlas.css"'));
+    }
+  }
+});
+
 test('所有HTML的站内href和src均能解析，页面片段和图片存在', async () => {
   const ids = new Map();
   const fragmentChecks = [];

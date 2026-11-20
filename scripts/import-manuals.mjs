@@ -9,8 +9,14 @@ const sourceRoot = process.env.HIVE_MANUAL_SOURCE
   ? path.resolve(process.env.HIVE_MANUAL_SOURCE)
   : path.resolve(websiteRoot, '../../telchina/hive-os');
 const updated = '2026-11-20';
-const diagramSource = 'docs/11-手册/01-产品技术手册/蜂巢功能架构与目录.html';
-const diagramPath = '/media/diagrams/capabilities.html';
+const diagramDirectory = 'docs/11-手册/01-产品技术手册';
+const diagrams = [
+  { source: '蜂巢功能架构与目录.html', file: 'capabilities.html', article: '/docs/product/capabilities/' },
+  { source: '蜂巢总体架构图.html', file: 'system-architecture.html', article: '/architecture/' },
+  { source: '员工数字分身概念图.html', file: 'employee-digital-twin.html', article: '/product/' },
+  { source: 'diagram-atlas.css', file: 'diagram-atlas.css' },
+];
+const brandAssets = ['hive-logo.png', 'social-cover.svg', 'social-cover.png', 'favicon.svg'];
 
 // 路由是公开链接的一部分。改标题或源文件名时保留已有slug。
 const manuals = [
@@ -105,7 +111,8 @@ function rewriteLinks(markdown, source, section) {
       }
       const route = articleMapping[resolved];
       if (route) return `[${label}](${route}${suffix})`;
-      if (resolved === diagramSource) return `[${label}](/docs/product/capabilities/${suffix})`;
+      const diagram = diagrams.find((item) => resolved === `${diagramDirectory}/${item.source}`);
+      if (diagram?.article) return `[${label}](${diagram.article}${suffix})`;
       if (target.startsWith('/docs/') || target.startsWith('/media/')) return match;
       changes.removedUnknownLinks.add(`${source} → ${target}`);
       return label;
@@ -144,10 +151,29 @@ const digest = createHash('sha256');
 const totals = [];
 const generated = [];
 const media = new Map();
-const diagram = await readFile(path.join(sourceRoot, diagramSource), 'utf8');
-auditPublicText(diagram.replaceAll(`https://www.bluexiii.com/hive${diagramPath}`, diagramPath), diagramSource);
-digest.update(`${diagramSource}\n`).update(diagram);
-media.set(diagramPath, diagram);
+for (const { source, file } of diagrams) {
+  const origin = `${diagramDirectory}/${source}`;
+  const target = `/media/diagrams/${file}`;
+  const bytes = await readFile(path.join(sourceRoot, origin));
+  const publicText = bytes.toString('utf8')
+    .replaceAll(`https://www.bluexiii.com/hive${target}`, target)
+    .replace(/href="https:\/\/www\.bluexiii\.com\/hive(\/docs\/[a-z0-9/-]+\/)"/g, 'href="$1"');
+  auditPublicText(publicText, origin);
+  digest.update(`${origin}\n`).update(bytes);
+  media.set(target, bytes);
+}
+
+for (const file of brandAssets) {
+  const origin = `${diagramDirectory}/官网素材/${file}`;
+  const bytes = await readFile(path.join(sourceRoot, origin));
+  if (file.endsWith('.svg')) {
+    // 分享封面印有官网地址，只有这个完整的公开文字标签可以通过个人标识检查。
+    auditPublicText(bytes.toString('utf8').replace('>www.bluexiii.com/hive</text>', '>蜂巢官网</text>'), origin);
+  }
+  digest.update(`${origin}\n`).update(bytes);
+  media.set(file === 'favicon.svg' ? '/favicon.svg' : `/media/${file}`, bytes);
+}
+
 for (const manual of manuals) {
   const contentDirectory = path.join(websiteRoot, 'content', manual.section);
   const assetNames = (await readdir(path.join(sourceRoot, manual.directory, 'assets'))).filter((file) => /\.(?:png|svg)$/i.test(file)).sort();
@@ -183,6 +209,23 @@ for (const article of generated) {
   }
 }
 
+if (process.argv.includes('--check-media')) {
+  const publicRoot = path.join(websiteRoot, 'public');
+  const published = await readdir(publicRoot, { recursive: true, withFileTypes: true });
+  for (const entry of published.filter((entry) => entry.isFile())) {
+    const file = '/' + path.relative(publicRoot, path.join(entry.parentPath, entry.name)).split(path.sep).join('/');
+    if ((file.startsWith('/media/') || /\.(png|svg|webp|jpe?g|ico|avif)$/i.test(file)) && !media.has(file)) {
+      throw new Error(`官网素材没有登记产品docs来源：${file}`);
+    }
+  }
+  for (const [target, sourceBytes] of media) {
+    const copy = await readFile(path.join(publicRoot, target));
+    if (!sourceBytes.equals(copy)) throw new Error(`官网副本与产品手册不一致：${target}`);
+  }
+  console.log(`${media.size}份官网素材均与产品docs原件逐字节一致。`);
+  process.exit(0);
+}
+
 for (const [relative, bytes] of media) {
   const destination = path.join(websiteRoot, 'public', relative);
   await mkdir(path.dirname(destination), { recursive: true });
@@ -201,11 +244,12 @@ for (const { section } of manuals) {
 }
 await writeFile(path.join(websiteRoot, 'content/article-mapping.json'), JSON.stringify(articleMapping, null, 2) + '\n');
 
+const diagramRows = diagrams.map(({ source, file }) => `|${source}|[${file}](../public/media/diagrams/${file})|`).join('\n');
 const snapshotDigest = digest.digest('hex');
 await mkdir(path.join(websiteRoot, 'docs'), { recursive: true });
 const maintenancePath = path.join(websiteRoot, 'docs/内容维护.md');
 const existingMaintenance = await readFile(maintenancePath, 'utf8');
 const maintenanceNotes = existingMaintenance.match(/^## 网站检查命令[\s\S]*$/m)?.[0] ?? '';
-await writeFile(maintenancePath, `# 内容维护\n\n本网站公开蜂巢员工工作台、管理员控制台的操作手册及功能架构与目录。默认来源为相对路径\`../../telchina/hive-os\`的产品仓库，公开站点地址为https://www.bluexiii.com/hive/。\n\n## 当前范围与来源\n\n- 更新日期：${updated}。来源以导入时的产品仓库工作副本为准，不声称对应某个正式版本或已完成生产验收。\n- 员工手册：\`docs/11-手册/04-员工工作台操作手册/\`的第01—10章、经简化的README及${totals.find((item) => item.section === 'employee').images}张PNG/SVG配图。\n- 管理员手册：\`docs/11-手册/03-管理员控制台操作手册/\`的第01—10章、经简化的README及${totals.find((item) => item.section === 'admin').images}张PNG/SVG配图。\n- 两册均生成\`overview.md\`和10个章节，共22篇内容、${totals.reduce((sum, item) => sum + item.images, 0)}张图片。同步独立HTML功能目录。第11章和两册HTML离线阅读版留在来源仓库。\n- 来源快照SHA-256：\`${snapshotDigest}\`。摘要覆盖按固定顺序读取的HTML功能目录、来源Markdown与PNG/SVG原始字节，用于判断来源是否变化，不代表产品发布状态。\n\n## 更新操作\n\n1. 在hive-os完成正文和配图的产品事实核对，确认图片仍使用真实Vue页面与隔离合成数据。\n2. 在本网站根目录运行\`node scripts/import-manuals.mjs\`。可设置\`HIVE_MANUAL_SOURCE\`指定产品工作树。脚本只读产品仓库，更新已生成的文章和配图，清理两册图目录中已从来源移除的旧图。\n3. 检查\`content/employee/\`、\`content/admin/\`和\`public/media/manuals/\`和\`public/media/diagrams/capabilities.html\`的差异。正文修订应回到来源手册；生成文件中的手工修改会在再次导入时覆盖。\n4. 运行\`npm run check\`，并在浏览器核对桌面与手机阅读、搜索、目录、跨章链接、图片放大及暗色主题。导入脚本的成功不能代替这些站点检查。\n5. 由负责人按本仓库发布流程处理提交和上线，保留检查结果。\n\n## 路由和内容处理\n\n- 各章的英文slug在导入脚本中明确指定。修改中文标题或源文件名时，保留原slug；不要根据标题自动重建公开URL。\n- \`content/article-mapping.json\`的键为hive-os仓库相对来源路径，值为\`/docs/{employee|admin}/{slug}/\`，不带网站基础路径\`/hive\`。README映射到对应的\`overview/\`。\n- frontmatter保存标题、摘要、所属手册、顺序、更新日期和来源路径。正文移除原一级标题、顶部治理元数据、内部源码核对依据和旧版前后章页脚，由网站统一提供导航。\n- 已知章节Markdown链接按完整来源映射改写，未知内部链接只保留可读标签，不生成通往私有源码或内部文档的地址。图片改写为\`/media/manuals/{employee|admin}/文件名\`；网站渲染时统一补\`/hive\`。不递归复制链接目标。\n- overview保留用途、十章目录、阅读建议、图片说明和适用边界，删除原离线HTML操作、内部维护步骤及内部文档入口。\n\n## 公开内容检查与图片边界\n\n本次导入检查了生成正文、HTML功能目录和SVG文本中的内网或回环IP、本机用户路径、个人及单位标识、常见凭据格式和内部源码链接；没有发现需要公开化替换的真实身份、地址或凭据。保留\`/workspace\`、\`/home/employee\`等产品内工作目录，它们是操作概念，不是维护者本机路径；保留明确用于教学的example.invalid和api.example.com示例地址。\n\nPNG原图逐字节复制，导入脚本不做OCR，也不以文本扫描声称重新审查了图片中的每个字段。图片沿用来源手册制作与视觉复核时的合成数据范围：不包含真实业务记录、密码、二维码、绑定码或机器人凭据；截图中的成功、费用与时间只解释界面，不证明真实操作已完成。后续更新配图时仍须人工查看原图。\n\n本次共移除${changes.metadataRemoved}处顶部治理元数据和${changes.evidenceSectionsRemoved}节源码核对依据；未知内部链接处理${changes.removedUnknownLinks.size}处。公开内容限于本页列出的正文与配图。\n\n${maintenanceNotes}`);
+await writeFile(maintenancePath, `# 内容维护\n\n本网站公开蜂巢员工工作台、管理员控制台的操作手册、三张HTML架构图及其配套样式。默认来源为相对路径\`../../telchina/hive-os\`的产品仓库，公开站点地址为https://www.bluexiii.com/hive/。\n\n## 当前范围与来源\n\n- 更新日期：${updated}。来源以导入时的产品仓库工作副本为准，不声称对应某个正式版本或已完成生产验收。\n- 员工手册：\`docs/11-手册/04-员工工作台操作手册/\`的第01—10章、经简化的README及${totals.find((item) => item.section === 'employee').images}张PNG/SVG配图。\n- 管理员手册：\`docs/11-手册/03-管理员控制台操作手册/\`的第01—10章、经简化的README及${totals.find((item) => item.section === 'admin').images}张PNG/SVG配图。\n- 两册均生成\`overview.md\`和10个章节，共22篇内容、${totals.reduce((sum, item) => sum + item.images, 0)}张图片。第11章和两册HTML离线阅读版留在来源仓库。\n- 架构图与样式来源于产品仓库的\`${diagramDirectory}/\`。官网原样复制以下文件，嵌入时复用原图正文。\n\n|产品手册原件|官网副本|\n|---|---|\n${diagramRows}\n\nLogo、标签页图标、分享封面的SVG图源与PNG也由同一命令从产品技术手册的“官网素材”目录原样导入。\n\n- 来源快照SHA-256：\`${snapshotDigest}\`。摘要覆盖按固定顺序读取的架构图、样式、Logo、图标、封面、来源Markdown与PNG/SVG原始字节，用于判断来源是否变化，不代表产品发布状态。\n\n## 更新操作\n\n1. 在hive-os先修订HTML原图、正文或配图，并核对产品事实，确认图片仍使用真实Vue页面与隔离合成数据。\n2. 在本网站根目录运行\`node scripts/import-manuals.mjs\`。可设置\`HIVE_MANUAL_SOURCE\`指定产品工作树。脚本只读产品仓库，更新已生成的文章和配图，清理两册图目录中已从来源移除的旧图。\n3. 检查\`content/employee/\`、\`content/admin/\`、\`public/media/manuals/\`和\`public/media/diagrams/\`的差异。运行\`npm run import:manuals -- --check-media\`核对架构图、样式、截图、Logo、图标与封面是否均与产品docs逐字节一致。原图和正文修订应回到来源手册；生成文件中的手工修改会在再次导入时覆盖。\n4. 运行\`npm run check\`，并在浏览器核对桌面与手机阅读、搜索、目录、跨章链接、图片放大及暗色主题。导入脚本的成功不能代替这些站点检查。\n5. 由负责人按本仓库发布流程处理提交和上线，保留检查结果。\n\n## 路由和内容处理\n\n- 各章的英文slug在导入脚本中明确指定。修改中文标题或源文件名时，保留原slug；不要根据标题自动重建公开URL。\n- \`content/article-mapping.json\`的键为hive-os仓库相对来源路径，值为\`/docs/{employee|admin}/{slug}/\`，不带网站基础路径\`/hive\`。README映射到对应的\`overview/\`。\n- frontmatter保存标题、摘要、所属手册、顺序、更新日期和来源路径。正文移除原一级标题、顶部治理元数据、内部源码核对依据和旧版前后章页脚，由网站统一提供导航。\n- 已知章节Markdown链接按完整来源映射改写，未知内部链接只保留可读标签，不生成通往私有源码或内部文档的地址。图片改写为\`/media/manuals/{employee|admin}/文件名\`；网站渲染时统一补\`/hive\`。不递归复制链接目标。\n- overview保留用途、十章目录、阅读建议、图片说明和适用边界，删除原离线HTML操作、内部维护步骤及内部文档入口。\n\n## 公开内容检查与图片边界\n\n本次导入检查了生成正文、HTML架构图、配套样式和SVG文本中的内网或回环IP、本机用户路径、个人及单位标识、常见凭据格式和内部源码链接；没有发现需要公开化替换的真实身份、地址或凭据。保留\`/workspace\`、\`/home/employee\`等产品内工作目录，它们是操作概念，不是维护者本机路径；保留明确用于教学的example.invalid和api.example.com示例地址。\n\nPNG原图逐字节复制，导入脚本不做OCR，也不以文本扫描声称重新审查了图片中的每个字段。图片沿用来源手册制作与视觉复核时的合成数据范围：不包含真实业务记录、密码、二维码、绑定码或机器人凭据；截图中的成功、费用与时间只解释界面，不证明真实操作已完成。后续更新配图时仍须人工查看原图。\n\n本次共移除${changes.metadataRemoved}处顶部治理元数据和${changes.evidenceSectionsRemoved}节源码核对依据；未知内部链接处理${changes.removedUnknownLinks.size}处。导入范围见本页的正文、架构图和配图清单。\n\n${maintenanceNotes}`);
 
 console.log(JSON.stringify({ articles: generated.length, manuals: totals, unknownInternalLinksRemoved: changes.removedUnknownLinks.size, snapshotDigest }, null, 2));

@@ -2,7 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Icon from '../components/Icon.astro';
 import HeroWorkspace from '../components/HeroWorkspace.astro';
-import ArchitectureGraph from '../components/ArchitectureGraph.astro';
+import ManualDiagram from '../components/ManualDiagram.astro';
 import { url } from '../lib/content';
 import '../styles/home.css';
 
@@ -162,7 +162,7 @@ const concepts = [
         <div><p class="section-label">系统结构</p><h2 id="architecture-title">看清工作流经哪里</h2></div>
         <p>平台负责身份和任务，员工工作空间负责执行。模型和业务系统有各自的访问路径。</p>
       </div>
-      <ArchitectureGraph />
+      <ManualDiagram name="system-architecture" />
       <div class="architecture-actions">
         <a class="button primary" href={url('/architecture/')}>了解系统架构</a>
         <a class="button" href={url('/docs/product/capabilities/')}>浏览完整功能目录</a>

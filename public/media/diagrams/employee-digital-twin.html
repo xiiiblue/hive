@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用两次工单周报看懂员工身份、长期工作空间、对话、单次任务与企业业务权限的关系。">
+  <link rel="canonical" href="https://www.bluexiii.com/hive/media/diagrams/employee-digital-twin.html">
+  <meta property="og:url" content="https://www.bluexiii.com/hive/media/diagrams/employee-digital-twin.html">
+  <link rel="stylesheet" href="diagram-atlas.css">
+  <title>员工数字分身概念图</title>
+</head>
+<body class="atlas-sheet">
+<main>
+<figure class="hive-atlas twin-atlas" aria-labelledby="twin-atlas-title">
+  <figcaption class="atlas-head">
+    <h1 class="atlas-title" id="twin-atlas-title">员工数字分身概念图</h1>
+    <p>员工用自己的身份、资料和获配工具，让智能体协助工作。下面用一名客服员工的两次工单周报说明。</p>
+  </figcaption>
+  <div class="atlas-field">
+    <div class="twin-identity">
+      <span class="twin-person" aria-hidden="true"></span>
+      <div><strong>一名客服员工</strong><p>用本人账号登录蜂巢。</p></div>
+      <span class="atlas-edge"><span>拥有</span></span>
+      <div><strong>一个长期工作空间</strong><p>这名员工的不同对话使用同一份个人文件和工具。</p></div>
+    </div>
+    <div class="twin-work">
+      <section class="twin-thread">
+        <h2 class="atlas-panel-title">同一段「工单周报」对话</h2>
+        <p class="atlas-panel-intro">对话串起交流，每次新要求各有一条执行记录。</p>
+        <ol class="twin-turns">
+          <li><span class="twin-time">第一周</span><strong>按状态汇总本周工单</strong><p>智能体读取获准查看的记录，列出待跟进项。员工核对后保存周报和模板。</p></li>
+          <li><span class="twin-time">第二周</span><strong>沿用模板，更新本周数据</strong><p>智能体取回上次保存的模板，重新查询本周可见工单，另存新周报。</p></li>
+        </ol>
+      </section>
+      <div class="twin-exchange" aria-hidden="true">
+        <span>存下模板<i></i></span>
+        <span>读回模板<i></i></span>
+      </div>
+      <section class="twin-assets">
+        <h2 class="atlas-panel-title">两次任务之间留下什么</h2>
+        <dl>
+          <dt>文件与模板</dt><dd>周报和模板保存在个人目录，换一个对话也能打开。</dd>
+          <dt>做事的方法</dt><dd>员工可把验证过的步骤保存为个人技能（Skill），下次调用。</dd>
+          <dt>背景与要求</dt><dd>个人记忆可保存常用格式等偏好。企业工作规范由管理员分配。</dd>
+        </dl>
+      </section>
+    </div>
+    <section class="twin-access">
+      <h2 class="atlas-panel-title">每次查询，谁决定能看哪些工单？</h2>
+      <div class="twin-gates">
+        <div><span class="atlas-route-name">蜂巢</span><strong>核对系统资格</strong><p>对接蜂巢身份时，为获配该系统的员工提供面向它的短期身份证明。</p></div>
+        <span class="atlas-edge"><span>验明身份</span></span>
+        <div class="atlas-outside"><span class="atlas-route-name">工单系统</span><strong>检查业务权限</strong><p>关联自己的业务账号，按角色和数据范围决定可读取的工单。</p></div>
+      </div>
+    </section>
+    <p class="twin-close"><strong>一次任务结束后</strong>本次模型访问码失效。对话记录、周报文件和已保存的技能可供下次使用。</p>
+  </div>
+</figure>
+</main>
+</body>
+</html>

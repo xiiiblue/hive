@@ -112,10 +112,6 @@ small{font-size:12px}
 .page-intro>p,.page-intro-bottom>p{font-size:1.0625rem;color:var(--muted);line-height:1.8;margin-top:17px;max-width:42em}
 .page-intro-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
 .page-intro-bottom .button{margin-bottom:6px;white-space:nowrap}
-.product-overview{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;padding-block:15px 45px}
-.product-overview h2{margin:20px 0 24px}
-.product-overview p{font-size:15px;color:var(--muted);line-height:1.95;margin-block:14px}
-.product-overview .inline-link{margin-top:20px}
 .scenario-list{border-top:1px solid var(--line)}
 .scenario-list>a{display:grid;grid-template-columns:45px 1.05fr 1fr 30px;align-items:center;gap:34px;padding:34px 0;border-bottom:1px solid var(--line)}
 .scenario-list>a>span{font:12px ui-monospace,monospace;color:var(--accent)}
@@ -300,7 +296,6 @@ small{font-size:12px}
 .showcase-copy h3{font-size:24px}
 .docs-shell{grid-template-columns:220px minmax(0,1fr);gap:38px;padding-inline:28px}
 .doc-toc{display:none}
-.product-overview{gap:60px}
 .developer-note{grid-template-columns:45px 1fr}
 .developer-note>.inline-link{grid-column:2}
 .doc-card-grid{gap:18px}
@@ -329,8 +324,6 @@ small{font-size:12px}
 .audience-grid>a{padding-inline:23px}
 .audience-grid h3{font-size:24px}
 .doc-card-grid{grid-template-columns:repeat(2,1fr)}
-.product-overview{gap:35px}
-.product-overview h2{font-size:31px}
 .boundary-grid{gap:30px}
 .scenario-list>a{grid-template-columns:32px 1fr 25px}
 .scenario-list p{grid-column:2;grid-row:2;margin-top:-12px}
@@ -426,9 +419,6 @@ small{font-size:12px}
 .page-intro p br{display:none}
 .page-intro-bottom{display:block}
 .page-intro-bottom .button{margin-top:25px}
-.product-overview{grid-template-columns:1fr;gap:32px;padding-block:0 10px}
-.product-overview .product-overview h2{font-size:31px;margin-block:15px 20px}
-.product-overview p{font-size:13px}
 .scenario-list>a{padding-block:27px;gap:20px 17px;grid-template-columns:25px 1fr 20px}
 .scenario-list h3{font-size:20px;line-height:1.6}
 .scenario-list h3 small{font-size:9px}

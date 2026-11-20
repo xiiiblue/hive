@@ -1,6 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import ArchitectureGraph from '../components/ArchitectureGraph.astro';
+import ManualDiagram from '../components/ManualDiagram.astro';
 import DocCards from '../components/DocCards.astro';
 import { url, sectionDocs } from '../lib/content';
 
@@ -26,7 +26,7 @@ const stages = [
       <a class="button" href={url('/docs/product/capabilities/')}>查看功能目录</a>
     </div>
   </section>
-  <section class="container"><ArchitectureGraph /></section>
+  <section class="container"><ManualDiagram name="system-architecture" /></section>
   <section class="section container" data-tabs>
     <div class="section-heading"><h2>各部分负责什么</h2></div>
     <div class="architecture-explorer">

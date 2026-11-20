@@ -1,0 +1,29 @@
+---
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { url } from '../lib/content';
+
+interface Props {
+  name: 'system-architecture' | 'employee-digital-twin';
+}
+const { name } = Astro.props;
+const file = `/media/diagrams/${name}.html`;
+const source = readFileSync(resolve('public', file.slice(1)), 'utf8');
+const figures = source.match(/<figure\b[^>]*>[\s\S]*?<\/figure>/gi) ?? [];
+if (figures.length !== 1) throw new Error(`${file}应包含一张完整的手册原图`);
+// 原图独立打开时有自己的一级标题和官网绝对链接，嵌入后沿用页面层级和当前域名。
+const figure = figures[0]
+  .replace(/<(\/?)(h[12])\b/g, (_, closing, heading) => `<${closing}${heading === 'h1' ? 'h2' : 'h3'}`)
+  .replaceAll('href="https://www.bluexiii.com/hive/docs/', `href="${url('/docs/')}`);
+---
+<link rel="stylesheet" href={url('/media/diagrams/diagram-atlas.css')} />
+<Fragment set:html={figure} />
+<div class="diagram-links">
+  <a class="inline-link" href={url(file)}>单独打开此图</a>
+  <slot />
+</div>
+
+<style>
+  .diagram-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 12px; }
+  .diagram-links :global(a) { text-decoration: underline; text-underline-offset: .22em; }
+</style>
