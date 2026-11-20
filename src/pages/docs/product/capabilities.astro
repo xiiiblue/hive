@@ -1,0 +1,18 @@
+---
+import { url } from '../../../lib/content';
+const destination = url('/capabilities/');
+const canonical = new URL(destination, Astro.site);
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:url" content={canonical} />
+    <title>蜂巢功能架构图</title>
+    <script define:vars={{ destination }}>location.replace(destination + location.search + location.hash);</script>
+    <meta http-equiv="refresh" content={'0;url=' + destination} />
+  </head>
+  <body><a href={destination}>打开蜂巢功能架构图</a></body>
+</html>

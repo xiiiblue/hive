@@ -1,0 +1,40 @@
+---
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import postcss from 'postcss';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { getDocs, renderDoc } from '../lib/content';
+
+const doc = getDocs().find(item => item.slug === 'product/capabilities')!;
+const guide = renderDoc(doc.body);
+const original = readFileSync(resolve('public/media/diagrams/capabilities.html'), 'utf8');
+const map = original.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1];
+const style = original.match(/<style>([\s\S]*?)<\/style>/i)?.[1];
+const script = original.match(/<script>([\s\S]*?)<\/script>/i)?.[1];
+if (!map || !style || !script) throw new Error('功能架构图原件缺少正文、样式或筛选脚本');
+
+// 把离线原图的页面级样式限定在图中，官网导航、搜索和页脚沿用各自的样式。
+const css = postcss.parse(style);
+css.walkRules(rule => {
+  rule.selectors = rule.selectors.map(selector => {
+    if (selector === ':root' || selector === 'body') return '.capabilities-sheet';
+    if (selector === 'main') return '.capabilities-sheet .map-canvas';
+    return '.capabilities-sheet ' + selector;
+  });
+});
+---
+<SiteLayout title={doc.title + ' · 蜂巢'} description={doc.description}>
+  <style is:inline set:html={css.toString()}></style>
+  <div class="capabilities-sheet">
+    <div class="map-canvas" id="top" set:html={map} />
+  </div>
+  <div class="capability-guide prose" set:html={guide.html} />
+  <script is:inline set:html={script}></script>
+</SiteLayout>
+
+<style>
+  .capabilities-sheet { color-scheme: inherit; }
+  .capabilities-sheet :global(.diagram-actions a) { text-decoration: underline; }
+  .capability-guide { max-width: 66rem; margin: 0 auto; padding: 2rem clamp(1rem, 3vw, 2.25rem) 4rem; }
+  @media print { .capability-guide { display: none; } }
+</style>

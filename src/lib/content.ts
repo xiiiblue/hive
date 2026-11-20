@@ -31,7 +31,7 @@ export function getDocs():Doc[]{
  }).sort((a,b)=>sections.findIndex(s=>s.id===a.section)-sections.findIndex(s=>s.id===b.section)||a.order-b.order);
  return cached;
 }
-export function docUrl(doc:Doc){return url('/docs/'+doc.slug+'/');}
+export function docUrl(doc:Doc){return url(doc.slug === 'product/capabilities' ? '/capabilities/' : '/docs/'+doc.slug+'/');}
 export function sectionDocs(id:string){return getDocs().filter(d=>d.section===id);}
 export function plainText(value:string){return value.replace(/```[^\n]*\n([\s\S]*?)```/g,' $1 ').replace(/!\[([^\]]*)\]\([^)]*\)/g,' $1 ').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[>#*`|_]/g,' ').replace(/\s+/g,' ').trim();}
 export interface Heading {id:string;text:string;depth:number;}

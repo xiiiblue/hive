@@ -11,7 +11,7 @@ const sourceRoot = process.env.HIVE_MANUAL_SOURCE
 const updated = '2026-11-20';
 const diagramDirectory = 'docs/11-手册/01-产品技术手册';
 const diagrams = [
-  { source: '蜂巢功能架构与目录.html', file: 'capabilities.html', article: '/docs/product/capabilities/' },
+  { source: '蜂巢功能架构与目录.html', file: 'capabilities.html', article: '/capabilities/' },
   { source: '蜂巢总体架构图.html', file: 'system-architecture.html', article: '/architecture/' },
   { source: '员工数字分身概念图.html', file: 'employee-digital-twin.html', article: '/product/' },
   { source: 'diagram-atlas.css', file: 'diagram-atlas.css' },

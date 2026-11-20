@@ -42,7 +42,10 @@ async function go(path) {
 }
 
 async function openDirectory() {
-  const diagram = page.frameLocator('iframe[title="蜂巢功能架构与功能目录"]');
+  const diagram = page.locator('main .capabilities-sheet');
+  assert.equal(await page.locator('iframe, .doc-sidebar, .doc-toc').count(), 0);
+  assert.equal(await page.locator('main h1').count(), 1);
+  assert.equal(await page.locator('.desktop-nav a[aria-current=page]').textContent(), '功能架构图');
   assert.deepEqual(await diagram.locator('.architecture > .layer > h2').allTextContents(), [
     '使用入口', '员工应用', '企业管理', '系统接入', '平台支撑',
   ]);
@@ -61,9 +64,10 @@ async function openDirectory() {
   assert.equal(await query.inputValue(), '');
   assert.equal(await role.inputValue(), '');
   assert.equal(await matches.count(), all);
-  const standalone = page.getByRole('link', { name: '在新窗口打开' });
-  assert.equal(await standalone.getAttribute('href'), '/hive/media/diagrams/capabilities.html');
-  assert.equal(await standalone.getAttribute('target'), '_blank');
+  await diagram.getByRole('link', { name: '查找详细功能' }).click();
+  assert.equal(new URL(page.url()).hash, '#features');
+  await diagram.getByRole('link', { name: '返回页首' }).click();
+  assert.equal(new URL(page.url()).hash, '#top');
   const noOverflow = await query.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   assert(noOverflow, '功能目录宽度随阅读区适配');
 }
@@ -73,12 +77,15 @@ try {
     ['/', 'home'], ['/product/', 'product'], ['/architecture/', 'architecture'],
     ['/handbooks/', 'handbooks'], ['/developers/', 'developers'], ['/docs/', 'docs'],
     ['/docs/employee/02-conversations/', 'employee'], ['/docs/admin/overview/', 'admin'],
-    ['/docs/developers/open-api/', 'api'], ['/docs/product/capabilities/', 'capabilities'],
+    ['/docs/developers/open-api/', 'api'], ['/capabilities/', 'capabilities'],
   ]) {
     await go(path);
     await shot(name + '-desktop');
   }
   await openDirectory();
+  await page.goto(origin + '/hive/docs/product/capabilities/?from=bookmark#features');
+  await page.waitForURL('**/hive/capabilities/?from=bookmark#features');
+  await page.locator('#features:target').waitFor();
   checks.push('桌面首页、手册、文档、架构、开发对接与功能目录');
   await go('/');
   await page.getByRole('tab', { name: '继续已有工作' }).click();
@@ -141,7 +148,7 @@ try {
   for (const [path, name] of [
     ['/', 'home'], ['/architecture/', 'architecture'], ['/handbooks/', 'handbooks'],
     ['/docs/employee/02-conversations/', 'employee'], ['/docs/developers/identity/', 'identity'],
-    ['/docs/product/capabilities/', 'capabilities'],
+    ['/capabilities/', 'capabilities'],
   ]) {
     await go(path);
     await shot(name + '-mobile');
@@ -160,7 +167,7 @@ try {
   await go('/');
   const menu = page.getByRole('button', { name: '展开导航' });
   await menu.click();
-  assert(await page.getByRole('navigation', { name: '手机导航' }).getByRole('link', { name: '功能目录' }).isVisible());
+  assert(await page.getByRole('navigation', { name: '手机导航' }).getByRole('link', { name: '功能架构图' }).isVisible());
   await shot('mobile-navigation');
   await menu.click();
   await page.getByRole('button', { name: '切换明暗主题' }).click();
@@ -168,17 +175,17 @@ try {
   await shot('home-dark-mobile');
   await page.reload();
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
-  await go('/docs/product/capabilities/');
-  const diagramBody = page.frameLocator('iframe').locator('body');
+  await go('/capabilities/');
+  const diagramBody = page.locator('.capabilities-sheet');
   const darkBackground = await diagramBody.evaluate(node => getComputedStyle(node).backgroundColor);
   await page.getByRole('button', { name: '切换明暗主题' }).click();
   const lightBackground = await diagramBody.evaluate(node => getComputedStyle(node).backgroundColor);
-  assert.notEqual(darkBackground, lightBackground, '嵌入的功能目录随正文切换主题');
+  assert.notEqual(darkBackground, lightBackground, '功能图页面随官网切换明暗主题');
   await page.getByRole('button', { name: '切换明暗主题' }).click();
   await page.setViewportSize({ width: 1440, height: 1050 });
   await go('/docs/architecture/security/');
   await shot('reading-dark-desktop');
-  checks.push('移动导航、暗色主题及刷新保留、嵌入目录主题跟随');
+  checks.push('移动导航、暗色主题及刷新保留、独立功能图主题切换');
 
   assert.deepEqual(errors, []);
   assert.deepEqual(requests, []);

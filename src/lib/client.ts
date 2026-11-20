@@ -15,17 +15,9 @@ input?.addEventListener('input',()=>void search());
 document.querySelectorAll<HTMLButtonElement>('[data-search-query]').forEach(b=>b.addEventListener('click',()=>{if(input){input.value=b.dataset.searchQuery??'';void search();input.focus();}}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&searchDialog?.open){e.preventDefault();searchDialog.close();return;}if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(searchDialog?.open)searchDialog.close();else openSearch();}if(searchDialog?.open&&['ArrowDown','ArrowUp','Enter'].includes(e.key)){const links=[...document.querySelectorAll<HTMLAnchorElement>('.search-result')];if(!links.length)return;if(e.key==='Enter'){if(selected>=0){e.preventDefault();links[selected].click();}return;}e.preventDefault();selected=(selected+(e.key==='ArrowDown'?1:-1)+links.length)%links.length;links.forEach((link,i)=>link.classList.toggle('is-selected',i===selected));links[selected].scrollIntoView({block:'nearest'});}});
 searchDialog?.addEventListener('click',e=>{if(e.target===searchDialog)searchDialog.close();});
-const diagramFrame = document.querySelector<HTMLIFrameElement>('.capabilities-diagram iframe');
-function updateDiagramTheme() {
-  const frameRoot = diagramFrame?.contentDocument?.documentElement;
-  if (frameRoot) frameRoot.style.colorScheme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
-}
-diagramFrame?.addEventListener('load', updateDiagramTheme);
-updateDiagramTheme();
 document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
   const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
   document.documentElement.dataset.theme = theme;
-  updateDiagramTheme();
   try { localStorage.setItem('hive-site-theme', theme); }
   catch { /* 当前页仍可切换主题。 */ }
 });

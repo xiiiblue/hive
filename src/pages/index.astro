@@ -74,7 +74,7 @@ const examples = [
 
 const concepts = [
   { icon: 'workspace', title: '自己的文件和执行环境', text: '同一员工的多段对话可继续使用工作空间里的文件、脚本和依赖。', link: '/docs/architecture/workspace/' },
-  { icon: 'file', title: '任务需要的资料', text: '把个人文件附到对话，也可以从已分配的知识库引用资料。', link: '/docs/product/capabilities/' },
+  { icon: 'file', title: '任务需要的资料', text: '把个人文件附到对话，也可以从已分配的知识库引用资料。', link: '/capabilities/' },
   { icon: 'book', title: '可以复用的做法', text: 'Skill是一份给智能体用的操作说明。MCP是一种让智能体连接工具的方式。', link: '/docs/employee/04-skills/' },
   { icon: 'shield', title: '属于员工的业务权限', text: '蜂巢证明是谁在发起操作。业务系统根据自己的账号和授权判断能做什么。', link: '/docs/developers/identity/' },
 ];
@@ -89,7 +89,7 @@ const concepts = [
           <p class="home-hero-description">在同一个工作台里，用自己的资料开始对话，让智能体使用获准的工具，留下下次还能打开的文件。</p>
           <div class="button-row">
             <a class="button home-primary" href={url('/handbooks/')}><Icon name="book" size={19} />阅读操作手册</a>
-            <a class="button home-secondary" href={url('/docs/product/capabilities/')}>查看功能目录</a>
+            <a class="button home-secondary" href={url('/capabilities/')}>查看功能架构图</a>
           </div>
         </div>
         <HeroWorkspace />
@@ -165,7 +165,7 @@ const concepts = [
       <ManualDiagram name="system-architecture" />
       <div class="architecture-actions">
         <a class="button primary" href={url('/architecture/')}>了解系统架构</a>
-        <a class="button" href={url('/docs/product/capabilities/')}>浏览完整功能目录</a>
+        <a class="button" href={url('/capabilities/')}>浏览完整功能目录</a>
       </div>
     </section>
 

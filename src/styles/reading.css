@@ -53,27 +53,6 @@
 .chapter-pagination small { font-size: .8125rem; }
 .chapter-pagination strong { font-size: .9375rem; }
 
-.capabilities-diagram {
-  margin: 0 0 30px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--paper);
-}
-.diagram-toolbar {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 10px 14px;
-  align-items: baseline;
-  background: var(--soft);
-  border-bottom: 1px solid var(--line);
-  font-size: .875rem;
-}
-.capabilities-diagram iframe { width: 100%; display: block; border: 0; color-scheme: light; }
-html[data-theme=dark] .capabilities-diagram iframe { color-scheme: dark; }
-
 .doc-compact-navigation { display: none; }
 @media (max-width: 1200px) {
   .docs-shell { grid-template-columns: minmax(0, 205px) minmax(0, 790px); }
@@ -117,5 +96,5 @@ html[data-theme=dark] .capabilities-diagram iframe { color-scheme: dark; }
   .chapter-pagination a { padding: 12px; }
 }
 @media print {
-  .doc-compact-navigation, .capabilities-diagram { display: none; }
+  .doc-compact-navigation { display: none; }
 }

@@ -5,7 +5,7 @@ import { getDocs, sections, sectionDocs, docUrl, renderDoc, url, type Doc } from
 import '../../styles/reading.css';
 
 export function getStaticPaths() {
-  return getDocs().map(doc => ({ params: { slug: doc.slug }, props: { doc } }));
+  return getDocs().filter(doc => doc.slug !== 'product/capabilities').map(doc => ({ params: { slug: doc.slug }, props: { doc } }));
 }
 
 interface Props { doc: Doc; }
@@ -17,7 +17,6 @@ const list = sectionDocs(doc.section);
 const index = list.findIndex(item => item.slug === doc.slug);
 const previous = list[index - 1];
 const next = list[index + 1];
-const diagram = doc.slug === 'product/capabilities' ? url('/media/diagrams/capabilities.html') : undefined;
 ---
 <SiteLayout title={doc.title + ' · 蜂巢文档'} description={doc.description} kind="article">
   <div class="reading-progress" aria-hidden="true"></div>
@@ -69,12 +68,6 @@ const diagram = doc.slug === 'product/capabilities' ? url('/media/diagrams/capab
           )}
         </div>
         <div class="doc-content prose">
-          {diagram && (
-            <div class="capabilities-diagram">
-              <div class="diagram-toolbar"><strong>功能架构图</strong><a href={diagram} target="_blank" rel="noopener">在新窗口打开</a></div>
-              <iframe src={diagram} title="蜂巢功能架构与功能目录" height="880" />
-            </div>
-          )}
           <Fragment set:html={html} />
         </div>
         <footer class="doc-end">

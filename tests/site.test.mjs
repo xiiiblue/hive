@@ -9,7 +9,7 @@ const dist = path.join(root, 'dist');
 const content = path.join(root, 'content');
 const origin = 'https://www.bluexiii.com';
 const base = '/hive/';
-const mainRoutes = ['/', '/product/', '/architecture/', '/handbooks/', '/developers/', '/library/', '/docs/'];
+const mainRoutes = ['/', '/product/', '/capabilities/', '/architecture/', '/handbooks/', '/developers/', '/library/', '/docs/'];
 let documents;
 let publicFiles;
 let htmlPages;
@@ -75,7 +75,7 @@ async function readDocument(file) {
   assert.match(scalar(match[1], 'updated', slug), /^\d{4}-\d{2}-\d{2}$/, `${slug}的更新日期无效`);
   assert.match(match[1], /^sources:[ \t]*(?:\[[^\n]*\]|\n(?:[ \t]+- .+\n?)+)/m, `${slug}缺少来源数组`);
   assert.equal(slug.split('/')[0], section, `${slug}的section与目录不符`);
-  return { slug, title, description, section, order, body: match[2], route: `${base}docs/${slug}/` };
+  return { slug, title, description, section, order, body: match[2], route: slug === 'product/capabilities' ? base + 'capabilities/' : `${base}docs/${slug}/` };
 }
 
 function routeForHtml(file) {
@@ -229,7 +229,8 @@ test('公开页面使用唯一的HTTPS规范URL和正确的/hive/基础路径', 
     assert.equal(canonicals.length, 1, `${route}应有且只有一个canonical`);
     const canonical = new URL(canonicals[0].attrs.href);
     assert.equal(canonical.origin, origin, `${route}的canonical域名或协议错误`);
-    assert.equal(canonical.pathname, route, `${route}的canonical路径错误`);
+    const expectedRoute = route === base + 'docs/product/capabilities/' ? base + 'capabilities/' : route;
+    assert.equal(canonical.pathname, expectedRoute, `${route}的canonical路径错误`);
     assert.equal(canonical.search + canonical.hash, '', `${route}的canonical不能包含查询或片段`);
     assert.ok(!canonical.pathname.includes('/hive/hive/'), `${route}重复添加了基础路径`);
     const ogUrl = elements.find((tag) => tag.name === 'meta' && tag.attrs.property === 'og:url');
@@ -267,6 +268,14 @@ test('各文档页标题正确，前后章节按同一分区的顺序连接', as
     assert.ok(title.includes(doc.title), `${doc.slug}的浏览器标题与正文不一致`);
     const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map((match) => visibleText(match[1]));
     assert.deepEqual(headings, [doc.title], `${doc.slug}应有一个与frontmatter一致的一级标题`);
+    if (doc.slug === 'product/capabilities') {
+      assert.ok(!pagination(html), '独立功能图应使用官网导航');
+      assert.deepEqual(tags(html).filter(tag => tag.name === 'iframe'), []);
+      const source = htmlPages.get(path.join(dist, 'media/diagrams/capabilities.html'));
+      const originalMap = source.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)[1].trim();
+      assert.ok(html.includes(originalMap), '独立页面应完整沿用手册原图和详细目录');
+      continue;
+    }
     const peers = sections.get(doc.section);
     if (peers.length < 2) continue;
     const nav = pagination(html);
