@@ -31,6 +31,7 @@ const examples = [
   {
     key: 'report',
     label: '从资料到周报',
+    heroLabel: '员工工作台',
     icon: 'file',
     title: '把零散工单整理成一份周报',
     steps: [
@@ -45,6 +46,7 @@ const examples = [
   {
     key: 'files',
     label: '继续已有工作',
+    heroLabel: '文件管理',
     icon: 'workspace',
     title: '之前的资料，还在你的文件目录',
     steps: [
@@ -59,6 +61,7 @@ const examples = [
   {
     key: 'panels',
     label: '用面板处理业务',
+    heroLabel: '业务面板',
     icon: 'grid',
     title: '把常用的业务操作放进面板',
     steps: [
@@ -83,57 +86,75 @@ const concepts = [
   <div class="home-page">
     <div class="home-top">
       <section class="home-hero container" aria-labelledby="home-title">
-        <div class="home-hero-copy">
-          <p class="hero-category">企业内网 · 员工数字分身</p>
-          <h1 id="home-title">每个人的AI，<br />都有自己的<br class="hero-break" />工作空间。</h1>
-          <p class="home-hero-description">在同一个工作台里，用自己的资料开始对话，让智能体使用获准的工具，留下下次还能打开的文件。</p>
-          <div class="button-row">
-            <a class="button home-primary" href={url('/handbooks/')}><Icon name="book" size={19} />阅读操作手册</a>
-            <a class="button home-secondary" href={url('/capabilities/')}>查看功能架构图</a>
+        <div class="home-hero-intro">
+          <div>
+            <p class="hero-category">企业内网 · 员工数字分身</p>
+            <h1 id="home-title">每个人的AI，<br />都有自己的<span>工作空间。</span></h1>
+          </div>
+          <div class="home-hero-copy">
+            <p class="home-hero-description">在同一个工作台里，用自己的资料开始对话，让智能体使用获准的工具，留下下次还能打开的文件。</p>
+            <div class="button-row">
+              <a class="button home-primary" href={url('/handbooks/')}><Icon name="book" size={19} />阅读操作手册</a>
+              <a class="button home-secondary" href={url('/capabilities/')}>查看功能架构图</a>
+            </div>
           </div>
         </div>
-        <HeroWorkspace />
+        <HeroWorkspace scenes={examples} />
       </section>
-
-      <nav class="home-audiences container" aria-label="按角色开始">
-        {audiences.map(audience => (
-          <a class="role-link" href={url(audience.link)}>
-            <Icon name={audience.icon} size={22} />
-            <span><strong>{audience.title}</strong><small>{audience.summary}</small></span>
-            <Icon name="chevron" size={19} />
-          </a>
-        ))}
-      </nav>
     </div>
+
+    <nav class="home-audiences container" aria-label="按角色开始">
+      {audiences.map(audience => (
+        <a class="role-link" href={url(audience.link)}>
+          <Icon name={audience.icon} size={22} />
+          <span><strong>{audience.title}</strong><small>{audience.summary}</small></span>
+          <Icon name="chevron" size={19} />
+        </a>
+      ))}
+    </nav>
 
     <section id="examples" class="home-work section container" aria-labelledby="examples-title">
       <div class="home-heading">
-        <div><p class="section-label">使用场景</p><h2 id="examples-title">一次工作，从交代到交付</h2></div>
+        <div><p class="section-label">使用场景</p><h2 id="examples-title">一次工作，<span>从交代到交付</span></h2></div>
         <p>试着从一件熟悉的事开始。你可以把工作过程和文件留下来，后续直接接着做。</p>
       </div>
-      <div class="work-showcase" data-tabs>
-        <div class="work-tabs" role="tablist" aria-label="工作场景">
-          {examples.map((example, index) => (
-            <button id={'tab-' + example.key} type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={'example-' + example.key} tabindex={index === 0 ? 0 : -1}>
-              <Icon name={example.icon} size={19} />{example.label}
+      <div class="work-showcase" data-tabs="gallery">
+        <div class="work-toolbar">
+          <div class="work-tabs" role="tablist" aria-label="工作场景" aria-orientation="horizontal">
+            {examples.map((example, index) => (
+              <button id={'tab-' + example.key} type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={'example-' + example.key} tabindex={index === 0 ? 0 : -1}>
+                <Icon name={example.icon} size={19} />{example.label}
+              </button>
+            ))}
+          </div>
+          <div class="work-controls" role="group" aria-label="浏览工作场景">
+            <button type="button" data-tab-step="-1" aria-label="上一个工作场景" aria-controls="work-panels">
+              <Icon name="chevron" size={18} />
             </button>
+            <span class="work-position" role="status" data-tab-position>1 / {examples.length}</span>
+            <button type="button" data-tab-step="1" aria-label="下一个工作场景" aria-controls="work-panels">
+              <Icon name="chevron" size={18} />
+            </button>
+          </div>
+        </div>
+        <div class="work-panels" id="work-panels">
+          {examples.map((example, index) => (
+            <div class="work-panel" id={'example-' + example.key} role="tabpanel" aria-labelledby={'tab-' + example.key} hidden={index !== 0}>
+              <figure class="work-screen">
+                <button type="button" data-image-zoom aria-label={'放大' + example.alt}>
+                  <img src={url('/media/manuals/' + example.image)} width="1440" height="1100" alt={example.alt} loading="lazy" decoding="async" />
+                  <span class="zoom-label" aria-hidden="true"><Icon name="search" size={15} />放大查看</span>
+                </button>
+                <figcaption>真实界面 · 合成示例</figcaption>
+              </figure>
+              <div class="work-copy">
+                <h3>{example.title}</h3>
+                <ol>{example.steps.map(step => <li>{step}</li>)}</ol>
+                <a class="inline-link" href={url(example.link)}>查看操作步骤</a>
+              </div>
+            </div>
           ))}
         </div>
-        {examples.map((example, index) => (
-          <div class="work-panel" id={'example-' + example.key} role="tabpanel" aria-labelledby={'tab-' + example.key} hidden={index !== 0}>
-            <div class="work-copy">
-              <h3>{example.title}</h3>
-              <ol>{example.steps.map(step => <li>{step}</li>)}</ol>
-              <a class="inline-link" href={url(example.link)}>查看操作步骤</a>
-            </div>
-            <figure class="work-screen">
-              <button type="button" data-image-zoom aria-label={'放大' + example.alt}>
-                <img src={url('/media/manuals/' + example.image)} alt={example.alt} loading="lazy" decoding="async" />
-              </button>
-              <figcaption>真实界面 · 合成示例</figcaption>
-            </figure>
-          </div>
-        ))}
       </div>
     </section>
 
@@ -149,24 +170,20 @@ const concepts = [
           {concepts.map(concept => (
             <article>
               <Icon name={concept.icon} size={24} />
-              <h3><a href={url(concept.link)}>{concept.title}</a></h3>
-              <p>{concept.text}</p>
+              <div>
+                <h3><a href={url(concept.link)}>{concept.title}</a></h3>
+                <p>{concept.text}</p>
+              </div>
             </article>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="home-architecture section container" aria-labelledby="architecture-title">
-      <div class="home-heading">
-        <div><p class="section-label">系统结构</p><h2 id="architecture-title">看清工作流经哪里</h2></div>
-        <p>平台负责身份和任务，员工工作空间负责执行。模型和业务系统有各自的访问路径。</p>
-      </div>
-      <ManualDiagram name="system-architecture" />
-      <div class="architecture-actions">
-        <a class="button primary" href={url('/architecture/')}>了解系统架构</a>
-        <a class="button" href={url('/capabilities/')}>浏览完整功能目录</a>
-      </div>
+    <section class="section container" id="workspace-continuity" aria-labelledby="continuity-title">
+      <ManualDiagram name="workspace-continuity">
+        <a class="inline-link" href={url('/docs/employee/07-workspace/')}>查看工作空间和文件管理</a>
+      </ManualDiagram>
     </section>
 
     <section class="home-next" aria-labelledby="next-title">

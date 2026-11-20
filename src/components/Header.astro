@@ -5,14 +5,15 @@ import { url } from '../lib/content';
 
 const path = Astro.url.pathname;
 const links = [
+  ['首页', '/'],
   ['产品', '/product/'],
-  ['功能架构图', '/capabilities/'],
-  ['系统架构', '/architecture/'],
+  ['功能', '/capabilities/'],
+  ['架构', '/architecture/'],
   ['操作手册', '/handbooks/'],
   ['开发对接', '/developers/'],
   ['文档中心', '/docs/'],
 ];
-const active = links.find(([, href]) => path.startsWith(url(href)))?.[1];
+const active = links.find(([, href]) => href === '/' ? path === url(href) : path.startsWith(url(href)))?.[1];
 ---
 <header class="site-header" id="site-header">
   <div class="nav-wrap">
@@ -22,7 +23,6 @@ const active = links.find(([, href]) => path.startsWith(url(href)))?.[1];
     </nav>
     <div class="nav-actions">
       <button class="search-trigger" type="button" data-open-search aria-label="搜索全部文档"><Icon name="search" size={17} /><span>搜索文档</span><kbd>⌘ K</kbd></button>
-      <button type="button" class="icon-button theme-toggle" data-theme-toggle aria-label="切换明暗主题"><Icon name="sun" /></button>
       <button type="button" class="icon-button mobile-menu-button" data-menu-toggle aria-label="展开导航" aria-expanded="false" aria-controls="mobile-navigation"><Icon name="menu" /></button>
     </div>
   </div>

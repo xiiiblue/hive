@@ -1,18 +1,104 @@
 ---
 import Icon from './Icon.astro';
-import Logo from './Logo.astro';
 import { url } from '../lib/content';
+
+interface Props {
+  scenes: { heroLabel: string; image: string; alt: string }[];
+}
+
+const { scenes } = Astro.props;
 ---
-<figure class="hero-workspace">
-  <div class="workspace-pattern" aria-hidden="true">
-    <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+<div class="hero-gallery" data-hero-gallery>
+  <div class="hero-gallery-deck" id="hero-gallery-deck" data-hero-deck>
+    {scenes.map((scene, index) => (
+      <figure class="hero-workspace" data-hero-position={['front', 'right', 'left'][index]} inert={index !== 0} aria-hidden={index !== 0 ? 'true' : undefined}>
+        <div class="hero-product-window">
+          <button type="button" data-image-zoom aria-label={'放大' + scene.alt}>
+            <img src={url('/media/manuals/' + scene.image)} width="1440" height="1100" alt={scene.alt} fetchpriority={index === 0 ? 'high' : 'low'} decoding="async" />
+            <span class="zoom-label" aria-hidden="true"><Icon name="search" size={17} />放大查看</span>
+          </button>
+        </div>
+        <figcaption>真实界面 · 合成示例</figcaption>
+      </figure>
+    ))}
   </div>
-  <div class="workspace-stage-label"><Logo /><span>员工工作台</span></div>
-  <div class="hero-product-window">
-    <button type="button" data-image-zoom aria-label="放大员工工作台对话界面">
-      <img src={url('/media/manuals/employee/02-answer-files.png')} alt="员工工作台中的对话记录、工作过程和文件" fetchpriority="high" />
-      <span class="zoom-label" aria-hidden="true"><Icon name="search" size={17} />放大查看</span>
+  <div class="hero-gallery-controls" role="group" aria-label="切换首屏截图">
+    {scenes.map((scene, index) => (
+      <button type="button" data-hero-select aria-controls="hero-gallery-deck" aria-pressed={index === 0 ? 'true' : 'false'}>
+        {scene.heroLabel}
+      </button>
+    ))}
+    <button class="hero-gallery-playback" type="button" data-hero-playback aria-controls="hero-gallery-deck">
+      暂停轮播
     </button>
   </div>
-  <figcaption>真实界面 · 合成示例</figcaption>
-</figure>
+</div>
+
+<script>
+  const gallery = document.querySelector<HTMLElement>('[data-hero-gallery]');
+  const deck = gallery?.querySelector<HTMLElement>('[data-hero-deck]');
+  const playback = gallery?.querySelector<HTMLButtonElement>('[data-hero-playback]');
+  if (gallery && deck && playback) {
+    const slides = [...deck.querySelectorAll<HTMLElement>('[data-hero-position]')];
+    const choices = [...gallery.querySelectorAll<HTMLButtonElement>('[data-hero-select]')];
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let current = 0;
+    let playing = !reducedMotion.matches;
+    let inView = false;
+    let hovering = false;
+    let timer: number | undefined;
+
+    function show(index: number) {
+      current = index;
+      slides.forEach((slide, position) => {
+        const offset = (position - index + slides.length) % slides.length;
+        const active = offset === 0;
+        slide.dataset.heroPosition = ['front', 'right', 'left'][offset];
+        slide.inert = !active;
+        slide.setAttribute('aria-hidden', String(!active));
+        choices[position].setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    function schedule() {
+      window.clearTimeout(timer);
+      if (!playing || !inView || hovering || document.hidden) return;
+      timer = window.setTimeout(() => {
+        show((current + 1) % slides.length);
+        schedule();
+      }, 6500);
+    }
+
+    const setPlaying = (value: boolean) => {
+      playing = value;
+      playback.textContent = value ? '暂停轮播' : '播放轮播';
+      schedule();
+    };
+
+    choices.forEach((choice, index) => choice.addEventListener('click', () => {
+      setPlaying(false);
+      show(index);
+    }));
+    playback.addEventListener('click', () => setPlaying(!playing));
+    deck.addEventListener('focusin', () => setPlaying(false));
+    deck.addEventListener('pointerenter', event => {
+      if (event.pointerType !== 'mouse') return;
+      hovering = true;
+      schedule();
+    });
+    deck.addEventListener('pointerleave', () => {
+      hovering = false;
+      schedule();
+    });
+    document.addEventListener('visibilitychange', schedule);
+    reducedMotion.addEventListener('change', event => {
+      if (event.matches) setPlaying(false);
+    });
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting && entry.intersectionRatio >= .35;
+      schedule();
+    }, { threshold: .35 });
+    observer.observe(deck);
+    setPlaying(playing);
+  }
+</script>

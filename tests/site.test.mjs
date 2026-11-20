@@ -163,7 +163,8 @@ test('内容完整，首页和各主入口已生成', async () => {
 
 test('首页、架构页和产品页展示手册原图的完整正文与样式', () => {
   for (const [file, pages] of [
-    ['system-architecture.html', ['index.html', 'architecture/index.html']],
+    ['workspace-continuity.html', ['index.html']],
+    ['system-architecture.html', ['architecture/index.html']],
     ['employee-digital-twin.html', ['product/index.html']],
   ]) {
     const figureText = (html) => {

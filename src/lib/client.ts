@@ -15,12 +15,6 @@ input?.addEventListener('input',()=>void search());
 document.querySelectorAll<HTMLButtonElement>('[data-search-query]').forEach(b=>b.addEventListener('click',()=>{if(input){input.value=b.dataset.searchQuery??'';void search();input.focus();}}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&searchDialog?.open){e.preventDefault();searchDialog.close();return;}if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(searchDialog?.open)searchDialog.close();else openSearch();}if(searchDialog?.open&&['ArrowDown','ArrowUp','Enter'].includes(e.key)){const links=[...document.querySelectorAll<HTMLAnchorElement>('.search-result')];if(!links.length)return;if(e.key==='Enter'){if(selected>=0){e.preventDefault();links[selected].click();}return;}e.preventDefault();selected=(selected+(e.key==='ArrowDown'?1:-1)+links.length)%links.length;links.forEach((link,i)=>link.classList.toggle('is-selected',i===selected));links[selected].scrollIntoView({block:'nearest'});}});
 searchDialog?.addEventListener('click',e=>{if(e.target===searchDialog)searchDialog.close();});
-document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
-  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = theme;
-  try { localStorage.setItem('hive-site-theme', theme); }
-  catch { /* 当前页仍可切换主题。 */ }
-});
 const menu=document.querySelector<HTMLElement>('.mobile-nav'),menuButton=document.querySelector('[data-menu-toggle]');menuButton?.addEventListener('click',()=>{if(menu){menu.hidden=!menu.hidden;menuButton.setAttribute('aria-expanded',String(!menu.hidden));}});
 const lightbox = document.querySelector<HTMLDialogElement>('#image-lightbox');
 const lightboxImage = document.querySelector<HTMLImageElement>('#lightbox-image');
@@ -47,6 +41,47 @@ lightbox?.addEventListener('click', event => {
   if (event.target === lightbox) lightbox.close();
 });
 document.querySelectorAll<HTMLButtonElement>('[data-copy-code]').forEach(button=>button.addEventListener('click',async()=>{const text=button.closest('.code-window')?.querySelector('code')?.textContent??'';try{await navigator.clipboard.writeText(text);button.textContent='已复制';setTimeout(()=>button.textContent='复制代码',1600);}catch{button.textContent='请选中代码复制';}}));
-document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(group=>{const buttons=[...group.querySelectorAll<HTMLButtonElement>('[role=tab]')];function activate(button:HTMLButtonElement){buttons.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;const panel=document.getElementById(b.getAttribute('aria-controls')??'');if(panel)panel.hidden=!active;});}buttons.forEach((button,i)=>{button.addEventListener('click',()=>activate(button));button.addEventListener('keydown',event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const target=buttons[(i+(event.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length];activate(target);target.focus();}});});});
+document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(group => {
+  const tabs = [...group.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+  if (!tabs.length) return;
+  const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls') ?? ''));
+  const counter = group.querySelector<HTMLElement>('[data-tab-position]');
+  const gallery = group.dataset.tabs === 'gallery';
+  let selectedIndex = tabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true');
+
+  function activate(index: number, direction = index - selectedIndex) {
+    if (index === selectedIndex) return;
+    const panel = panels[index];
+    if (gallery && panel) panel.dataset.slideFrom = direction < 0 ? 'left' : 'right';
+
+    tabs.forEach((tab, tabIndex) => {
+      const active = tabIndex === index;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      const tabPanel = panels[tabIndex];
+      if (tabPanel) tabPanel.hidden = !active;
+    });
+    selectedIndex = index;
+    if (counter) counter.textContent = `${index + 1} / ${tabs.length}`;
+  }
+
+  function move(step: number) {
+    const index = (selectedIndex + step + tabs.length) % tabs.length;
+    activate(index, step);
+    return tabs[index];
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activate(index));
+    tab.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      move(event.key === 'ArrowRight' ? 1 : -1).focus();
+    });
+  });
+  group.querySelectorAll<HTMLButtonElement>('[data-tab-step]').forEach(button => {
+    button.addEventListener('click', () => move(button.dataset.tabStep === '-1' ? -1 : 1));
+  });
+});
 const progress=document.querySelector<HTMLElement>('.reading-progress');if(progress)window.addEventListener('scroll',()=>{const top=document.querySelector<HTMLElement>('.doc-content')?.offsetTop??0;const end=document.querySelector<HTMLElement>('.doc-content')?.offsetHeight??1;progress.style.width=Math.max(0,Math.min(100,(window.scrollY-top+innerHeight*.3)/end*100))+'%';},{passive:true});
 const tocLinks=[...document.querySelectorAll<HTMLAnchorElement>('.doc-toc a')];if(tocLinks.length){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)tocLinks.forEach(link=>link.classList.toggle('active',decodeURIComponent(link.hash.slice(1))===entry.target.id));});},{rootMargin:'-10% 0px -70% 0px'});document.querySelectorAll('.doc-content h2,.doc-content h3').forEach(h=>observer.observe(h));}

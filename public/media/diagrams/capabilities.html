@@ -9,21 +9,12 @@
   <title>蜂巢功能架构图</title>
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
       --page: #f2f6fc; --surface: #fff; --ink: #10223c; --muted: #48617e;
-      --line: #c9d8ed; --accent: #164eaf; --soft: #eaf1fd;
+      --line: #c9d8ed; --accent: #34506f; --soft: #eaf1fd;
       --layer: #182e50; --layer-ink: #fff; --tile: #eaf1fa;
-      --signal: #efaa23; --shadow: 0 12px 32px #193e7312;
+      --shadow: 0 12px 32px #193e7312;
       font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-    @supports (color: light-dark(white, black)) {
-      :root {
-        --page: light-dark(#f2f6fc, #0e182a); --surface: light-dark(#fff, #15233a);
-        --ink: light-dark(#10223c, #ecf3ff); --muted: light-dark(#48617e, #bccce5);
-        --line: light-dark(#c9d8ed, #384f70); --accent: light-dark(#164eaf, #b0cbff);
-        --soft: light-dark(#eaf1fd, #203658); --layer: light-dark(#182e50, #223d65);
-        --tile: light-dark(#eaf1fa, #213554);
-      }
     }
     * { box-sizing: border-box; }
     body { margin: 0; line-height: 1.65; background: var(--page); color: var(--ink); }
@@ -36,8 +27,7 @@
     p { color: var(--muted); }
     .map-header {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      gap: .9rem 1.3rem; padding: .22rem 0 .22rem 1rem; margin-bottom: 1.15rem;
-      border-left: .29rem solid var(--signal);
+      gap: .9rem 1.3rem; padding: .22rem 0; margin-bottom: 1.15rem;
     }
     .diagram-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; font-size: .9rem; }
     .diagram-actions a { font-weight: 650; }
@@ -112,7 +102,6 @@
     }
     @page { size: A4 landscape; margin: 9mm; }
     @media print {
-      :root { color-scheme: light !important; }
       body { background: white; }
       main { padding: 0; }
       #features, .diagram-actions { display: none; }
@@ -132,11 +121,11 @@
 </head>
 <body>
   <main id="top">
-    <header class="map-header" id="architecture">
+    <header class="map-header page-intro" id="architecture">
       <h1 id="map-title">蜂巢功能架构图</h1>
       <div class="diagram-actions">
-        <a href="#features">查找详细功能</a>
-        <button id="print-map" type="button" hidden>打印功能图</button>
+        <a class="button primary" href="#features">查找详细功能</a>
+        <button class="button" id="print-map" type="button" hidden>打印功能图</button>
       </div>
     </header>
 

@@ -1,22 +1,22 @@
-/* 这份样式由产品手册和官网共用。图中使用的颜色随所在页面的明暗主题切换。 */
+/* 产品手册与官网共用的架构图样式，独立打开时使用浅底配色。 */
 .atlas-sheet {
-  color-scheme: light dark;
+  color-scheme: light;
   margin: 0;
-  background: light-dark(#eaf0f7, #0a1423);
+  background: #eaf0f7;
 }
 .atlas-sheet main { max-width: 1240px; margin: 0 auto; padding: clamp(8px, 2.5vw, 36px); }
 .hive-atlas {
-  --atlas-paper: light-dark(#fff, #14243a);
-  --atlas-ground: light-dark(#f1f5f9, #0c192b);
-  --atlas-ink: light-dark(#152e47, #f0f6fc);
-  --atlas-sub: light-dark(#455d71, #bed0df);
-  --atlas-line: light-dark(#c2d0db, #435770);
-  --atlas-wire: light-dark(#54728b, #95afc8);
-  --atlas-tint: light-dark(#e8f4f2, #123735);
-  --atlas-teal: light-dark(#09635a, #8ae2cd);
-  --atlas-blue: light-dark(#19558a, #a4cdfb);
-  --atlas-gold: light-dark(#815016, #f2cd90);
-  --atlas-warm: light-dark(#fff5e3, #352d21);
+  --atlas-paper: #fff;
+  --atlas-ground: #f1f5f9;
+  --atlas-ink: #152e47;
+  --atlas-sub: #455d71;
+  --atlas-line: #c2d0db;
+  --atlas-wire: #54728b;
+  --atlas-tint: #e8f4f2;
+  --atlas-teal: #09635a;
+  --atlas-blue: #34506f;
+  --atlas-gold: #815016;
+  --atlas-warm: #fff5e3;
   container-type: inline-size;
   margin: 0;
   border: 1px solid var(--atlas-line);
@@ -41,7 +41,6 @@
   background-color: #112b46;
   background-image: radial-gradient(circle at 95% 160%, transparent 110px, #7296af45 111px, transparent 113px, transparent 144px, #7296af45 145px, transparent 147px, transparent 179px, #7296af45 180px, transparent 182px), linear-gradient(110deg, #142b47, #173f57);
 }
-.hive-atlas.twin-atlas .atlas-head { background-color: #103d37; background-image: repeating-radial-gradient(circle at 100% 180%, transparent 0 34px, #80cbb522 35px 36px, transparent 37px 57px), linear-gradient(110deg, #173c39, #145346); }
 .hive-atlas .atlas-title { color: #fff; font-size: clamp(1.5rem, 3.3cqw, 2.25rem); line-height: 1.22; font-weight: 720; letter-spacing: -.035em; }
 .hive-atlas .atlas-head p { color: #dfebf3; margin-top: 8px; max-width: 50em; }
 .atlas-legend { display: inline-flex; align-items: center; gap: 8px; color: #dfebf3; font-size: .84rem; }
@@ -114,6 +113,60 @@
 .twin-gates .atlas-outside { background: var(--atlas-warm); border-color: var(--atlas-gold); }
 .twin-gates .atlas-route-name { color: var(--atlas-gold); }
 .hive-atlas .twin-close { margin-top: 14px; padding-left: 12px; border-left: 3px solid var(--atlas-teal); }
+.continuity-atlas { --continuity-inset: clamp(16px, 3cqw, 34px); }
+.continuity-head { padding: var(--continuity-inset); }
+.hive-atlas .continuity-head .atlas-title { color: var(--atlas-ink); }
+.continuity-head .atlas-title span { display: inline-block; }
+.hive-atlas .continuity-head p { margin-top: 9px; }
+.hive-atlas .continuity-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2.2cqw, 26px);
+  padding-inline: var(--continuity-inset);
+  list-style: none;
+}
+.hive-atlas .continuity-timeline li {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 8px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--atlas-line);
+  border-radius: 10px;
+  background: var(--atlas-paper);
+}
+.continuity-timeline li::after {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 100%;
+  height: 17px;
+  border-left: 1px solid var(--atlas-wire);
+}
+.continuity-date { color: var(--atlas-blue); font-size: .88rem; font-weight: 680; }
+.hive-atlas .continuity-timeline :is(h2, h3) { font-size: 1.1rem; line-height: 1.4; letter-spacing: 0; font-weight: 700; }
+.continuity-output { display: grid; gap: 2px; padding: 8px 10px; border-radius: 6px; background: var(--atlas-ground); }
+.continuity-output small { color: var(--atlas-sub); font-size: .8rem; }
+.continuity-output strong { font-size: .9rem; line-height: 1.45; }
+.continuity-timeline li:last-child .continuity-output { background: var(--atlas-tint); color: var(--atlas-teal); }
+.continuity-space {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: 16px var(--continuity-inset) var(--continuity-inset);
+  padding: 12px 16px;
+  border: 1px solid #294660;
+  border-radius: 8px;
+  background: #18334d;
+  color: #f1f7ff;
+}
+.hive-atlas .continuity-space p { color: #dce9f4; }
+@container (max-width: 720px) {
+  .hive-atlas .continuity-timeline { grid-template-columns: minmax(0, 1fr); gap: 13px; }
+  .continuity-timeline li:not(:last-child)::after { height: 14px; }
+}
 @container (max-width: 900px) {
   .atlas-band { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .hive-atlas .atlas-label { display: flex; align-items: center; gap: 8px; padding: 0; }
@@ -146,7 +199,7 @@
 }
 @page atlas-print { size: A4 landscape; margin: 8mm; }
 @media print {
-  .atlas-sheet { page: atlas-print; background: white; color-scheme: light; }
+  .atlas-sheet { page: atlas-print; background: white; }
   .atlas-sheet main { max-width: none; padding: 0; }
   .atlas-sheet .hive-atlas { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   .atlas-sheet .atlas-head { padding: 12px 18px; }

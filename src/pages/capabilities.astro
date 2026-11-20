@@ -15,7 +15,22 @@ if (!map || !style || !script) throw new Error('功能架构图原件缺少正�
 
 // 把离线原图的页面级样式限定在图中，官网导航、搜索和页脚沿用各自的样式。
 const css = postcss.parse(style);
+const sharedStyles = new Set(['font-family', '--ink', '--muted', '--line', '--accent', '--soft', '--shadow']);
 css.walkRules(rule => {
+  if (rule.parent?.type === 'root') {
+    if (rule.selector === ':root') {
+      rule.walkDecls(declaration => {
+        if (sharedStyles.has(declaration.prop)) declaration.remove();
+      });
+    }
+    if (rule.selector === '.map-header') {
+      rule.walkDecls(/^(padding|margin-bottom)$/, declaration => { declaration.remove(); });
+    }
+    if (rule.selector === 'main' || rule.selector === 'h1') {
+      rule.remove();
+      return;
+    }
+  }
   rule.selectors = rule.selectors.map(selector => {
     if (selector === ':root' || selector === 'body') return '.capabilities-sheet';
     if (selector === 'main') return '.capabilities-sheet .map-canvas';
@@ -26,7 +41,7 @@ css.walkRules(rule => {
 <SiteLayout title={doc.title + ' · 蜂巢'} description={doc.description}>
   <style is:inline set:html={css.toString()}></style>
   <div class="capabilities-sheet">
-    <div class="map-canvas" id="top">
+    <div class="map-canvas container" id="top">
       <Fragment set:html={map} />
       <section class="capability-guide" id="按需要查找功能" aria-labelledby="按任务查操作手册" set:html={guide.html} />
     </div>
@@ -35,8 +50,13 @@ css.walkRules(rule => {
 </SiteLayout>
 
 <style>
-  .capabilities-sheet { color-scheme: inherit; }
-  .capabilities-sheet :global(.diagram-actions a) { text-decoration: underline; }
+  .capabilities-sheet {
+    --page: var(--bg);
+    --surface: var(--paper);
+    --tile: var(--soft);
+  }
+  .map-canvas { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .capabilities-sheet :global(.diagram-actions .button) { min-height: 2.75rem; padding: .5rem .85rem; }
   .capabilities-sheet :global(.catalog > .bucket:nth-child(odd of :not([hidden])):nth-last-child(1 of :not([hidden]))) {
     grid-column: 1 / -1;
   }
@@ -101,5 +121,9 @@ css.walkRules(rule => {
   @media (max-width: 35rem) {
     .capability-guide :global(ul) { grid-template-columns: minmax(0, 1fr); }
   }
-  @media print { .capability-guide { display: none; } }
+  @media print {
+    .map-canvas { width: 100%; padding: 0; }
+    .capabilities-sheet :global(.map-header) { padding: 0; }
+    .capability-guide { display: none; }
+  }
 </style>

@@ -2,7 +2,7 @@
 
 蜂巢的产品展示与公开文档网站，目标地址为[www.bluexiii.com/hive](https://www.bluexiii.com/hive/)。源码独立于蜂巢产品，放在`code/public/hive-os-site/`，与博客和ACDL网站并列；GitHub仓库为[xiiiblue/hive](https://github.com/xiiiblue/hive)。
 
-首页用工作台界面和HTML架构图介绍蜂巢，提供员工、管理员和接入开发者三条阅读路线。功能目录可以按关键词和角色筛选，文档支持全文搜索、章节导航、图片放大、打印及明暗主题。页面静态生成，阅读不依赖蜂巢后端或外部模型服务。
+首页通过工作台界面和连续工作图介绍蜂巢，提供员工、管理员和接入开发者三条阅读路线。功能目录可以按关键词和角色筛选，文档支持全文搜索、章节导航、图片放大及打印。页面静态生成，阅读不依赖蜂巢后端或外部模型服务。
 
 ## 当前内容
 
@@ -41,7 +41,7 @@ npm run preview -- --port 4328
 - `content/`保存Markdown正文。新增文章会自动生成稳定的`/docs/{目录}/{文件名}/`路径，并进入文档目录、全文搜索、站点地图与前后篇导航。
 - `src/pages/`保存产品展示页面，`src/components/`保存导航、概念图、架构图和阅读组件，`src/styles/global.css`定义通用样式，`src/styles/home.css`定义首页构图。新版视觉约定见[视觉设计](docs/视觉设计.md)。
 - `public/media/`保存公开配图。原图与文案需要一起核对，不能仅靠文字扫描判定图片无敏感内容。
-- `scripts/import-manuals.mjs`从产品仓库导入两册操作手册的公开章节、操作截图、三张HTML架构图及样式、真实Logo、标签页图标和分享封面。默认读取`../../telchina/hive-os`，可设置`HIVE_MANUAL_SOURCE`指定产品工作树。运行`npm run import:manuals`前先核对来源。
+- `scripts/import-manuals.mjs`从产品仓库导入两册操作手册的公开章节、操作截图、HTML图表及样式、真实Logo、标签页图标和分享封面。默认读取`../../telchina/hive-os`，可设置`HIVE_MANUAL_SOURCE`指定产品工作树。运行`npm run import:manuals`前先核对来源。
 
 新文章使用以下前置信息，正文从段落或二级标题开始：
 
