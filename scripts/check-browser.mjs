@@ -64,6 +64,13 @@ async function openDirectory() {
   assert.equal(await query.inputValue(), '');
   assert.equal(await role.inputValue(), '');
   assert.equal(await matches.count(), all);
+  const guide = diagram.getByRole('region', { name: '按任务查操作手册' });
+  assert.deepEqual(await guide.getByRole('heading', { level: 3 }).allTextContents(), ['员工工作台', '管理员控制台', '开发对接']);
+  const catalog = await diagram.locator('.catalog').boundingBox();
+  const lastGroup = await diagram.locator('.catalog .bucket:visible').last().boundingBox();
+  const guideBounds = await guide.boundingBox();
+  assert(Math.abs(catalog.x - guideBounds.x) < 1 && Math.abs(catalog.width - guideBounds.width) < 1, '功能目录和手册入口左右对齐');
+  assert(Math.abs(catalog.width - lastGroup.width) < 1, '最后一组功能铺满整行');
   await diagram.getByRole('link', { name: '查找详细功能' }).click();
   assert.equal(new URL(page.url()).hash, '#features');
   await diagram.getByRole('link', { name: '返回页首' }).click();
