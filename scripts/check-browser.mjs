@@ -43,6 +43,9 @@ async function go(path) {
 
 async function openDirectory() {
   const diagram = page.frameLocator('iframe[title="蜂巢功能架构与功能目录"]');
+  assert.deepEqual(await diagram.locator('.architecture > .layer > h2').allTextContents(), [
+    '使用入口', '员工应用', '企业管理', '系统接入', '平台支撑',
+  ]);
   const query = diagram.getByRole('searchbox', { name: '按关键词搜索' });
   const role = diagram.getByRole('combobox', { name: '按角色筛选' });
   await query.waitFor();

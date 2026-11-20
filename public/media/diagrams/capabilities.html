@@ -3,19 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="用一张图理解蜂巢如何接收任务、使用资料和连接业务，再按身份查找系统功能。">
+  <meta name="description" content="按使用入口、员工应用、企业管理、系统接入和平台支撑查看蜂巢的功能模块。">
   <link rel="canonical" href="https://www.bluexiii.com/hive/media/diagrams/capabilities.html">
   <meta property="og:url" content="https://www.bluexiii.com/hive/media/diagrams/capabilities.html">
-  <title>蜂巢功能架构与目录</title>
+  <title>蜂巢功能架构图</title>
   <style>
     :root {
       color-scheme: light dark;
       --page: #f2f6fc; --surface: #fff; --ink: #10223c; --muted: #48617e;
       --line: #c9d8ed; --accent: #164eaf; --soft: #eaf1fd;
-      --core: #12346b; --core-ink: #fff; --core-sub: #d8e7ff;
-      --teal: #09655b; --teal-soft: #e4f4f1;
-      --violet: #594289; --violet-soft: #f1ebfb;
-      --shadow: 0 18px 40px #193e7310;
+      --layer: #182e50; --layer-ink: #fff; --tile: #eaf1fa;
+      --signal: #efaa23; --shadow: 0 12px 32px #193e7312;
       font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
     }
     @supports (color: light-dark(white, black)) {
@@ -23,41 +21,62 @@
         --page: light-dark(#f2f6fc, #0e182a); --surface: light-dark(#fff, #15233a);
         --ink: light-dark(#10223c, #ecf3ff); --muted: light-dark(#48617e, #bccce5);
         --line: light-dark(#c9d8ed, #384f70); --accent: light-dark(#164eaf, #b0cbff);
-        --soft: light-dark(#eaf1fd, #203658); --core: light-dark(#12346b, #234a86);
-        --core-sub: light-dark(#d8e7ff, #e1ecff);
-        --teal: light-dark(#09655b, #a1e4d9); --teal-soft: light-dark(#e4f4f1, #173b3c);
-        --violet: light-dark(#594289, #dfc8ff); --violet-soft: light-dark(#f1ebfb, #342a51);
+        --soft: light-dark(#eaf1fd, #203658); --layer: light-dark(#182e50, #223d65);
+        --tile: light-dark(#eaf1fa, #213554);
       }
     }
     * { box-sizing: border-box; }
     body { margin: 0; line-height: 1.65; background: var(--page); color: var(--ink); }
-    main { max-width: 78rem; padding: clamp(1rem, 4vw, 3.5rem); margin: auto; }
+    main { max-width: 86rem; padding: clamp(.85rem, 3vw, 2.25rem); margin: auto; }
     h1, h2, h3, h4, p { margin: 0; }
-    h1 { font-size: clamp(1.85rem, 4vw, 3.3rem); line-height: 1.15; letter-spacing: -.035em; }
+    h1 { font-size: clamp(1.65rem, 4vw, 2.7rem); line-height: 1.15; letter-spacing: -.035em; }
     h2 { font-size: clamp(1.35rem, 2.6vw, 1.85rem); line-height: 1.3; }
     h3 { font-size: 1.11rem; line-height: 1.4; }
     h4 { font-size: 1rem; line-height: 1.45; }
     p { color: var(--muted); }
-    header { margin-bottom: 1.6rem; }
-    header p, .section-head p { margin-top: .6rem; }
-    .jump-to-features { display: inline-block; margin-top: .65rem; font-weight: 650; }
-    main > section + section { margin-top: 2.4rem; }
+    .map-header {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: .9rem 1.3rem; padding: .22rem 0 .22rem 1rem; margin-bottom: 1.15rem;
+      border-left: .29rem solid var(--signal);
+    }
+    .diagram-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; font-size: .9rem; }
+    .diagram-actions a { font-weight: 650; }
+    .diagram-actions button { width: auto; min-height: 2.55rem; padding-inline: .8rem; }
+    .architecture { display: grid; gap: .58rem; margin: 0; }
+    .layer {
+      display: grid; grid-template-columns: 8.35rem minmax(0, 1fr);
+      border: 1px solid var(--line); border-radius: .68rem; overflow: hidden;
+      background: var(--soft); box-shadow: var(--shadow);
+    }
+    .layer-label {
+      display: grid; place-items: center; font-size: 1.075rem; letter-spacing: .04em;
+      padding: .7rem .5rem; margin: 0; background: var(--layer); color: var(--layer-ink);
+    }
+    .modules { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .48rem; padding: .48rem; }
+    .module {
+      min-width: 0; padding: .55rem; border: 1px solid var(--line);
+      border-radius: .45rem; background: var(--surface);
+    }
+    .module h3 {
+      color: var(--accent); font-size: .99rem; padding-bottom: .31rem;
+      border-bottom: 1px solid var(--line); margin-bottom: .38rem;
+    }
+    .feature-list {
+      margin: 0; padding: 0; list-style: none; display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .28rem;
+    }
+    .feature-list li {
+      display: grid; place-items: center; text-align: center; min-height: 1.75rem;
+      padding: .19rem .3rem; border-radius: .23rem; background: var(--tile);
+      font-size: .84rem; line-height: 1.38; overflow-wrap: anywhere;
+    }
+    .feature-list li:only-child { grid-column: 1 / -1; }
+    .module--channels { grid-column: span 2; }
+    .module--channels .feature-list { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    figcaption { margin-top: .14rem; color: var(--muted); font-size: .85rem; }
+    #features { margin-top: 3rem; }
     .section-head { margin-bottom: 1rem; }
-    .architecture { margin: 0; padding: clamp(.85rem, 3vw, 1.65rem); border: 1px solid var(--line); border-radius: 1.25rem; background: var(--surface); box-shadow: var(--shadow); }
-    .diagram-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
-    .node { display: grid; grid-template-columns: 2rem 1fr; align-items: start; gap: .65rem; padding: .88rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--soft); }
-    .node p, .storage p { font-size: .9rem; margin-top: .2rem; }
-    .symbol { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid currentColor; border-radius: .58rem; color: var(--accent); font-size: .89rem; font-weight: 700; }
-    .core { grid-template-columns: 2rem 1fr; color: var(--core-ink); background: var(--core); border-color: transparent; }
-    .core .symbol, .core p { color: var(--core-sub); }
-    .work { background: var(--teal-soft); }
-    .work .symbol { color: var(--teal); }
-    .outside { background: var(--violet-soft); }
-    .outside .symbol { color: var(--violet); }
-    .flow { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 2.4rem; color: var(--muted); text-align: center; font-size: .82rem; }
-    .flow::before { content: ""; height: .85rem; width: .65rem; flex: 0 0 .65rem; background: currentColor; clip-path: polygon(43% 0, 57% 0, 57% 70%, 100% 70%, 50% 100%, 0 70%, 43% 70%); }
-    .storage { margin-top: .85rem; padding: .85rem .95rem; border: 1px dashed var(--line); border-radius: .8rem; }
-    figcaption { margin-top: .8rem; color: var(--muted); font-size: .9rem; }
+    .section-head p { margin-top: .6rem; }
     .filters { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; align-items: end; gap: .75rem; margin-bottom: .8rem; }
     [hidden] { display: none !important; }
     label { display: grid; gap: .25rem; font-size: .9rem; font-weight: 650; }
@@ -77,66 +96,268 @@
     .entry + .entry { border-top: 1px solid var(--line); }
     .entry p { font-size: .93rem; margin-top: .2rem; }
     .back { margin-top: 1rem; font-size: .9rem; }
-    @media (max-width: 45rem) {
-      .diagram-row, .catalog { grid-template-columns: 1fr; }
-      .node { padding: .65rem; }
+    @media screen and (max-width: 58rem) {
+      .layer { grid-template-columns: minmax(0, 1fr); }
+      .layer-label { place-items: center start; padding: .55rem .8rem; }
+      .modules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-    @media (max-width: 32rem) {
+    @media screen and (max-width: 37rem) {
+      .modules, .catalog { grid-template-columns: minmax(0, 1fr); }
+      .module--channels { grid-column: auto; }
+      .module--channels .feature-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media screen and (max-width: 32rem) {
       .filters { grid-template-columns: minmax(0, 1fr) auto; }
       .filters label:first-child { grid-column: 1 / -1; }
-      .architecture { padding: .65rem; }
     }
+    @page { size: A4 landscape; margin: 9mm; }
     @media print {
-      :root { color-scheme: light !important; --page: #fff; --surface: #fff; --ink: #172338; --muted: #36445c; --line: #b4c1d2; --accent: #183c78; --soft: #eaf1fd; --core: #12346b; --core-ink: #fff; --core-sub: #e8effa; }
+      :root { color-scheme: light !important; }
+      body { background: white; }
       main { padding: 0; }
-      .filters, .result, .jump-list, .jump-to-features, .back { display: none; }
-      .catalog [hidden] { display: revert !important; }
-      .architecture, .entry { break-inside: avoid; print-color-adjust: exact; }
-      .architecture { box-shadow: none; }
-      .bucket { overflow: visible; }
-      .bucket > h3 { break-after: avoid; }
+      #features, .diagram-actions { display: none; }
+      .map-header { margin-bottom: 2.5mm; }
+      h1 { font-size: 20pt; }
+      .architecture { gap: 1.3mm; }
+      .layer { grid-template-columns: 27mm minmax(0, 1fr); break-inside: avoid; box-shadow: none; print-color-adjust: exact; }
+      .layer-label { font-size: 10pt; padding: 1mm; }
+      .modules { padding: 1.1mm; gap: 1.1mm; }
+      .module { padding: 1.3mm; }
+      .module h3 { font-size: 9pt; margin-bottom: 1mm; padding-bottom: .8mm; }
+      .feature-list { gap: .8mm; }
+      .feature-list li { font-size: 8pt; min-height: 4.2mm; padding: .25mm .65mm; }
+      figcaption { font-size: 8pt; }
     }
   </style>
 </head>
 <body>
   <main id="top">
-    <header>
-      <h1>蜂巢功能架构与目录</h1>
-      <p>先看一项工作从哪里开始、在哪里执行，再按自己的角色查找功能。</p>
-      <a class="jump-to-features" href="#features">直接查找功能</a>
+    <header class="map-header" id="architecture">
+      <h1 id="map-title">蜂巢功能架构图</h1>
+      <div class="diagram-actions">
+        <a href="#features">查找详细功能</a>
+        <button id="print-map" type="button" hidden>打印功能图</button>
+      </div>
     </header>
 
-    <section aria-labelledby="architecture">
-      <div class="section-head">
-        <h2 id="architecture">一项工作怎样经过蜂巢</h2>
-      </div>
-      <figure class="architecture" aria-labelledby="architecture">
-        <div class="diagram-row">
-          <div class="node"><span class="symbol" aria-hidden="true">用</span><div><h3>员工入口</h3><p>电脑和手机工作台、已连接的消息渠道。任务也可以由定时计划或来信规则触发。</p></div></div>
-          <div class="node"><span class="symbol" aria-hidden="true">管</span><div><h3>管理员控制台</h3><p>维护人员、模型、企业资料和业务能力，查看任务、用量和运行状态。</p></div></div>
-          <div class="node"><span class="symbol" aria-hidden="true">接</span><div><h3>业务系统接入</h3><p>外部系统可通过获配的开放接口提交任务，也可接入统一身份、工具和业务面板。</p></div></div>
+    <figure class="architecture" aria-labelledby="map-title">
+      <section class="layer layer--access" aria-labelledby="layer-access">
+        <h2 class="layer-label" id="layer-access">使用入口</h2>
+        <div class="modules">
+          <section class="module">
+            <h3>员工入口</h3>
+            <ul class="feature-list">
+              <li>电脑工作台</li>
+              <li>手机工作台</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>管理入口</h3>
+            <ul class="feature-list">
+              <li>管理员控制台</li>
+            </ul>
+          </section>
+          <section class="module module--channels">
+            <h3>消息渠道</h3>
+            <ul class="feature-list">
+              <li>企业微信</li>
+              <li>微信</li>
+              <li>Telegram</li>
+              <li>钉钉</li>
+              <li>飞书</li>
+            </ul>
+          </section>
         </div>
-        <div class="flow">提交任务、变更配置或核对身份</div>
-        <div class="node core"><span class="symbol" aria-hidden="true">核</span><div><h3>平台核心服务</h3><p>确认身份和授权，保存会话和任务，安排执行，记录结果与关键管理操作。</p></div></div>
-        <div class="flow">运行环境管理服务准备员工的独立环境并启动执行引擎</div>
-        <div class="node work"><span class="symbol" aria-hidden="true">工</span><div><h3>员工工作空间</h3><p>Hive Pi和OpenCode是两种执行引擎。它们使用获配的文件、资料、技能和工具处理任务。个人文件可跨会话使用，团队目录按授权共享。</p></div></div>
-        <div class="flow">执行期间按需要连接模型、业务和资料</div>
-        <div class="diagram-row">
-          <div class="node outside"><span class="symbol" aria-hidden="true">模</span><div><h3>模型网关</h3><p>按本次任务允许的模型路由访问上游，记录调用和用量。执行环境使用短期模型访问身份。</p></div></div>
-          <div class="node outside"><span class="symbol" aria-hidden="true">业</span><div><h3>企业业务系统</h3><p>员工工具按授权调用业务接口。业务系统核验身份、决定数据和操作权限。</p></div></div>
-          <div class="node outside"><span class="symbol" aria-hidden="true">资</span><div><h3>资料与工作成果</h3><p>执行过程中查阅获授权的知识库和工作文件。结果回到会话，生成的文件可留在工作空间。</p></div></div>
+      </section>
+      <section class="layer layer--employee" aria-labelledby="layer-employee">
+        <h2 class="layer-label" id="layer-employee">员工应用</h2>
+        <div class="modules">
+          <section class="module">
+            <h3>智能对话</h3>
+            <ul class="feature-list">
+              <li>新建与继续</li>
+              <li>模型与思考</li>
+              <li>附件与引用</li>
+              <li>会话搜索归档</li>
+              <li>上下文压缩</li>
+              <li>任务取消</li>
+              <li>会话调试</li>
+              <li>结果预览导出</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>资料与技能</h3>
+            <ul class="feature-list">
+              <li>知识库</li>
+              <li>工作规范</li>
+              <li>企业技能</li>
+              <li>个人技能</li>
+              <li>技能市场</li>
+              <li>记忆与学习</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>业务协作</h3>
+            <ul class="feature-list">
+              <li>业务范围切换</li>
+              <li>业务系统目录</li>
+              <li>企业业务面板</li>
+              <li>个人面板定制</li>
+              <li>远程工具</li>
+              <li>个人邮箱</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>自动化与个人设置</h3>
+            <ul class="feature-list">
+              <li>定时任务</li>
+              <li>来信规则</li>
+              <li>执行记录</li>
+              <li>结果推送</li>
+              <li>账号与语言</li>
+              <li>显示偏好</li>
+              <li>个人用量</li>
+              <li>用户反馈</li>
+            </ul>
+          </section>
         </div>
-        <div class="storage">
-          <h3>各类数据保存在哪里</h3>
-          <p>数据库保存账号、授权、会话、任务状态和调用记录；个人与团队目录保存工作文件；对象存储保存资源包、备份和导出等归档文件。</p>
+      </section>
+      <section class="layer layer--admin" aria-labelledby="layer-admin">
+        <h2 class="layer-label" id="layer-admin">企业管理</h2>
+        <div class="modules">
+          <section class="module">
+            <h3>组织与授权</h3>
+            <ul class="feature-list">
+              <li>企业品牌</li>
+              <li>员工与管理员</li>
+              <li>部门管理</li>
+              <li>能力组</li>
+              <li>员工能力分配</li>
+              <li>工作规范</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>企业资源</h3>
+            <ul class="feature-list">
+              <li>业务系统登记</li>
+              <li>企业技能发布</li>
+              <li>面板版本管理</li>
+              <li>MCP服务管理</li>
+              <li>知识库管理</li>
+              <li>市场技能审核</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>模型与费用</h3>
+            <ul class="feature-list">
+              <li>平台模型渠道</li>
+              <li>个人模型管理</li>
+              <li>执行引擎设置</li>
+              <li>用量与费用</li>
+              <li>模型调用记录</li>
+              <li>预算管理</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>任务与运维</h3>
+            <ul class="feature-list">
+              <li>任务管理</li>
+              <li>定时计划</li>
+              <li>并行度与时限</li>
+              <li>消息渠道状态</li>
+              <li>服务器监控</li>
+              <li>员工反馈处理</li>
+              <li>运营事件</li>
+              <li>审计日志</li>
+            </ul>
+          </section>
         </div>
-        <figcaption>个人邮箱、机器人渠道、模型和企业资源的可见性取决于部署配置和账号授权。浏览器可从业务面板直接走获准的业务接口。</figcaption>
-      </figure>
-    </section>
+      </section>
+      <section class="layer layer--connect" aria-labelledby="layer-connect">
+        <h2 class="layer-label" id="layer-connect">系统接入</h2>
+        <div class="modules">
+          <section class="module">
+            <h3>统一身份</h3>
+            <ul class="feature-list">
+              <li>单点登录</li>
+              <li>员工身份核验</li>
+              <li>业务账号关联</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>开放API</h3>
+            <ul class="feature-list">
+              <li>接口密钥管理</li>
+              <li>提交任务</li>
+              <li>查询与取消</li>
+              <li>流式结果</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>技能与工具</h3>
+            <ul class="feature-list">
+              <li>技能打包分发</li>
+              <li>MCP远程工具</li>
+              <li>工具连接测试</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>业务面板</h3>
+            <ul class="feature-list">
+              <li>静态资源接入</li>
+              <li>身份与业务上下文</li>
+              <li>面板间跳转</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+      <section class="layer layer--platform" aria-labelledby="layer-platform">
+        <h2 class="layer-label" id="layer-platform">平台支撑</h2>
+        <div class="modules">
+          <section class="module">
+            <h3>工作空间</h3>
+            <ul class="feature-list">
+              <li>个人文件</li>
+              <li>团队共享目录</li>
+              <li>命令行终端</li>
+              <li>环境启停与配额</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>任务执行</h3>
+            <ul class="feature-list">
+              <li>任务排队</li>
+              <li>Hive Pi</li>
+              <li>OpenCode</li>
+              <li>工具执行</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>模型访问</h3>
+            <ul class="feature-list">
+              <li>模型网关</li>
+              <li>模型路由</li>
+              <li>临时访问身份</li>
+              <li>用量计量</li>
+            </ul>
+          </section>
+          <section class="module">
+            <h3>备份与恢复</h3>
+            <ul class="feature-list">
+              <li>个人资产备份</li>
+              <li>恢复点查询</li>
+              <li>管理员恢复</li>
+              <li>个人资产导出</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+      <figcaption>消息渠道、模型和企业资源的可用范围以所在环境的配置和账号授权为准。</figcaption>
+    </figure>
 
-    <section aria-labelledby="features">
+    <section id="features" aria-labelledby="features-title">
       <div class="section-head">
-        <h2 id="features">查找系统功能</h2>
+        <h2 id="features-title">查找系统功能</h2>
         <p>Skill是一份可重复使用的工作方法，MCP是连接外部工具的协议，业务面板是工作台中的业务网页。开放API是业务系统调用蜂巢的接口。</p>
       </div>
       <div class="filters" id="filters" hidden>
@@ -271,6 +492,10 @@
     </section>
   </main>
   <script>
+    const printMap = document.querySelector('#print-map');
+    printMap.addEventListener('click', () => window.print());
+    printMap.hidden = false;
+
     const filters = document.querySelector('#filters');
     const query = document.querySelector('#query');
     const role = document.querySelector('#role');
