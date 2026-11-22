@@ -1,6 +1,6 @@
 ---
 title: "业务系统与企业资源"
-description: "登记业务系统，维护企业Skill和业务面板，理解资源发布、系统资格和人员分配。"
+description: "登记业务系统，发布企业技能和业务面板，再将系统和资源加入对应岗位的能力组。"
 section: admin
 order: 4
 updated: '2026-11-22'

@@ -1,6 +1,6 @@
 ---
 title: "技能审核、版本管理与MCP"
-description: "管理员工共享的Skill版本，理解下架和紧急禁用，并配置和测试MCP远程工具。"
+description: "审核员工提交的技能，查看版本下架后谁还能使用，并配置和测试MCP工具。"
 section: admin
 order: 5
 updated: '2026-11-22'

@@ -3,8 +3,9 @@ title: 提交和管理异步长任务
 description: 提交后保存任务标识，通过轮询读取结果，并明确处理取消与HTTP等待超时。
 section: developers
 order: 30
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
+  - docs/11-手册/03-管理员控制台操作手册/07-统一身份与开放API.md
   - apps/hive-core/src/mainline/server.ts
   - apps/hive-core/src/mainline/open-api/postgres-open-api.ts
   - docs/02-设计/02-能力设计/CAP-018-开放智能体API.md
@@ -95,7 +96,9 @@ curl --silent --show-error --fail-with-body \
 
 异步提交、查询和取消的HTTP等待最多30秒。504且错误码为`OPEN_API_REQUEST_TIMEOUT`时，只能确定本次HTTP等待结束；任务可能已经创建或仍在执行。
 
-提交结果不明时，用同一Key、同一`Idempotency-Key`和原请求重试，取得同一任务。不要生成新标识盲目再次提交。拿到任务ID后可以继续查询；总期限到达导致的任务失败通过`run_status`和`terminal_reason`判断。
+提交中途断线时，先看有没有拿到任务ID。有ID就查询原任务。没有ID，但第一次提交带了防重复标识（`Idempotency-Key`），用原API Key、原标识和相同的请求内容重试。两者都没有时，先请管理员查看该Key的“使用详情”，确认是否已创建任务，再决定是否提交。
+
+任务是否因总期限到达而失败，可以查看`run_status`和`terminal_reason`。
 
 同步与异步入口分别处理幂等，不能把改用另一种入口当成原请求重试。
 

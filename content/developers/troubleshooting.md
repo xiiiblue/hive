@@ -3,8 +3,9 @@ title: 接入错误与排查
 description: 从HTTP状态、任务状态和业务身份逐步定位失败，避免重复执行与错误放行。
 section: developers
 order: 80
-updated: '2026-10-16'
+updated: '2026-11-22'
 sources:
+  - docs/11-手册/03-管理员控制台操作手册/07-统一身份与开放API.md
   - apps/hive-core/src/mainline/server.ts
   - docs/02-设计/02-能力设计/CAP-018-开放智能体API.md
   - docs/02-设计/02-能力设计/CAP-022-业务系统公共属性与统一身份.md
@@ -37,7 +38,7 @@ sources:
 |502 `OPEN_API_RUN_FAILED`|执行失败|按任务记录核对模型、Skill、工具与业务错误，再决定是否修正后新建任务|
 |409 `OPEN_API_RUN_CANCELED`|同步执行被取消|核对已完成部分与业务结果，不自动当成从未执行|
 |504 `OPEN_API_TIMEOUT`|同步任务达到总时限，正在停止|检查任务和外部业务状态；不能承诺文件与业务修改已回滚|
-|504 `OPEN_API_REQUEST_TIMEOUT`|异步接口HTTP等待结束|任务可能仍存在；同标识重试提交或继续查询|
+|504 `OPEN_API_REQUEST_TIMEOUT`|异步接口HTTP等待结束|有任务ID就查询。首次已带防重复标识时可原样重试。两者都没有时先查该Key的“使用详情”|
 |404 `OPEN_API_RUN_NOT_FOUND`|任务不存在、已删除或不属于原Key|核对任务ID及创建Key；另一枚同员工Key也无权查询|
 |409 `OPEN_API_REQUEST_INVALIDATED_BY_RESTORE`|员工资产恢复使旧请求失效|先核对外部业务结果；不要自动换标识重新执行|
 
