@@ -394,7 +394,7 @@
           <ul class="entries">
             <li class="entry" data-roles="employee"><h4>技能广场</h4><p>按业务范围查看已获配的企业技能、个人技能、市场技能和可用工具，选用适合当前任务的能力。</p></li>
             <li class="entry" data-roles="employee"><h4>维护个人技能</h4><p>上传ZIP、编辑资料和标签、按标签筛选、整包替换内容；核对更新后的技能版本和适用范围。</p></li>
-            <li class="entry" data-roles="employee"><h4>安装或共享市场技能</h4><p>查看说明与版本，安装同事共享的技能；发布或更新以市场审核和版本状态为准。</p></li>
+            <li class="entry" data-roles="employee"><h4>安装或共享市场技能</h4><p>查看说明与版本，安装已通过审核的版本。作者提交新版本后，要等管理员审核通过，其他员工才可安装。</p></li>
             <li class="entry" data-roles="employee"><h4>企业技能个人版</h4><p>从可复制的企业Skill创建个人副本，在聊天中改进自己的版本并在确认后切换。</p></li>
             <li class="entry" data-roles="employee"><h4>采纳聊天学习建议</h4><p>有合适的学习建议时，先查看拟保留的做法，再确认创建或更新个人技能。</p></li>
             <li class="entry" data-roles="employee admin"><h4>知识库</h4><p>管理员维护资料并通过能力组分配。员工从“资料与规范”查阅或在聊天引用，助手可搜索获授权资料。</p></li>
@@ -403,8 +403,8 @@
         </section>
         <section class="bucket" id="workspace" aria-labelledby="workspace-title"><h3 id="workspace-title">工作空间</h3>
           <ul class="entries">
-            <li class="entry" data-roles="employee"><h4>管理个人文件</h4><p>在个人空间查看目录、上传与下载文件，常见类型可预览。文件可以跨会话继续使用。</p></li>
-            <li class="entry" data-roles="employee admin"><h4>团队共享目录</h4><p>管理员设置访问成员及权限；获配员工在团队目录里协作，继续使用各自的独立运行环境。</p></li>
+            <li class="entry" data-roles="employee"><h4>管理个人文件</h4><p>在个人主目录查看文件、上传与下载文件，常见类型可预览。文件可以跨会话继续使用。</p></li>
+            <li class="entry" data-roles="employee admin"><h4>团队共享目录</h4><p>管理员指定成员，成员共同读写团队目录，继续使用各自的独立运行环境。</p></li>
             <li class="entry" data-roles="employee"><h4>使用终端</h4><p>电脑端可用终端检查文件、运行脚本和准备依赖。实际操作以账号权限和环境状态为准。</p></li>
             <li class="entry" data-roles="employee admin"><h4>运行环境与资源</h4><p>查看运行环境状态与资源；管理员可按权限启停和维护配额，容量是否生效以控台实际状态为准。</p></li>
             <li class="entry" data-roles="employee admin"><h4>备份、恢复与导出</h4><p>员工查看恢复点和导出自己的资料；管理员按权限发起恢复，先核对目标与覆盖范围。</p></li>
@@ -428,7 +428,7 @@
             <li class="entry" data-roles="employee"><h4>在对话中管理个人事项</h4><p>用对话查找本人旧会话、查看可用能力，或请求调整回答语言、时区和本人定时事项，之后复核保存结果。</p></li>
             <li class="entry" data-roles="employee"><h4>账号和语言</h4><p>查看账号信息、按权限修改密码，设置地区、时区和回答语言。</p></li>
             <li class="entry" data-roles="employee"><h4>聊天默认项和显示</h4><p>管理聊天偏好、回答显示主题与字号，按页面可用项调整相关默认设置。</p></li>
-            <li class="entry" data-roles="employee"><h4>记忆与学习</h4><p>查看和整理个人记忆，调整相关选项和学习设置，方便后续任务沿用适用背景。</p></li>
+            <li class="entry" data-roles="employee"><h4>记忆与学习</h4><p>编辑个人记忆，或分别开关自动记忆和学习建议。聊天中的技能整理建议由员工采纳并发送。</p></li>
             <li class="entry" data-roles="employee"><h4>个人用量</h4><p>查看自己的模型调用记录、用量和已计价费用，并按页面支持的条件筛选。</p></li>
             <li class="entry" data-roles="employee admin"><h4>用户反馈</h4><p>员工提交问题、建议或截图并查看处理进度；管理员回复和记录处理结果。</p></li>
           </ul>
@@ -438,11 +438,11 @@
             <li class="entry" data-roles="admin"><h4>平台概览与企业品牌</h4><p>查看平台概况，维护企业展示名称、标识及适用的登录页等展示内容。</p></li>
             <li class="entry" data-roles="admin"><h4>员工和管理员</h4><p>创建账号、修改员工资料、重置密码或停用账号。操作前核对身份与账号类型。</p></li>
             <li class="entry" data-roles="admin"><h4>组织与部门</h4><p>维护部门层级和人员归属，按组织关系查找员工。企业资源另由能力组明确分配。</p></li>
-            <li class="entry" data-roles="admin"><h4>能力组</h4><p>组合业务系统、企业Skill、面板、MCP和知识库等资源，再按员工分配并查看实际可用内容。</p></li>
+            <li class="entry" data-roles="admin"><h4>能力组</h4><p>将业务系统、企业Skill、MCP、业务面板、工作规范和知识库放入组。每名员工最多属于一个组。</p></li>
             <li class="entry" data-roles="admin"><h4>业务系统资料</h4><p>登记企业系统、功能入口和公共属性，查看人员资格与关联资源。</p></li>
             <li class="entry" data-roles="admin"><h4>企业Skill与面板版本</h4><p>上传资源包、查看文件或版本，发布后再按人员和业务范围验证可见性。</p></li>
             <li class="entry" data-roles="admin"><h4>企业MCP与知识库</h4><p>登记远程工具与认证，查看连接结果；维护知识库文件、转换状态和预览，更新后核对员工可见范围。</p></li>
-            <li class="entry" data-roles="admin"><h4>工作规范与市场审核</h4><p>编辑适用规范并核对内容；审理市场提交、查看版本并按影响进行下架或紧急禁用。</p></li>
+            <li class="entry" data-roles="admin"><h4>工作规范与市场审核</h4><p>维护组内工作规范。审核市场版本，可通过、驳回或下架；下架后已安装的同事仍可使用。</p></li>
           </ul>
         </section>
         <section class="bucket" id="models" aria-labelledby="models-title"><h3 id="models-title">模型与费用</h3>
@@ -462,7 +462,7 @@
             <li class="entry" data-roles="admin"><h4>定时计划与渠道总览</h4><p>查看员工计划和最近状态，核对消息渠道绑定与可用性；需要员工操作的绑定或规则从本人工作台处理。</p></li>
             <li class="entry" data-roles="admin"><h4>平台运行与服务器监控</h4><p>查看服务和运行环境状态，以及CPU、内存、磁盘等资源趋势。按时间范围关联异常。</p></li>
             <li class="entry" data-roles="admin"><h4>运营事件与审计</h4><p>处理站内告警与运营事件，查阅管理员操作和接入事件；必要时结合业务系统日志核对结果。</p></li>
-            <li class="entry" data-roles="admin"><h4>空间备份与恢复</h4><p>选择对应员工、恢复点和可恢复范围，核对恢复前后状态及记录。部署级恢复由运维按环境流程执行。</p></li>
+            <li class="entry" data-roles="admin"><h4>空间备份与恢复</h4><p>选择员工和恢复点，恢复该员工的个人资料。分别核对数据恢复和环境启动结果。部署级恢复由运维按环境流程执行。</p></li>
             <li class="entry" data-roles="admin"><h4>反馈处理</h4><p>查看待处理反馈、已有沟通和员工补充，公开给该员工的回复与处理结果以页面记录为准。</p></li>
           </ul>
         </section>

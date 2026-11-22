@@ -3,7 +3,7 @@ title: "入门与工作台导航"
 description: "完成首次登录，找到业务范围和常用功能，了解电脑和手机工作台。"
 section: employee
 order: 1
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/04-员工工作台操作手册/01-入门与工作台导航.md"
 ---

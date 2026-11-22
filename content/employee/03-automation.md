@@ -3,7 +3,7 @@ title: "会话管理与自动化"
 description: "整理会话分组和归档，设置定时任务，查看每次执行的结果。"
 section: employee
 order: 3
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/04-员工工作台操作手册/03-会话管理与自动化.md"
 ---

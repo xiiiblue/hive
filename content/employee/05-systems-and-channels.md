@@ -3,7 +3,7 @@ title: "业务系统、知识库与连接"
 description: "使用获配的业务系统和工具，连接个人机器人，配置邮箱、来信规则和相关通知。"
 section: employee
 order: 5
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/04-员工工作台操作手册/05-业务系统工具与消息渠道.md"
 ---

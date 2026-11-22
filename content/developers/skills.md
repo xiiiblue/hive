@@ -3,7 +3,7 @@ title: 编写和分发Skill
 description: 把工作说明、脚本和模板整理成Skill，并正确处理个人草稿、企业资源和市场版本。
 section: developers
 order: 50
-updated: '2026-10-16'
+updated: '2026-11-22'
 sources:
   - docs/02-设计/02-能力设计/CAP-002-Skill与包治理.md
   - packages/provider-contracts/src/skill-display-metadata.ts
@@ -104,7 +104,7 @@ main().catch(() => {
 |方式|维护与使用规则|
 |---|---|
 |个人Skill|员工自己的普通目录，可继续修改，仅本人使用|
-|企业Skill|管理员在“企业Skill”上传Markdown或ZIP，检查草稿后发布，并独立分配给员工|
+|企业Skill|管理员在“企业Skill”上传Markdown或ZIP，检查草稿后发布，再把这项技能加入需要使用它的能力组|
 |技能市场版本|员工从个人卡片“共享到市场”，形成不可变发布版本，其他员工选择精确版本安装|
 
 市场版本不会自动升级。需要修改受管理安装时，使用“复制为个人Skill”，副本不再跟随市场版本变化；不要直接编辑受管理安装目录。发布者不能安装自己发布的市场版本，仍使用原个人Skill。

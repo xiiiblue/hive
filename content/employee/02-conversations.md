@@ -3,7 +3,7 @@ title: "发起与完成对话"
 description: "选择模型，引用资料和工具，查看聊天文件、调试记录和任务结果。"
 section: employee
 order: 2
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/04-员工工作台操作手册/02-发起与完成对话.md"
 ---

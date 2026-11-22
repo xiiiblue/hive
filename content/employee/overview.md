@@ -3,7 +3,7 @@ title: "员工工作台操作手册"
 description: "从第一次登录到对话、技能、业务面板和工作资料管理，了解员工工作台的用途和操作。"
 section: employee
 order: 0
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/04-员工工作台操作手册/README.md"
 ---

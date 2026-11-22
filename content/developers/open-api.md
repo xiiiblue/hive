@@ -3,7 +3,7 @@ title: 调用蜂巢开放API
 description: 用服务端Key提交智能体任务，正确读取普通回答和SSE流式结果。
 section: developers
 order: 20
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - apps/hive-core/src/mainline/server.ts
   - apps/hive-core/src/mainline/open-api/postgres-open-api.ts
@@ -20,7 +20,7 @@ sources:
 ## 开始前准备
 
 1. 管理员在“集成与接入→开放API”创建Key，选择普通员工、执行引擎、业务范围和可选任务时限。
-2. 管理员分别为该员工配置所需模型、系统资格和资源。
+2. 确认所选引擎有可用模型。需要读取业务资料或使用企业工具时，在员工所属的能力组中核对相应系统和资源。
 3. 调用程序在后端安全配置中读取`HIVE_API_KEY`。管理员可以再次查看新版创建的完整Key，查看会记录审计。升级前的旧Key仍可使用，完整值无法还原。Key只放在服务端安全配置中。
 4. 用只读且输出容易核对的任务完成首次调用。
 

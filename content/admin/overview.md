@@ -3,7 +3,7 @@ title: "管理员控制台操作手册"
 description: "从人员与能力配置到模型、任务和恢复管理，理解控制台各项功能的用途、步骤和影响。"
 section: admin
 order: 0
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/03-管理员控制台操作手册/README.md"
 ---

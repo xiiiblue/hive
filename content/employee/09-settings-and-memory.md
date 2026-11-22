@@ -3,7 +3,7 @@ title: "个人设置、记忆与工作规范"
 description: "维护账号和个人偏好，使用记忆、学习、企业资料和工作规范。"
 section: employee
 order: 9
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/04-员工工作台操作手册/09-个人设置记忆与规范.md"
 ---

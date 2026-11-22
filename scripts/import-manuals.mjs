@@ -8,7 +8,7 @@ const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 const sourceRoot = process.env.HIVE_MANUAL_SOURCE
   ? path.resolve(process.env.HIVE_MANUAL_SOURCE)
   : path.resolve(websiteRoot, '../../telchina/hive-os');
-const updated = '2026-11-20';
+const updated = '2026-11-22';
 const diagramDirectory = 'docs/11-手册/01-产品技术手册';
 const diagrams = [
   { source: '蜂巢功能架构与目录.html', file: 'capabilities.html', article: '/capabilities/' },

@@ -10,19 +10,19 @@ const audiences = [
   {
     icon: 'workspace',
     title: '员工工作台',
-    summary: '发起第一次对话，引用资料、整理文件，或设置自动化。',
+    summary: '从第一条对话开始，上传资料、核对回答、找回上次生成的文件。',
     link: '/docs/employee/overview/',
   },
   {
     icon: 'shield',
     title: '管理员控制台',
-    summary: '开通人员，分配知识库、业务系统和工具，查看平台运行。',
+    summary: '开通员工账号，把员工加入能力组，让他用上岗位需要的资料和工具。',
     link: '/docs/admin/overview/',
   },
   {
     icon: 'code',
     title: '开发者指南',
-    summary: '从开放API、统一身份、工具或业务面板选一种接入方式。',
+    summary: '让业务系统发起任务、查询结果，或让员工在蜂巢里打开业务面板。',
     link: '/developers/',
   },
 ];
@@ -92,7 +92,7 @@ const concepts = [
             <h1 id="home-title">每个人的AI，<br />都有自己的<span>工作空间。</span></h1>
           </div>
           <div class="home-hero-copy">
-            <p class="home-hero-description">在同一个工作台里，用自己的资料开始对话，让智能体使用获准的工具，留下下次还能打开的文件。</p>
+            <p class="home-hero-description">把本周的工单交给AI助手，请它整理一份周报。你可以核对它用了哪些资料，打开生成的文件，下周接着改。</p>
             <div class="button-row">
               <a class="button home-primary" href={url('/handbooks/')}><Icon name="book" size={19} />阅读操作手册</a>
               <a class="button home-secondary" href={url('/capabilities/')}>查看功能架构图</a>
@@ -115,7 +115,7 @@ const concepts = [
 
     <section id="examples" class="home-work section container" aria-labelledby="examples-title">
       <div class="home-heading">
-        <div><p class="section-label">使用场景</p><h2 id="examples-title">一次工作，<span>从交代到交付</span></h2></div>
+        <div><p class="section-label">使用场景</p><h2 id="examples-title">用蜂巢<span>做一份周报</span>，再接着做下一件事</h2></div>
         <p>试着从一件熟悉的事开始。你可以把工作过程和文件留下来，后续直接接着做。</p>
       </div>
       <div class="work-showcase" data-tabs="gallery">

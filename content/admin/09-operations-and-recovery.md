@@ -3,7 +3,7 @@ title: "平台运行、备份与排查"
 description: "通过监控、运营事件与审计排查问题，处理反馈、备份、恢复和导出。"
 section: admin
 order: 9
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/03-管理员控制台操作手册/09-平台运行备份与排查.md"
 ---

@@ -3,7 +3,7 @@ title: "按场景完成管理工作"
 description: "按员工入职、能力变化、模型接入、异常排查与资料恢复场景，组织跨页面管理工作。"
 section: admin
 order: 10
-updated: '2026-11-20'
+updated: '2026-11-22'
 sources:
   - "docs/11-手册/03-管理员控制台操作手册/10-按场景完成管理工作.md"
 ---
