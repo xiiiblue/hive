@@ -164,6 +164,14 @@ for (const { source, file } of diagrams) {
   media.set(target, bytes);
 }
 
+// 仅同步经过公开审阅的CLI截图，环境映射和分发包由各团队保管。
+for (const file of ['select.png', 'confirm.png', 'result.png']) {
+  const origin = `tools/panel-publisher/images/${file}`;
+  const bytes = await readFile(path.join(sourceRoot, origin));
+  digest.update(`${origin}\n`).update(bytes);
+  media.set(`/media/panel-publisher/${file}`, bytes);
+}
+
 for (const file of brandAssets) {
   const origin = `${diagramDirectory}/官网素材/${file}`;
   const bytes = await readFile(path.join(sourceRoot, origin));
