@@ -6,57 +6,79 @@ import DocCards from '../components/DocCards.astro';
 import { url, sectionDocs } from '../lib/content';
 
 const scenarios = [
-  { icon: 'file', title: '把分散资料整理成报告', text: '提供工单、纪要或表格，写清时间范围和格式。核对数字和来源后，保留结果文件。', link: '/docs/employee/02-conversations/' },
-  { icon: 'book', title: '把成功的方法留给下一次', text: '使用已有Skill，或把自己的处理过程整理成一份可以复用的操作说明。', link: '/docs/employee/04-skills/' },
-  { icon: 'layers', title: '让重复工作按时开展', text: '在普通对话中试好做法，设置定时任务，再检查执行历史。', link: '/docs/employee/03-automation/' },
-  { icon: 'grid', title: '从面板处理业务', text: '按授权打开业务面板查看记录。按操作入口保存个人副本，并用聊天调整页面。', link: '/docs/employee/06-panels/' },
+  { icon: 'file', title: '把分散资料整理成报告', text: '提供工单、纪要或表格，写清时间范围和格式。核对数字和来源后，将结果文件保存在个人目录。', link: '/docs/employee/02-conversations/' },
+  { icon: 'book', title: '把成功的方法留给下一次', text: '直接选用企业已发布的Skill，或把验证过的处理步骤整理成可复用的个人操作说明。', link: '/docs/employee/04-skills/' },
+  { icon: 'layers', title: '让重复工作按时自动开展', text: '先在普通对话中验证做法，再配置定时任务或来信规则，随时在任务列表核对执行历史。', link: '/docs/employee/03-automation/' },
+  { icon: 'grid', title: '从可视化面板处理业务', text: '按授权打开业务面板查询和操作记录；需要定制视图时另存个人副本，用对话微调页面。', link: '/docs/employee/06-panels/' },
 ];
 ---
 <SiteLayout title="认识蜂巢 · 蜂巢" description="了解蜂巢的员工数字分身、持久工作空间、业务权限和常见使用场景。">
   <section class="page-intro container">
+    <span class="eyebrow">产品与场景</span>
     <h1>认识蜂巢</h1>
     <div class="page-intro-bottom">
-      <p>蜂巢在企业内网为员工提供独立的AI工作空间。员工可以使用自己的资料和获准的工具，让智能体协助完成工作。</p>
-      <a class="button primary" href={url('/capabilities/')}>查看功能架构图</a>
+      <p>蜂巢在企业内网为每名员工提供独立的AI工作空间。员工使用自己的资料和获准的工具，让智能体协助完成日常工作并持续沉淀成果。</p>
+      <a class="button primary" href={url('/capabilities/')}>查看功能架构图<Icon name="arrow" size={17} /></a>
     </div>
   </section>
   <section class="container">
     <ManualDiagram name="employee-digital-twin">
-      <a class="inline-link" href={url('/docs/product/digital-twin/')}>理解几个常用概念</a>
+      <a class="inline-link" href={url('/docs/product/digital-twin/')}>理解数字分身核心概念<Icon name="arrow" size={16} /></a>
     </ManualDiagram>
   </section>
   <section class="section container">
     <div class="section-heading">
-      <h2>从熟悉的工作开始</h2>
-      <a class="inline-link" href={url('/docs/product/scenarios/')}>阅读场景指南</a>
+      <div>
+        <span class="eyebrow">日常工作流</span>
+        <h2>从熟悉的工作开始</h2>
+      </div>
+      <a class="inline-link" href={url('/docs/product/scenarios/')}>阅读完整场景指南<Icon name="arrow" size={16} /></a>
     </div>
     <div class="scenario-list">
       {scenarios.map(scenario => (
-        <a href={url(scenario.link)}><Icon name={scenario.icon} size={24} /><h3>{scenario.title}</h3><p>{scenario.text}</p><Icon name="chevron" size={19} /></a>
+        <a href={url(scenario.link)}>
+          <span class="scenario-icon"><Icon name={scenario.icon} size={22} /></span>
+          <div><h3>{scenario.title}</h3><p>{scenario.text}</p></div>
+          <Icon name="chevron" size={18} />
+        </a>
       ))}
     </div>
   </section>
   <section class="section principles">
     <div class="container">
-      <div class="section-heading"><h2>使用前需要确认什么</h2></div>
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">适用边界</span>
+          <h2>使用前需要确认什么</h2>
+        </div>
+        <p>清晰区分平台职责、业务系统授权与员工核对义务，不把演示或单节点环境当作无边界承诺。</p>
+      </div>
       <div class="boundary-grid">
-        <article><h3>部署范围</h3><p>蜂巢面向单企业内网。模型和业务系统的访问范围由部署与配置决定。</p></article>
-        <article><h3>使用权限</h3><p>只有已分配给员工的模型、知识库、工具和系统可以使用。实际业务操作还要经过目标系统授权。</p></article>
-        <article><h3>执行结果</h3><p>任务状态说明智能体执行到哪一步。关键数据、生成的文件和业务写入结果仍要核对。</p></article>
+        <article>
+          <span class="boundary-badge">01 · 部署范围</span>
+          <h3>单企业内网部署</h3>
+          <p>蜂巢面向单企业内网单节点环境，不是公有云SaaS。模型与外部接口的实际访问范围由所在企业部署与网络策略决定。</p>
+        </article>
+        <article>
+          <span class="boundary-badge">02 · 权限边界</span>
+          <h3>平台管分配，业务管授权</h3>
+          <p>员工只能使用所属能力组分配的模型、知识库、工具和系统；涉及具体业务数据时，仍由目标业务系统按本人账号鉴权。</p>
+        </article>
+        <article>
+          <span class="boundary-badge">03 · 结果核对</span>
+          <h3>执行完成不等于免检</h3>
+          <p>任务状态仅代表智能体运行到哪一步。关键统计数字、导出文件与业务写入结果仍需由员工本人核对确认。</p>
+        </article>
       </div>
     </div>
   </section>
   <section class="section container">
-    <div class="section-heading"><h2>产品文档</h2></div>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">深入阅读</span>
+        <h2>产品文档</h2>
+      </div>
+    </div>
     <DocCards docs={sectionDocs('product')} />
   </section>
 </SiteLayout>
-
-<style>
-.boundary-grid p, .scenario-list p { font-size: 1rem; }
-.scenario-list a > :global(svg:first-child) { color: var(--accent); }
-@media (max-width: 950px) {
-  .scenario-list a > :global(svg:first-child) { grid-column: 1; grid-row: 1; }
-  .scenario-list a > :global(svg:last-child) { grid-column: 3; grid-row: 1; }
-}
-</style>

@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 import { url } from '../lib/content';
 
 interface Props {
-  scenes: { heroLabel: string; image: string; alt: string }[];
+  scenes: { heroLabel: string; windowUrl: string; image: string; alt: string }[];
 }
 
 const { scenes } = Astro.props;
@@ -12,13 +12,20 @@ const { scenes } = Astro.props;
   <div class="hero-gallery-deck" id="hero-gallery-deck" data-hero-deck>
     {scenes.map((scene, index) => (
       <figure class="hero-workspace" data-hero-position={['front', 'right', 'left'][index]} inert={index !== 0} aria-hidden={index !== 0 ? 'true' : undefined}>
+        <div class="hero-window-chrome" aria-hidden="true">
+          <div class="window-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="window-address">{scene.windowUrl}</span>
+          <span class="window-tag">{scene.heroLabel}</span>
+        </div>
         <div class="hero-product-window">
           <button type="button" data-image-zoom aria-label={'放大' + scene.alt}>
             <img src={url('/media/manuals/' + scene.image)} width="1440" height="1100" alt={scene.alt} fetchpriority={index === 0 ? 'high' : 'low'} decoding="async" />
-            <span class="zoom-label" aria-hidden="true"><Icon name="search" size={17} />放大查看</span>
+            <span class="zoom-label" aria-hidden="true"><Icon name="search" size={16} />放大查看</span>
           </button>
         </div>
-        <figcaption>真实界面 · 合成示例</figcaption>
+        <figcaption>真实Vue界面 · 隔离合成示例</figcaption>
       </figure>
     ))}
   </div>

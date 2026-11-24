@@ -37,11 +37,11 @@ const paths = [
   description="开放API、异步任务、统一身份、Skill、MCP、业务面板与HiveBridge桌面开发者工具指南。"
 >
   <section class="page-intro container">
+    <span class="eyebrow">开放接口与能力交付</span>
     <h1>开发对接</h1>
     <div class="page-intro-bottom">
       <p>
-        从智能体调用、员工身份或企业能力交付中选择起点。<br />
-        理解接口契约，也理解谁负责业务权限与执行结果。
+        从智能体调用、员工短期身份核验或能力交付选择起点，理清接口契约与权限责任边界。
       </p>
       <a class="button primary" href={url('/docs/developers/overview/')}>
         接入快速开始<Icon name="arrow" size={18} />
@@ -66,9 +66,7 @@ const paths = [
               阅读对接指南<Icon name="arrow" size={18} />
             </a>
           </div>
-          <pre>
-            <code>{path.code}</code>
-          </pre>
+            <pre><code>{path.code}</code></pre>
         </article>
       ))
     }

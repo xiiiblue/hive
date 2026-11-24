@@ -54,9 +54,20 @@ css.walkRules(rule => {
     --page: var(--bg);
     --surface: var(--paper);
     --tile: var(--soft);
+    --layer: #18181b;
+    --layer-ink: #ffffff;
   }
-  .map-canvas { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
-  .capabilities-sheet :global(.diagram-actions .button) { min-height: 2.75rem; padding: .5rem .85rem; }
+  .map-canvas { padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+  .capabilities-sheet :global(.diagram-actions .button) { min-height: 2.75rem; padding: .5rem 1rem; }
+  .capabilities-sheet :global(.layer) { background: #fafafa; border-color: var(--line); box-shadow: var(--shadow-xs); }
+  .capabilities-sheet :global(.layer-label) { border-right: 2px solid var(--accent); font-weight: 680; }
+  .capabilities-sheet :global(.module) { border-color: var(--line); border-radius: .55rem; }
+  .capabilities-sheet :global(.module h3) { color: var(--ink); font-weight: 680; }
+  .capabilities-sheet :global(.feature-list li) { background: #f4f4f5; color: var(--ink-secondary); border: 1px solid rgba(17,17,19,.05); border-radius: .32rem; }
+  .capabilities-sheet :global(.bucket) { border-color: var(--line); box-shadow: var(--shadow-xs); }
+  .capabilities-sheet :global(.bucket > h3) { background: var(--accent-soft); color: var(--ink); border-bottom: 1px solid var(--accent-border); }
+  .capabilities-sheet :global(.jump-list a) { background: var(--paper); border: 1px solid var(--line); color: var(--ink-secondary); }
+  .capabilities-sheet :global(.jump-list a:hover) { border-color: var(--accent-border); color: var(--accent); }
   .capabilities-sheet :global(.catalog > .bucket:nth-child(odd of :not([hidden])):nth-last-child(1 of :not([hidden]))) {
     grid-column: 1 / -1;
   }
@@ -67,15 +78,15 @@ css.walkRules(rule => {
     grid-template-columns: 8.35rem minmax(0, 1fr);
     gap: .75rem 1rem;
     border-top: 1px solid var(--line);
-    padding-block: 1.5rem .75rem;
-    margin-top: 1.25rem;
+    padding-block: 1.75rem .75rem;
+    margin-top: 1.5rem;
   }
   .capability-guide :global(h2) { grid-column: 1 / -1; margin-bottom: .25rem; }
   .capability-guide :global(h3) { padding-top: .7rem; font-size: .9375rem; }
   .capability-guide :global(ul) {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: .5rem;
+    gap: .55rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -84,17 +95,20 @@ css.walkRules(rule => {
   .capability-guide :global(li a) {
     display: flex;
     align-items: center;
-    min-height: 2.75rem;
+    min-height: 2.8rem;
     height: 100%;
-    padding: .5rem .75rem;
+    padding: .55rem .85rem;
     border: 1px solid var(--line);
-    border-radius: .4rem;
+    border-radius: .5rem;
     background: var(--surface);
     font-size: .9rem;
+    font-weight: 550;
+    box-shadow: var(--shadow-xs);
     text-decoration: underline;
     text-decoration-color: transparent;
+    transition: border-color .16s ease, color .16s ease;
   }
-  .capability-guide :global(li a:hover) { border-color: var(--accent); text-decoration-color: currentColor; }
+  .capability-guide :global(li a:hover) { border-color: var(--accent-border); color: var(--accent); text-decoration-color: currentColor; }
   .capability-guide :global(h2:not(:first-child)) {
     margin: .5rem 0 0;
     padding-top: .85rem;
@@ -114,6 +128,7 @@ css.walkRules(rule => {
     .capabilities-sheet :global(.bucket:nth-child(odd of :not([hidden])):nth-last-child(1 of :not([hidden])) .entry:nth-child(even of :not([hidden]))) { border-inline-start: 1px solid var(--line); }
   }
   @media (max-width: 58rem) {
+    .capabilities-sheet :global(.layer-label) { border-right: 0; border-bottom: 2px solid var(--accent); }
     .capability-guide { grid-template-columns: minmax(0, 1fr); gap: .6rem; }
     .capability-guide :global(h3) { padding-top: .25rem; }
     .capability-guide :global(ul) { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: .35rem; }

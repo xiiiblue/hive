@@ -17,13 +17,50 @@ const figure = figures[0]
   .replaceAll('href="https://www.bluexiii.com/hive/docs/', `href="${url('/docs/')}`);
 ---
 <link rel="stylesheet" href={url('/media/diagrams/diagram-atlas.css')} />
-<Fragment set:html={figure} />
+<div class="embedded-atlas-wrap">
+  <Fragment set:html={figure} />
+</div>
 <div class="diagram-links">
   <a class="inline-link" href={url(file)}>单独打开此图</a>
   <slot />
 </div>
 
 <style>
-  .diagram-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 12px; }
+  .embedded-atlas-wrap :global(.hive-atlas) {
+    --atlas-ground: #fafafa;
+    --atlas-paper: #ffffff;
+    --atlas-ink: #111113;
+    --atlas-sub: #66666e;
+    --atlas-line: #e4e4e7;
+    --atlas-wire: #8b8b96;
+    --atlas-tint: #eff6ff;
+    --atlas-teal: #2563eb;
+    --atlas-blue: #2563eb;
+    --atlas-gold: #52525b;
+    --atlas-warm: #f4f4f5;
+    border-color: var(--line);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-head) {
+    background-color: #18181b;
+    background-image:
+      radial-gradient(circle at 95% 160%, transparent 110px, rgba(59, 130, 246, 0.22) 111px, transparent 113px, transparent 144px, rgba(59, 130, 246, 0.16) 145px, transparent 147px, transparent 179px, rgba(59, 130, 246, 0.12) 180px, transparent 182px),
+      linear-gradient(115deg, #141417 0%, #222228 100%);
+    border-bottom: 1px solid #2e2e34;
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-head p),
+  .embedded-atlas-wrap :global(.atlas-legend) {
+    color: #d4d4d8;
+  }
+  .embedded-atlas-wrap :global(.continuity-space) {
+    background: #18181b;
+    border-color: #27272d;
+    color: #fafafa;
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .continuity-space p) {
+    color: #a1a1aa;
+  }
+  .diagram-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 14px; }
   .diagram-links :global(a) { text-decoration: underline; text-underline-offset: .22em; }
 </style>

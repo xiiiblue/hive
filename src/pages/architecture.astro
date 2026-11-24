@@ -1,44 +1,58 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import Icon from '../components/Icon.astro';
 import ManualDiagram from '../components/ManualDiagram.astro';
 import DocCards from '../components/DocCards.astro';
 import { url, sectionDocs } from '../lib/content';
 
 const layers = [
-  { key: 'control', label: '平台核心', title: '确认身份，管理资源和任务', text: '平台核心维护员工、资源分配、对话和任务状态。需要启停或检查员工执行环境的操作，由运行环境管理服务负责。', link: 'overview' },
-  { key: 'runtime', label: '员工工作空间', title: '一项任务结束，资料继续保留', text: 'Hive Pi或OpenCode在员工的独立执行环境中推进任务。员工可以在下一次任务继续使用自己的文件和已安装依赖。', link: 'workspace' },
-  { key: 'model', label: '模型访问', title: '由模型网关访问模型服务', text: '模型网关核验运行身份、选择配置好的访问路由，并记录调用归属与用量。上游凭据由平台管理。', link: 'model-gateway' },
-  { key: 'business', label: '业务权限', title: '由业务系统决定操作权限', text: '业务系统可核验蜂巢提供的短期身份，把它关联到本系统的账号，再按用户角色和数据范围授权。', link: 'security' },
+  { num: '01', key: 'control', label: '平台核心', title: '确认身份，统一管理资源与任务状态', text: 'Hive Core负责维护员工身份、岗位能力组分配、对话历史和任务队列。涉及员工容器的启动、停止与健康检查，由Runtime Manager协同完成。', link: 'overview' },
+  { num: '02', key: 'runtime', label: '员工工作空间', title: '一次任务结束，文件与依赖继续保留', text: 'Hive Pi或OpenCode在员工独占的Workspace Runtime中执行任务。个人主目录与团队共享目录持久化挂载，下一轮对话可直接沿用已有资料和脚本。', link: 'workspace' },
+  { num: '03', key: 'model', label: '模型访问', title: '经由模型网关统一鉴权、路由与计费', text: '执行环境不保存上游厂商密钥。Model Gateway校验当次任务的短期访问码与预算，按管理员配置的渠道转发请求并记录Token用量。', link: 'model-gateway' },
+  { num: '04', key: 'business', label: '业务权限', title: '短期身份随请求传递，业务系统自主鉴权', text: '访问已接入的企业系统时，平台签发限定目标的短期员工身份证明；业务系统在线核验后映射本系统账号，按自有角色和数据范围裁决操作权限。', link: 'security' },
 ];
 
 const stages = [
-  ['接收要求', '员工在对话中发起一项工作，或者由已授权的外部系统通过开放API发起。'],
-  ['核对与准备', '平台检查身份、使用范围和运行条件，再安排任务等待或执行。'],
-  ['执行与记录', '智能体根据任务调用模型和工具，平台持续记录过程。'],
-  ['结束与保留', '任务记为完成、失败或取消。员工可以在原对话查看记录，在文件目录找保留下来的结果。'],
+  ['接收请求', '员工在网页、手机或已绑定机器人发起要求，或由获准业务系统通过开放API提交任务。'],
+  ['核对与调度', '平台校验员工身份、能力组范围、并发配额与运行环境状态，将任务排入队列或立即唤醒容器。'],
+  ['隔离执行与记录', '智能体在员工独立执行环境中读写文件、调用模型网关和外部工具，平台实时留存流式进度。'],
+  ['归档与复用', '任务以完成、失败或取消收尾。对话保留完整过程与调试信息，产出文件留在工作空间供后续复用。'],
 ];
 ---
 <SiteLayout title="架构与设计 · 蜂巢" description="了解蜂巢的平台核心、员工工作空间、模型网关和企业业务权限。">
   <section class="page-intro container">
+    <span class="eyebrow">系统设计</span>
     <h1>系统架构</h1>
     <div class="page-intro-bottom">
-      <p>身份和任务由平台管理，工作在员工自己的执行环境中完成。</p>
-      <a class="button primary" href={url('/capabilities/')}>查看功能架构图</a>
+      <p>身份认证、资源编排与审计集中在平台核心，具体代码、文件与工具调用隔离在员工各自的工作空间中完成。</p>
+      <a class="button primary" href={url('/capabilities/')}>查看功能架构图<Icon name="arrow" size={17} /></a>
     </div>
   </section>
-  <section class="container"><ManualDiagram name="system-architecture" /></section>
+  <section class="container">
+    <ManualDiagram name="system-architecture" />
+  </section>
   <section class="section container" data-tabs>
-    <div class="section-heading"><h2>各部分负责什么</h2></div>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">分层职责</span>
+        <h2>各部分负责什么</h2>
+      </div>
+      <p>切换下方四个核心层次，了解身份、运行环境、模型网关和外部业务系统之间的边界。</p>
+    </div>
     <div class="architecture-explorer">
       <div role="tablist" aria-label="架构职责">
         {layers.map((layer, index) => (
-          <button type="button" role="tab" id={'layer-' + layer.key} aria-controls={'layer-panel-' + layer.key} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1}>{layer.label}</button>
+          <button type="button" role="tab" id={'layer-' + layer.key} aria-controls={'layer-panel-' + layer.key} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1}>
+            {layer.label}<span>{layer.num}</span>
+          </button>
         ))}
       </div>
       {layers.map((layer, index) => (
         <div role="tabpanel" id={'layer-panel-' + layer.key} aria-labelledby={'layer-' + layer.key} hidden={index !== 0}>
-          <h3>{layer.title}</h3><p>{layer.text}</p>
-          <a class="inline-link" href={url('/docs/architecture/' + layer.link + '/')}>阅读相关设计</a>
+          <span class="eyebrow">{layer.num} · {layer.label}</span>
+          <h3>{layer.title}</h3>
+          <p>{layer.text}</p>
+          <a class="inline-link" href={url('/docs/architecture/' + layer.link + '/')}>阅读相关架构设计<Icon name="arrow" size={16} /></a>
         </div>
       ))}
     </div>
@@ -46,23 +60,32 @@ const stages = [
   <section class="principles section">
     <div class="container lifecycle">
       <div>
+        <span class="eyebrow">执行链路</span>
         <h2>一项任务如何开始和结束</h2>
-        <p>对话保存交流的上下文。每次要求智能体执行工作，都会留下独立的任务记录。</p>
-        <a class="inline-link" href={url('/docs/architecture/task-lifecycle/')}>阅读任务执行说明</a>
+        <p>对话负责承载连续交流的上下文；每次向智能体发起指令，平台都会生成一条具备独立状态与审计轨迹的任务（Run）。</p>
+        <a class="inline-link" href={url('/docs/architecture/task-lifecycle/')}>阅读任务生命周期说明<Icon name="arrow" size={16} /></a>
       </div>
-      <ol>{stages.map(([title, text], index) => <li><span>{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol>
+      <ol>
+        {stages.map(([title, text], index) => (
+          <li>
+            <span>0{index + 1}</span>
+            <div><h3>{title}</h3><p>{text}</p></div>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
   <section class="section container">
-    <div class="section-heading"><h2>架构文档</h2></div>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">架构专题</span>
+        <h2>架构文档</h2>
+      </div>
+    </div>
     <DocCards docs={sectionDocs('architecture')} />
   </section>
 </SiteLayout>
 
 <style>
-.architecture-explorer [role=tabpanel] { min-height: 250px; }
-.architecture-explorer h3 { margin-top: 0; }
-.architecture-explorer p, .lifecycle > div p { font-size: 1rem; }
-.lifecycle > div h2 { margin-top: 0; }
-.lifecycle li p { font-size: .9375rem; }
+  .architecture-explorer [role=tabpanel] .eyebrow { margin-bottom: 10px; }
 </style>

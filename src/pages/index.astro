@@ -6,38 +6,19 @@ import ManualDiagram from '../components/ManualDiagram.astro';
 import { url } from '../lib/content';
 import '../styles/home.css';
 
-const audiences = [
-  {
-    icon: 'workspace',
-    title: '员工工作台',
-    summary: '从第一条对话开始，上传资料、核对回答、找回上次生成的文件。',
-    link: '/docs/employee/overview/',
-  },
-  {
-    icon: 'shield',
-    title: '管理员控制台',
-    summary: '开通员工账号，把员工加入能力组，让他用上岗位需要的资料和工具。',
-    link: '/docs/admin/overview/',
-  },
-  {
-    icon: 'code',
-    title: '开发者指南',
-    summary: '让业务系统发起任务、查询结果，或让员工在蜂巢里打开业务面板。',
-    link: '/developers/',
-  },
-];
-
 const examples = [
   {
     key: 'report',
     label: '从资料到周报',
     heroLabel: '员工工作台',
+    windowUrl: 'hive / 对话 / 演示工单周报',
     icon: 'file',
-    title: '把零散工单整理成一份周报',
+    kicker: '对话与过程核对',
+    title: '把零散工单整理成一份可核对的周报',
     steps: [
-      '附上工单或表格，告诉智能体报告的时间范围和格式。',
-      '查看执行过程，核对数字、引用和生成的文件。',
-      '下次直接从自己的文件目录打开报告，继续补充。',
+      '附上工单表格或引用知识库资料，说明时间范围与输出格式。',
+      '展开思考过程与工具调用，逐项核对统计数字、来源和生成文件。',
+      '报告留在个人工作目录，下周在新对话中读取原模板继续更新。',
     ],
     image: 'employee/02-answer-files.png',
     alt: '员工工作台的对话与生成文件',
@@ -47,12 +28,14 @@ const examples = [
     key: 'files',
     label: '继续已有工作',
     heroLabel: '文件管理',
+    windowUrl: 'hive / 工作空间 / 文件',
     icon: 'workspace',
-    title: '之前的资料，还在你的文件目录',
+    kicker: '持久目录与共享空间',
+    title: '上次留下的材料与脚本，始终在你的目录里',
     steps: [
-      '打开「文件管理」，在自己的目录中找上次保留的材料。',
-      '先预览或下载，确认你要用的是正确版本。',
-      '需要智能体处理时，在对话中提供文件或说明位置。',
+      '打开文件管理，查看个人主目录与获分配的团队共享目录。',
+      '在线预览Markdown、表格或代码，下载交付件，确认当前版本。',
+      '在任意新对话中用 @ 引用已有路径，无需每次重新上传。',
     ],
     image: 'employee/07-files.png',
     alt: '员工工作台的文件管理页面',
@@ -62,12 +45,14 @@ const examples = [
     key: 'panels',
     label: '用面板处理业务',
     heroLabel: '业务面板',
+    windowUrl: 'hive / 面板 / 工单看板',
     icon: 'grid',
-    title: '把常用的业务操作放进面板',
+    kicker: '业务页面与个人定制',
+    title: '把高频业务查询与操作放进可视化面板',
     steps: [
-      '打开获分配的业务面板，按业务系统授予的权限查看和操作。',
-      '需要个人调整时，按页面提供的入口保存一份个人副本。',
-      '在对话中说明要改的地方，预览结果再保存。',
+      '从导航打开获分配的业务面板，按本人业务系统权限查看与办理。',
+      '需要调整筛选或布局时，一键另存为个人面板副本。',
+      '在对话栏说明修改要求，预览无误后再保存生效。',
     ],
     image: 'employee/06-panel-home.png',
     alt: '员工工作台的业务面板入口',
@@ -75,71 +60,131 @@ const examples = [
   },
 ];
 
-const concepts = [
-  { icon: 'workspace', title: '自己的文件和执行环境', text: '同一员工的多段对话可继续使用工作空间里的文件、脚本和依赖。', link: '/docs/architecture/workspace/' },
-  { icon: 'file', title: '任务需要的资料', text: '把个人文件附到对话，也可以从已分配的知识库引用资料。', link: '/capabilities/' },
-  { icon: 'book', title: '可以复用的做法', text: 'Skill是一份给智能体用的操作说明。MCP是一种让智能体连接工具的方式。', link: '/docs/employee/04-skills/' },
-  { icon: 'shield', title: '属于员工的业务权限', text: '蜂巢证明是谁在发起操作。业务系统根据自己的账号和授权判断能做什么。', link: '/docs/developers/identity/' },
+const steps = [
+  { n: '01', title: '提出要求', text: '在网页、手机或已绑定的企微、钉钉、飞书机器人里描述任务，附上资料。' },
+  { n: '02', title: '在自己的空间执行', text: '智能体在你独占的运行环境中读写文件、调用Skill、MCP工具和获准业务系统。' },
+  { n: '03', title: '核对并沉淀', text: '查看完整过程与产出文件；验证过的做法保存为个人Skill，下次直接复用。' },
 ];
 ---
 <SiteLayout>
   <div class="home-page">
-    <div class="home-top">
-      <section class="home-hero container" aria-labelledby="home-title">
-        <div class="home-hero-intro">
-          <div>
-            <p class="hero-category">企业内网 · 员工数字分身</p>
-            <h1 id="home-title">每个人的AI，<br />都有自己的<span>工作空间。</span></h1>
+    <section class="hero" aria-labelledby="home-title">
+      <div class="hero-aurora" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="hero-pill"><i></i>企业内网 · 员工数字分身平台</span>
+          <h1 id="home-title">每位员工，<br />都有一个<span class="hl">记得住事</span>的AI搭档</h1>
+          <p class="hero-lead">蜂巢为每个人提供独立、持久的AI工作空间。文件、脚本和做法跨对话保留，业务权限仍由原系统把关——今天的成果，明天接着用。</p>
+          <div class="button-row">
+            <a class="button primary" href={url('/docs/product/get-started/')}>开始了解<Icon name="arrow" size={17} /></a>
+            <a class="button" href={url('/handbooks/')}><Icon name="book" size={17} />操作手册</a>
           </div>
-          <div class="home-hero-copy">
-            <p class="home-hero-description">把本周的工单交给AI助手，请它整理一份周报。你可以核对它用了哪些资料，打开生成的文件，下周接着改。</p>
-            <div class="button-row">
-              <a class="button home-primary" href={url('/handbooks/')}><Icon name="book" size={19} />阅读操作手册</a>
-              <a class="button home-secondary" href={url('/capabilities/')}>查看功能架构图</a>
+          <dl class="hero-stats">
+            <div><dt>62</dt><dd>项平台功能</dd></div>
+            <div><dt>2</dt><dd>种执行引擎</dd></div>
+            <div><dt>5</dt><dd>类消息渠道</dd></div>
+          </dl>
+        </div>
+        <div class="hero-visual home-hero">
+          <HeroWorkspace scenes={examples} />
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" aria-labelledby="bento-title">
+      <div class="center-heading">
+        <span class="eyebrow">为什么是蜂巢</span>
+        <h2 id="bento-title">不是又一个聊天框，<br />而是一个能积累的工作环境</h2>
+      </div>
+      <div class="bento">
+        <a class="bento-card b-wide b-mint" href={url('/docs/architecture/workspace/')}>
+          <span class="b-icon"><Icon name="workspace" size={22} /></span>
+          <h3>独立、持久的工作空间</h3>
+          <p>每人一个主目录与独占运行环境。上周的周报模板、装好的依赖、写好的脚本，下一次对话里都还在；团队共享目录支持多人协作。</p>
+          <div class="b-files" aria-hidden="true">
+            <span>~/reports/工单周报.md</span><span>~/scripts/stat.py</span><span>/shared/客服组/</span>
+          </div>
+        </a>
+        <a class="bento-card b-indigo" href={url('/docs/employee/04-skills/')}>
+          <span class="b-icon"><Icon name="book" size={22} /></span>
+          <h3>做法沉淀成Skill</h3>
+          <p>把验证过的步骤保存为个人Skill，或从技能市场安装企业发布的版本，连接MCP远程工具与岗位知识库。</p>
+        </a>
+        <a class="bento-card b-sky" href={url('/docs/employee/05-systems-and-channels/')}>
+          <span class="b-icon"><Icon name="layers" size={22} /></span>
+          <h3>多渠道随处发起</h3>
+          <p>除电脑与手机网页外，支持绑定企微、微信、钉钉、飞书与Telegram个人机器人。</p>
+          <div class="b-chips" aria-hidden="true"><span>企微</span><span>钉钉</span><span>飞书</span><span>微信</span><span>TG</span></div>
+        </a>
+        <a class="bento-card" href={url('/docs/employee/03-automation/')}>
+          <span class="b-icon"><Icon name="check" size={22} /></span>
+          <h3>定时与来信自动化</h3>
+          <p>验证好的工作流可设成定时计划或个人邮箱来信规则自动触发，历史状态随时可查。</p>
+        </a>
+        <a class="bento-card" href={url('/docs/employee/06-panels/')}>
+          <span class="b-icon"><Icon name="grid" size={22} /></span>
+          <h3>可视化业务面板</h3>
+          <p>把高频查询与审批做成静态面板直连业务接口；员工可另存个人副本并用对话微调视图。</p>
+        </a>
+        <a class="bento-card b-full b-dark" href={url('/docs/developers/identity/')}>
+          <div class="b-dark-main">
+            <span class="b-icon"><Icon name="shield" size={22} /></span>
+            <div>
+              <h3>平台验明身份，业务系统管授权</h3>
+              <p>蜂巢不托管员工业务密码。访问外部系统时签发短期员工身份，由目标系统按自有账号与角色决定能看什么、能改什么。</p>
             </div>
           </div>
-        </div>
-        <HeroWorkspace scenes={examples} />
-      </section>
-    </div>
-
-    <nav class="home-audiences container" aria-label="按角色开始">
-      {audiences.map(audience => (
-        <a class="role-link" href={url(audience.link)}>
-          <Icon name={audience.icon} size={22} />
-          <span><strong>{audience.title}</strong><small>{audience.summary}</small></span>
-          <Icon name="chevron" size={19} />
+          <div class="b-trust-chain" aria-hidden="true">
+            <span>员工本人登录</span><i>→</i><span>蜂巢签发短期身份</span><i>→</i><span>业务系统核验授权</span>
+          </div>
         </a>
-      ))}
-    </nav>
+      </div>
+    </section>
+
+    <section class="flow-band" aria-labelledby="flow-title">
+      <div class="container">
+        <div class="center-heading">
+          <span class="eyebrow">工作方式</span>
+          <h2 id="flow-title">三步完成工作，把成果留下来</h2>
+        </div>
+        <ol class="flow-steps">
+          {steps.map(s => (
+            <li><span class="flow-n">{s.n}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+          ))}
+        </ol>
+      </div>
+    </section>
 
     <section id="examples" class="home-work section container" aria-labelledby="examples-title">
-      <div class="home-heading">
-        <div><p class="section-label">使用场景</p><h2 id="examples-title">用蜂巢<span>做一份周报</span>，再接着做下一件事</h2></div>
-        <p>试着从一件熟悉的事开始。你可以把工作过程和文件留下来，后续直接接着做。</p>
+      <div class="center-heading">
+        <span class="eyebrow">真实界面</span>
+        <h2 id="examples-title">看看日常工作在蜂巢里的样子</h2>
+        <p>截图来自真实运行的界面与合成演示数据。</p>
       </div>
       <div class="work-showcase" data-tabs="gallery">
         <div class="work-toolbar">
           <div class="work-tabs" role="tablist" aria-label="工作场景" aria-orientation="horizontal">
             {examples.map((example, index) => (
               <button id={'tab-' + example.key} type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={'example-' + example.key} tabindex={index === 0 ? 0 : -1}>
-                <Icon name={example.icon} size={19} />{example.label}
+                <Icon name={example.icon} size={18} />{example.label}
               </button>
             ))}
           </div>
           <div class="work-controls" role="group" aria-label="浏览工作场景">
-            <button type="button" data-tab-step="-1" aria-label="上一个工作场景" aria-controls="work-panels">
-              <Icon name="chevron" size={18} />
-            </button>
+            <button type="button" data-tab-step="-1" aria-label="上一个工作场景" aria-controls="work-panels"><Icon name="chevron" size={18} /></button>
             <span class="work-position" role="status" data-tab-position>1 / {examples.length}</span>
-            <button type="button" data-tab-step="1" aria-label="下一个工作场景" aria-controls="work-panels">
-              <Icon name="chevron" size={18} />
-            </button>
+            <button type="button" data-tab-step="1" aria-label="下一个工作场景" aria-controls="work-panels"><Icon name="chevron" size={18} /></button>
           </div>
         </div>
         <div class="work-panels" id="work-panels">
           {examples.map((example, index) => (
             <div class="work-panel" id={'example-' + example.key} role="tabpanel" aria-labelledby={'tab-' + example.key} hidden={index !== 0}>
+              <div class="work-copy">
+                <span class="work-kicker">{example.kicker}</span>
+                <h3>{example.title}</h3>
+                <ol>{example.steps.map(step => <li>{step}</li>)}</ol>
+                <a class="inline-link" href={url(example.link)}>查看完整操作步骤<Icon name="arrow" size={16} /></a>
+              </div>
               <figure class="work-screen">
                 <button type="button" data-image-zoom aria-label={'放大' + example.alt}>
                   <img src={url('/media/manuals/' + example.image)} width="1440" height="1100" alt={example.alt} loading="lazy" decoding="async" />
@@ -147,34 +192,7 @@ const concepts = [
                 </button>
                 <figcaption>真实界面 · 合成示例</figcaption>
               </figure>
-              <div class="work-copy">
-                <h3>{example.title}</h3>
-                <ol>{example.steps.map(step => <li>{step}</li>)}</ol>
-                <a class="inline-link" href={url(example.link)}>查看操作步骤</a>
-              </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="home-foundation" aria-labelledby="foundation-title">
-      <div class="container foundation-grid">
-        <div class="foundation-intro">
-          <p class="section-label">认识蜂巢</p>
-          <h2 id="foundation-title">为什么叫<br />员工数字分身</h2>
-          <p>它在员工自己的工作空间里处理任务，使用已获准的能力，并保留可以继续使用的资料和成果。</p>
-          <a class="inline-link" href={url('/docs/product/digital-twin/')}>了解数字分身</a>
-        </div>
-        <div class="foundation-concepts">
-          {concepts.map(concept => (
-            <article>
-              <Icon name={concept.icon} size={24} />
-              <div>
-                <h3><a href={url(concept.link)}>{concept.title}</a></h3>
-                <p>{concept.text}</p>
-              </div>
-            </article>
           ))}
         </div>
       </div>
@@ -182,16 +200,38 @@ const concepts = [
 
     <section class="section container" id="workspace-continuity" aria-labelledby="continuity-title">
       <ManualDiagram name="workspace-continuity">
-        <a class="inline-link" href={url('/docs/employee/07-workspace/')}>查看工作空间和文件管理</a>
+        <a class="inline-link" href={url('/docs/employee/07-workspace/')}>查看工作空间和文件管理<Icon name="arrow" size={16} /></a>
       </ManualDiagram>
+    </section>
+
+    <section class="section container roles" aria-labelledby="roles-heading">
+      <div class="center-heading">
+        <span class="eyebrow">从这里开始</span>
+        <h2 id="roles-heading">按你的角色找到入口</h2>
+      </div>
+      <nav class="role-grid" aria-label="按角色开始">
+        <a class="role-card" href={url('/docs/employee/overview/')}>
+          <span class="b-icon"><Icon name="person" size={22} /></span>
+          <strong>我是员工</strong><small>对话、文件、Skill、业务面板与自动化</small><span class="role-go">员工手册<Icon name="arrow" size={16} /></span>
+        </a>
+        <a class="role-card" href={url('/docs/admin/overview/')}>
+          <span class="b-icon"><Icon name="shield" size={22} /></span>
+          <strong>我是管理员</strong><small>账号、能力组、模型与费用、运行与备份</small><span class="role-go">管理员手册<Icon name="arrow" size={16} /></span>
+        </a>
+        <a class="role-card" href={url('/developers/')}>
+          <span class="b-icon"><Icon name="code" size={22} /></span>
+          <strong>我是开发者</strong><small>开放API、统一身份、MCP与HiveBridge</small><span class="role-go">对接指南<Icon name="arrow" size={16} /></span>
+        </a>
+      </nav>
     </section>
 
     <section class="home-next" aria-labelledby="next-title">
       <div class="container home-next-inner">
-        <div><h2 id="next-title">准备开始使用蜂巢？</h2><p>蜂巢面向单企业内网。先确认你的部署已开通哪些功能，再按入门路线开始。</p></div>
+        <h2 id="next-title">准备好在企业内网中试试蜂巢了吗？</h2>
+        <p>蜂巢面向单企业内网单节点部署。先确认所在环境已开通的能力，再跟着入门路线完成第一个小任务。</p>
         <div class="button-row">
-          <a class="button home-primary" href={url('/docs/product/get-started/')}>阅读入门路线</a>
-          <a class="button home-secondary" href={url('/docs/')}>打开文档中心</a>
+          <a class="button primary" href={url('/docs/product/get-started/')}>阅读入门路线<Icon name="arrow" size={17} /></a>
+          <a class="button" href={url('/capabilities/')}>浏览功能架构</a>
         </div>
       </div>
     </section>

@@ -5,41 +5,75 @@ import { sections, sectionDocs, docUrl, url } from '../../lib/content';
 ---
 <SiteLayout title="文档中心 · 蜂巢" description="按角色和主题查阅蜂巢产品、架构、员工手册、管理员手册与开发对接指南。">
   <section class="page-intro container">
+    <span class="eyebrow">全站知识库 · 43篇文档</span>
     <h1>文档中心</h1>
     <div class="page-intro-bottom">
-      <p>按主题阅读，或用功能名称和界面文字查找具体操作。</p>
+      <p>按产品、架构、操作手册和开发指南分类阅读，或使用全文搜索查找界面按钮、接口路径与代码示例。</p>
       <button class="button primary" type="button" data-open-search><Icon name="search" size={18} />搜索全部正文</button>
     </div>
   </section>
   <section class="container docs-index">
     <nav class="library-summary" aria-label="跳到文档主题">
-      {sections.map(section => <a href={'#' + section.id}>{section.title}</a>)}
+      {sections.map(section => (
+        <a href={'#' + section.id}>
+          <span>{section.title}</span>
+          <small>{sectionDocs(section.id).length}</small>
+        </a>
+      ))}
     </nav>
     {sections.map(section => (
       <section class="doc-index-section" id={section.id}>
-        <header class="doc-index-heading"><h2>{section.title}</h2><p>{section.description}</p></header>
+        <header class="doc-index-heading">
+          <h2>{section.title}</h2>
+          <p>{section.description}</p>
+        </header>
         <div class="doc-index-list">
           {sectionDocs(section.id).map(doc => (
             <a href={docUrl(doc)}>
-              <div><strong>{doc.title}</strong><p>{doc.description}</p></div>
+              <div>
+                <strong>{doc.title}</strong>
+                <p>{doc.description}</p>
+              </div>
               <Icon name="chevron" size={18} />
             </a>
           ))}
         </div>
       </section>
     ))}
-    <p class="doc-index-footer"><a class="inline-link" href={url('/capabilities/')}>浏览蜂巢功能目录</a></p>
+    <p class="doc-index-footer">
+      <a class="inline-link" href={url('/capabilities/')}>打开蜂巢功能架构与交互筛选目录<Icon name="arrow" size={16} /></a>
+    </p>
   </section>
 </SiteLayout>
 
 <style>
-.library-summary { gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-.library-summary a { display: inline-block; padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); font-size: .875rem; color: var(--ink); }
-.library-summary a:hover { border-color: var(--accent); color: var(--accent); }
-.doc-index-heading { display: block; margin-bottom: 16px; }
-.doc-index-heading p { margin: 7px 0 0; font-size: .9375rem; }
-.doc-index-list { margin-left: 0; }
-.doc-index-list > a { justify-content: space-between; }
-.doc-index-list p { font-size: .875rem; }
-.doc-index-footer { margin-top: 27px; }
+.library-summary a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 0.86rem;
+  font-weight: 550;
+  color: var(--ink-secondary);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.library-summary a small {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+.library-summary a:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.doc-index-footer {
+  margin-top: 36px;
+}
 </style>
