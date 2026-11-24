@@ -6,8 +6,8 @@ order: 75
 updated: '2026-11-24'
 sources:
   - tools/panel-publisher/README.md
-  - tools/hivebridge/README.md
-  - tools/hivebridge/publisher/cli.go
+  - tools/hive-bridge/README.md
+  - tools/hive-bridge/publisher/cli.go
   - docs/02-设计/02-能力设计/CAP-034-业务面板发布工具.md
 ---
 
@@ -21,8 +21,8 @@ HiveBridge 1.0（蜂桥）是蜂巢的桌面资源发布工具。在自己的电
 
 |电脑|压缩包|解压后双击|
 |---|---|---|
-|Windows x64|`hivebridge-1.0-windows.zip`|`hivebridge.exe`|
-|Mac（Apple Silicon或Intel）|`hivebridge-1.0-macos.zip`|`HiveBridge.app`|
+|Windows x64|`hive-bridge-1.0-windows.zip`|`hivebridge.exe`|
+|Mac（Apple Silicon或Intel）|`hive-bridge-1.0-macos.zip`|`HiveBridge.app`|
 
 从旧桌面版升级时，可以点左下角“打开配置文件”选择原来的`hive-panel.json`。启动时优先读取程序旁的`hivebridge.json`，缺失时读取同目录的旧文件名。已经选过的业务源码根目录会保留。Windows使用系统的Microsoft Edge WebView2运行时。
 
