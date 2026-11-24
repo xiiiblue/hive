@@ -1,4 +1,29 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';import DocCards from '../components/DocCards.astro';import Icon from '../components/Icon.astro';import {url,sectionDocs} from '../lib/content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import DocCards from '../components/DocCards.astro';
+import Icon from '../components/Icon.astro';
+import { url, sectionDocs } from '../lib/content';
 ---
-<SiteLayout title="交流与实践 · 蜂巢" description="了解蜂巢的设计取舍、典型业务任务、ACDL研发方法与HiveFlow自动化实践。"><section class="page-intro container"><span class="eyebrow">IDEAS & PRACTICE / 交流与实践</span><h1>产品之外，<br/><em>还有值得说明的选择。</em></h1><p>从架构取舍到业务例子，记录为什么这样建设蜂巢。<br/>把交流材料转成可以持续阅读、逐步补充的内容。</p></section><section class="section container no-top-padding"><DocCards docs={sectionDocs('insights')}/><div class="related-acdl"><span class="eyebrow">RELATED READING</span><h2>蜂巢的研发方法与自动化实践</h2><p>ACDL介绍如何组织需求、设计、实施与验证。HiveFlow介绍如何把开发者反馈接到调查、开发和交付。</p><div class="button-row"><a class="button primary" href="https://www.bluexiii.com/acdl/">前往ACDL网站<Icon name="external" size={18}/></a><a class="button" href="https://www.bluexiii.com/flow/">前往HiveFlow网站<Icon name="external" size={18}/></a></div></div></section><section class="end-note container"><p>现有交流材料按当前产品重新整理。<br/>历史演示、设计意图与真实环境验证各有适用范围，不能互相替代。</p><a class="inline-link" href={url('/docs/')}>回到文档中心<Icon name="arrow" size={18}/></a></section></SiteLayout>
+<SiteLayout title="交流与实践 · 蜂巢" description="了解蜂巢的设计取舍、典型业务任务、ACDL研发方法与HiveFlow自动化实践。">
+  <section class="page-intro container">
+    <span class="eyebrow">交流与实践</span>
+    <h1>产品之外，还有值得说明的工程取舍</h1>
+    <p>从架构取舍到真实业务例子，记录为什么这样建设蜂巢，把内部交流材料整理成可以持续阅读的公开记录。</p>
+  </section>
+  <section class="section container no-top-padding">
+    <DocCards docs={sectionDocs('insights')} />
+    <div class="related-acdl" data-reveal data-spotlight>
+      <span class="eyebrow">关联实践</span>
+      <h2>蜂巢的研发方法与自动化实践</h2>
+      <p>ACDL介绍如何组织需求、设计、实施与验证；HiveFlow介绍如何把开发者反馈接到调查、开发和交付。</p>
+      <div class="button-row">
+        <a class="button primary" href="https://www.bluexiii.com/acdl/">前往ACDL网站<Icon name="external" size={17} /></a>
+        <a class="button" href="https://www.bluexiii.com/flow/">前往HiveFlow网站<Icon name="external" size={17} /></a>
+      </div>
+    </div>
+  </section>
+  <section class="end-note container" data-reveal>
+    <p>现有交流材料按当前产品重新整理。历史演示、设计意图与真实环境验证各有适用范围，不能互相替代。</p>
+    <a class="inline-link" href={url('/docs/')}>回到文档中心<Icon name="arrow" size={17} /></a>
+  </section>
+</SiteLayout>

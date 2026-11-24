@@ -47,6 +47,20 @@ css.walkRules(rule => {
     </div>
   </div>
   <script is:inline set:html={script}></script>
+  <script>
+    // 为功能目录卡片补充鼠标聚光灯与滚动渐显支持（不改动原图DOM结构）
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced) {
+      document.querySelectorAll<HTMLElement>('.capabilities-sheet .bucket, .capabilities-sheet .module').forEach(el => {
+        el.addEventListener('pointermove', event => {
+          if (event.pointerType !== 'mouse') return;
+          const rect = el.getBoundingClientRect();
+          el.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+          el.style.setProperty('--my', `${event.clientY - rect.top}px`);
+        });
+      });
+    }
+  </script>
 </SiteLayout>
 
 <style>
@@ -57,36 +71,211 @@ css.walkRules(rule => {
     --layer: #18181b;
     --layer-ink: #ffffff;
   }
-  .map-canvas { padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
-  .capabilities-sheet :global(.diagram-actions .button) { min-height: 2.75rem; padding: .5rem 1rem; }
-  .capabilities-sheet :global(.layer) { background: #fafafa; border-color: var(--line); box-shadow: var(--shadow-xs); }
-  .capabilities-sheet :global(.layer-label) { border-right: 2px solid var(--accent); font-weight: 680; }
-  .capabilities-sheet :global(.module) { border-color: var(--line); border-radius: .55rem; }
-  .capabilities-sheet :global(.module h3) { color: var(--ink); font-weight: 680; }
-  .capabilities-sheet :global(.feature-list li) { background: #f4f4f5; color: var(--ink-secondary); border: 1px solid rgba(17,17,19,.05); border-radius: .32rem; }
-  .capabilities-sheet :global(.bucket) { border-color: var(--line); box-shadow: var(--shadow-xs); }
-  .capabilities-sheet :global(.bucket > h3) { background: var(--accent-soft); color: var(--ink); border-bottom: 1px solid var(--accent-border); }
-  .capabilities-sheet :global(.jump-list a) { background: var(--paper); border: 1px solid var(--line); color: var(--ink-secondary); }
-  .capabilities-sheet :global(.jump-list a:hover) { border-color: var(--accent-border); color: var(--accent); }
+  .map-canvas { padding-top: clamp(24px, 3vw, 40px); padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+
+  /* 顶部标题区 */
+  .capabilities-sheet :global(.map-header) {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .capabilities-sheet :global(.diagram-actions .button) { min-height: 2.75rem; padding: .5rem 1.05rem; }
+  .capabilities-sheet :global(a:not(.button)) { color: var(--ink); text-decoration: none; }
+  .capabilities-sheet :global(a:not(.button):hover) { color: var(--accent); }
+  .capabilities-sheet :global(.button.primary) { color: #ffffff; }
+
+  /* 5层功能架构大图 */
+  .capabilities-sheet :global(.architecture) { gap: .72rem; }
+  .capabilities-sheet :global(.layer) {
+    background: var(--bg-subtle);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-xs);
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .capabilities-sheet :global(.layer:hover) {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-sm);
+  }
+  .capabilities-sheet :global(.layer-label) {
+    background: linear-gradient(165deg, #1f1f24 0%, #141417 100%);
+    font-weight: 680;
+    font-size: 1rem;
+    letter-spacing: .04em;
+    border-right: 1px solid #27272d;
+  }
+  .capabilities-sheet :global(.modules) { gap: .55rem; padding: .55rem; }
+  .capabilities-sheet :global(.module) {
+    position: relative;
+    overflow: hidden;
+    border-color: var(--line);
+    border-radius: 10px;
+    padding: .68rem .72rem;
+    box-shadow: 0 1px 2px rgba(17, 17, 19, .025);
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  }
+  .capabilities-sheet :global(.module::before) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(37, 99, 235, .05), transparent 65%);
+    transition: opacity .22s ease;
+  }
+  .capabilities-sheet :global(.module:hover) {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-xs);
+  }
+  .capabilities-sheet :global(.module:hover::before) { opacity: 1; }
+  .capabilities-sheet :global(.module h3) {
+    color: var(--ink);
+    font-size: .95rem;
+    font-weight: 680;
+    padding-bottom: .38rem;
+    margin-bottom: .45rem;
+    border-bottom-color: var(--soft);
+  }
+  .capabilities-sheet :global(.feature-list) { gap: .32rem; }
+  .capabilities-sheet :global(.feature-list li) {
+    background: var(--soft);
+    color: var(--ink-secondary);
+    border: 1px solid rgba(17, 17, 19, .04);
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 500;
+    transition: background .16s ease, color .16s ease, border-color .16s ease, transform .16s ease;
+  }
+  .capabilities-sheet :global(.feature-list li:hover) {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    border-color: var(--accent-border);
+    transform: translateY(-1px);
+  }
+
+  /* 详细功能筛选区 */
+  .capabilities-sheet :global(#features) { margin-top: 3.5rem; scroll-margin-top: 90px; }
+  .capabilities-sheet :global(.section-head) { margin-bottom: 1.25rem; }
+  .capabilities-sheet :global(.filters) {
+    padding: 16px 18px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-xs);
+    margin-bottom: 1rem;
+  }
+  .capabilities-sheet :global(.filters input),
+  .capabilities-sheet :global(.filters select) {
+    border-color: var(--line);
+    border-radius: 8px;
+    background: var(--bg-subtle);
+    transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+  }
+  .capabilities-sheet :global(.filters input:focus),
+  .capabilities-sheet :global(.filters select:focus) {
+    outline: none;
+    background: var(--paper);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+  }
+  .capabilities-sheet :global(.filters button) {
+    border-radius: 8px;
+    border-color: var(--line-strong);
+    font-weight: 600;
+    transition: background .16s ease, border-color .16s ease, color .16s ease;
+  }
+  .capabilities-sheet :global(.filters button:hover) {
+    background: var(--soft);
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .capabilities-sheet :global(.jump-list) { gap: .45rem; margin-bottom: 1.25rem; }
+  .capabilities-sheet :global(.jump-list a) {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--ink-secondary);
+    font-size: .85rem;
+    font-weight: 550;
+    padding: .3rem .78rem;
+    box-shadow: var(--shadow-xs);
+    transition: transform .16s ease, border-color .16s ease, color .16s ease, background .16s ease;
+  }
+  .capabilities-sheet :global(.jump-list a:hover) {
+    transform: translateY(-1px);
+    border-color: var(--line-strong);
+    background: var(--soft);
+    color: var(--ink);
+  }
+
+  /* 详细功能分类卡片 */
+  .capabilities-sheet :global(.catalog) { gap: 1rem; }
+  .capabilities-sheet :global(.bucket) {
+    position: relative;
+    border-color: var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-xs);
+    transition: border-color .18s ease, box-shadow .18s ease;
+  }
+  .capabilities-sheet :global(.bucket:hover) {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-sm);
+  }
+  .capabilities-sheet :global(.bucket > h3) {
+    background: var(--bg-subtle);
+    color: var(--ink);
+    font-weight: 680;
+    border-bottom: 1px solid var(--line);
+    padding: .82rem 1.05rem;
+  }
+  .capabilities-sheet :global(.entry) {
+    padding: .75rem 1.05rem;
+    transition: background .15s ease;
+  }
+  .capabilities-sheet :global(.entry:hover) {
+    background: #fafafa;
+  }
+  .capabilities-sheet :global(.entry strong) { color: var(--ink); font-weight: 650; }
   .capabilities-sheet :global(.catalog > .bucket:nth-child(odd of :not([hidden])):nth-last-child(1 of :not([hidden]))) {
     grid-column: 1 / -1;
   }
-  .capabilities-sheet :global(#features > .back) { text-align: right; margin-top: .75rem; }
-  .capabilities-sheet :global(#features > .back a) { text-decoration: underline; }
+  .capabilities-sheet :global(#features > .back) { text-align: right; margin-top: .95rem; }
+  .capabilities-sheet :global(#features > .back a) { text-decoration: none; color: var(--muted); font-weight: 550; }
+  .capabilities-sheet :global(#features > .back a:hover) { color: var(--ink); }
+
+  /* 层级错峰入场动效 */
+  @media (prefers-reduced-motion: no-preference) {
+    .capabilities-sheet :global(.map-header) {
+      animation: cap-enter 480ms cubic-bezier(.22, 1, .36, 1) both;
+    }
+    .capabilities-sheet :global(.architecture > .layer) {
+      animation: cap-enter 520ms cubic-bezier(.22, 1, .36, 1) both;
+    }
+    .capabilities-sheet :global(.architecture > .layer:nth-child(1)) { animation-delay: 40ms; }
+    .capabilities-sheet :global(.architecture > .layer:nth-child(2)) { animation-delay: 100ms; }
+    .capabilities-sheet :global(.architecture > .layer:nth-child(3)) { animation-delay: 160ms; }
+    .capabilities-sheet :global(.architecture > .layer:nth-child(4)) { animation-delay: 220ms; }
+    .capabilities-sheet :global(.architecture > .layer:nth-child(5)) { animation-delay: 280ms; }
+    @keyframes cap-enter {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* 底部按任务查手册 */
   .capability-guide {
     display: grid;
     grid-template-columns: 8.35rem minmax(0, 1fr);
     gap: .75rem 1rem;
     border-top: 1px solid var(--line);
-    padding-block: 1.75rem .75rem;
-    margin-top: 1.5rem;
+    padding-block: 2rem 1rem;
+    margin-top: 1.75rem;
   }
-  .capability-guide :global(h2) { grid-column: 1 / -1; margin-bottom: .25rem; }
-  .capability-guide :global(h3) { padding-top: .7rem; font-size: .9375rem; }
+  .capability-guide :global(h2) { grid-column: 1 / -1; margin-bottom: .35rem; }
+  .capability-guide :global(h3) { padding-top: .7rem; font-size: .9375rem; color: var(--ink); }
   .capability-guide :global(ul) {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: .55rem;
+    gap: .6rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -95,20 +284,24 @@ css.walkRules(rule => {
   .capability-guide :global(li a) {
     display: flex;
     align-items: center;
-    min-height: 2.8rem;
+    min-height: 2.85rem;
     height: 100%;
-    padding: .55rem .85rem;
+    padding: .55rem .9rem;
     border: 1px solid var(--line);
-    border-radius: .5rem;
+    border-radius: 10px;
     background: var(--surface);
     font-size: .9rem;
     font-weight: 550;
     box-shadow: var(--shadow-xs);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    transition: border-color .16s ease, color .16s ease;
+    text-decoration: none;
+    transition: border-color .16s ease, color .16s ease, transform .16s ease, box-shadow .16s ease;
   }
-  .capability-guide :global(li a:hover) { border-color: var(--accent-border); color: var(--accent); text-decoration-color: currentColor; }
+  .capability-guide :global(li a:hover) {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    color: var(--accent);
+    box-shadow: var(--shadow-sm);
+  }
   .capability-guide :global(h2:not(:first-child)) {
     margin: .5rem 0 0;
     padding-top: .85rem;
@@ -128,7 +321,7 @@ css.walkRules(rule => {
     .capabilities-sheet :global(.bucket:nth-child(odd of :not([hidden])):nth-last-child(1 of :not([hidden])) .entry:nth-child(even of :not([hidden]))) { border-inline-start: 1px solid var(--line); }
   }
   @media (max-width: 58rem) {
-    .capabilities-sheet :global(.layer-label) { border-right: 0; border-bottom: 2px solid var(--accent); }
+    .capabilities-sheet :global(.layer-label) { border-right: 0; border-bottom: 1px solid #27272d; }
     .capability-guide { grid-template-columns: minmax(0, 1fr); gap: .6rem; }
     .capability-guide :global(h3) { padding-top: .25rem; }
     .capability-guide :global(ul) { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: .35rem; }
@@ -138,7 +331,7 @@ css.walkRules(rule => {
   }
   @media print {
     .map-canvas { width: 100%; padding: 0; }
-    .capabilities-sheet :global(.map-header) { padding: 0; }
+    .capabilities-sheet :global(.map-header) { padding: 0; border-bottom: 0; }
     .capability-guide { display: none; }
   }
 </style>

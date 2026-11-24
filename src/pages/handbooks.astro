@@ -32,8 +32,8 @@ const books = [
     </div>
   </section>
   <div class="container handbook-grid">
-    {books.map(book => (
-      <section class="handbook-card">
+    {books.map((book, bookIdx) => (
+      <section class="handbook-card" data-reveal data-spotlight style={`--reveal-delay: ${bookIdx * 100}ms`}>
         <div class="handbook-card-heading">
           <div class="handbook-top-row">
             <span class="handbook-icon"><Icon name={book.icon} size={22} /></span>
@@ -46,6 +46,7 @@ const books = [
         <figure class="handbook-preview">
           <button type="button" data-image-zoom aria-label={'放大' + book.title + '界面'}>
             <img src={url('/media/manuals/' + book.image)} alt={book.title + '演示界面'} loading="lazy" decoding="async" />
+            <span class="preview-zoom-pill" aria-hidden="true"><Icon name="search" size={14} />放大查看</span>
           </button>
           <figcaption>真实界面 · 合成示例（点击可放大）</figcaption>
         </figure>
@@ -134,6 +135,7 @@ const books = [
   border-bottom: 1px solid var(--line);
 }
 .handbook-preview button {
+  position: relative;
   width: 100%;
   display: block;
   cursor: zoom-in;
@@ -151,6 +153,32 @@ const books = [
   height: 100%;
   object-fit: cover;
   object-position: center top;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.handbook-preview button:hover img {
+  transform: scale(1.02);
+}
+.preview-zoom-pill {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(24, 24, 27, 0.84);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 550;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.handbook-preview button:hover .preview-zoom-pill,
+.handbook-preview button:focus-visible .preview-zoom-pill {
+  opacity: 1;
+  transform: translateY(0);
 }
 .handbook-preview figcaption {
   font-size: 0.78rem;
@@ -170,10 +198,15 @@ const books = [
   grid-template-columns: 28px minmax(0, 1fr) 16px;
   align-items: center;
   gap: 10px;
-  padding-block: 12px;
+  padding: 12px 10px;
+  margin-inline: -10px;
+  border-radius: 8px;
   font-size: 0.94rem;
   font-weight: 550;
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.handbook-chapters a:hover {
+  background: var(--bg-subtle);
 }
 .chap-num {
   font: 600 0.75rem/1 ui-monospace, SFMono-Regular, monospace;

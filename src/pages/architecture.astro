@@ -28,10 +28,10 @@ const stages = [
       <a class="button primary" href={url('/capabilities/')}>查看功能架构图<Icon name="arrow" size={17} /></a>
     </div>
   </section>
-  <section class="container">
+  <section class="container" data-reveal>
     <ManualDiagram name="system-architecture" />
   </section>
-  <section class="section container" data-tabs>
+  <section class="section container" data-tabs data-reveal>
     <div class="section-heading">
       <div>
         <span class="eyebrow">分层职责</span>
@@ -59,7 +59,7 @@ const stages = [
   </section>
   <section class="principles section">
     <div class="container lifecycle">
-      <div>
+      <div data-reveal>
         <span class="eyebrow">执行链路</span>
         <h2>一项任务如何开始和结束</h2>
         <p>对话负责承载连续交流的上下文；每次向智能体发起指令，平台都会生成一条具备独立状态与审计轨迹的任务（Run）。</p>
@@ -67,7 +67,7 @@ const stages = [
       </div>
       <ol>
         {stages.map(([title, text], index) => (
-          <li>
+          <li data-reveal style={`--reveal-delay: ${index * 80}ms`}>
             <span>0{index + 1}</span>
             <div><h3>{title}</h3><p>{text}</p></div>
           </li>
@@ -76,7 +76,7 @@ const stages = [
     </div>
   </section>
   <section class="section container">
-    <div class="section-heading">
+    <div class="section-heading" data-reveal>
       <div>
         <span class="eyebrow">架构专题</span>
         <h2>架构文档</h2>

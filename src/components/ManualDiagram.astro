@@ -32,35 +32,376 @@ const figure = figures[0]
     --atlas-ink: #111113;
     --atlas-sub: #66666e;
     --atlas-line: #e4e4e7;
-    --atlas-wire: #8b8b96;
-    --atlas-tint: #eff6ff;
+    --atlas-wire: #a1a1aa;
+    --atlas-tint: #f4f7ff;
     --atlas-teal: #2563eb;
-    --atlas-blue: #2563eb;
+    --atlas-blue: #111113;
     --atlas-gold: #52525b;
-    --atlas-warm: #f4f4f5;
+    --atlas-warm: #fafafa;
     border-color: var(--line);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sm);
+    background: var(--atlas-ground);
   }
+
+  /* 统一图表内链接样式：去蓝链，悬停时温和变蓝 */
+  .embedded-atlas-wrap :global(.hive-atlas a) {
+    color: var(--atlas-ink);
+    font-weight: 660;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(17, 17, 19, 0.24);
+    padding-bottom: 1px;
+    transition: color 0.16s ease, border-color 0.16s ease;
+  }
+  .embedded-atlas-wrap :global(.hive-atlas a:hover) {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    border-bottom-style: solid;
+    text-decoration: none;
+  }
+
+  /* 轻盈通透的图头（替代厚重黑块） */
   .embedded-atlas-wrap :global(.hive-atlas .atlas-head) {
-    background-color: #18181b;
+    background-color: #ffffff;
     background-image:
-      radial-gradient(circle at 95% 160%, transparent 110px, rgba(59, 130, 246, 0.22) 111px, transparent 113px, transparent 144px, rgba(59, 130, 246, 0.16) 145px, transparent 147px, transparent 179px, rgba(59, 130, 246, 0.12) 180px, transparent 182px),
-      linear-gradient(115deg, #141417 0%, #222228 100%);
-    border-bottom: 1px solid #2e2e34;
+      radial-gradient(50% 90% at 92% 0%, rgba(37, 99, 235, 0.06), transparent 70%),
+      linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    color: var(--atlas-ink);
+    border-bottom: 1px solid var(--atlas-line);
+    padding: clamp(20px, 2.8cqw, 30px) clamp(18px, 2.8cqw, 32px);
   }
-  .embedded-atlas-wrap :global(.hive-atlas .atlas-head p),
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-title) {
+    color: var(--atlas-ink);
+    letter-spacing: -0.03em;
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-head p) {
+    color: var(--atlas-sub);
+  }
   .embedded-atlas-wrap :global(.atlas-legend) {
-    color: #d4d4d8;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--atlas-line);
+    color: var(--atlas-sub);
+    font-size: 0.78rem;
+  }
+
+  /* 泳道与标签 */
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-field) {
+    padding: 6px clamp(16px, 2.5cqw, 30px) 16px;
+  }
+  .embedded-atlas-wrap :global(.atlas-band) {
+    padding: 22px 0;
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-label) {
+    color: var(--atlas-ink);
+    font-size: 0.94rem;
+    font-weight: 680;
+  }
+  .embedded-atlas-wrap :global(.atlas-label::before) {
+    width: 18px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--ink);
+  }
+
+  /* 第一层：使用入口改为精致独立卡片 */
+  .embedded-atlas-wrap :global(.atlas-entries) {
+    gap: 12px;
+  }
+  .embedded-atlas-wrap :global(.atlas-entries > div) {
+    padding: 14px 16px;
+    border-left: 1px solid var(--atlas-line);
+    border: 1px solid var(--atlas-line);
+    border-radius: 12px;
+    background: var(--atlas-paper);
+    box-shadow: var(--shadow-xs);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .embedded-atlas-wrap :global(.atlas-entries > div:hover) {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* 第二层：平台与执行节点卡片 */
+  .embedded-atlas-wrap :global(.atlas-node) {
+    padding: 15px 16px;
+    border: 1px solid var(--atlas-line);
+    border-radius: 12px;
+    background: var(--atlas-paper);
+    box-shadow: var(--shadow-xs);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .embedded-atlas-wrap :global(.atlas-node:hover) {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-sm);
+  }
+  .embedded-atlas-wrap :global(.atlas-node.atlas-execution) {
+    background: linear-gradient(155deg, #f5f8ff 0%, #ffffff 75%);
+    border-color: #bfdbfe;
+    box-shadow: 0 4px 16px -6px rgba(37, 99, 235, 0.16);
+  }
+  .embedded-atlas-wrap :global(.atlas-node.atlas-execution:hover) {
+    border-color: #93c5fd;
+  }
+  .embedded-atlas-wrap :global(.atlas-codename) {
+    font-size: 0.75rem;
+    color: var(--atlas-sub);
+    margin-bottom: 5px;
+  }
+  .embedded-atlas-wrap :global(.atlas-execution .atlas-codename) {
+    color: var(--accent);
+  }
+  .embedded-atlas-wrap :global(.atlas-edge) {
+    border-top-style: dashed;
+    border-top-color: var(--line-strong);
+  }
+  .embedded-atlas-wrap :global(.atlas-edge > span) {
+    font-size: 0.74rem;
+    background: var(--atlas-ground);
+    padding: 0 5px;
+    border-radius: 4px;
+  }
+  .embedded-atlas-wrap :global(.atlas-return::before) {
+    border-style: dashed;
+    border-color: var(--line-strong);
+  }
+
+  /* 第三层：向外访问路由卡片与外部虚线框 */
+  .embedded-atlas-wrap :global(.atlas-route) {
+    border-radius: 12px;
+    border-color: var(--atlas-line);
+    padding: 14px;
+    gap: 6px;
+    box-shadow: var(--shadow-xs);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .embedded-atlas-wrap :global(.atlas-route:hover) {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-sm);
+  }
+  .embedded-atlas-wrap :global(.atlas-route .atlas-route-name) {
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+  .embedded-atlas-wrap :global(.atlas-outside) {
+    padding: 11px 12px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 9px;
+    background: #fafafa;
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .atlas-aside) {
+    margin-top: 2px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--ink);
+    border-radius: 0 8px 8px 0;
+    background: var(--atlas-paper);
+    border-top: 1px solid var(--atlas-line);
+    border-right: 1px solid var(--atlas-line);
+    border-bottom: 1px solid var(--atlas-line);
+  }
+
+  /* 数字分身概念图与连续工作图适配 */
+  .embedded-atlas-wrap :global(.twin-atlas .atlas-field) {
+    display: grid;
+    gap: 16px;
+    padding: clamp(18px, 2.5cqw, 28px);
+  }
+  .embedded-atlas-wrap :global(.twin-identity) {
+    padding: 16px 20px;
+    background: var(--atlas-paper);
+    border: 1px solid var(--atlas-line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-xs);
+  }
+  .embedded-atlas-wrap :global(.twin-person) {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+  }
+  .embedded-atlas-wrap :global(.twin-identity .atlas-edge > span) {
+    background: var(--atlas-paper);
+  }
+  .embedded-atlas-wrap :global(.twin-work) {
+    border-color: var(--atlas-line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-xs);
+    background: var(--atlas-paper);
+  }
+  .embedded-atlas-wrap :global(.twin-turns) {
+    display: grid;
+    gap: 14px;
+  }
+  .embedded-atlas-wrap :global(.twin-turns li) {
+    padding: 12px 14px 12px 32px;
+    border-radius: 10px;
+    background: #fafafa;
+    border: 1px solid var(--atlas-line);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .embedded-atlas-wrap :global(.twin-turns li:hover) {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-xs);
+  }
+  .embedded-atlas-wrap :global(.twin-turns li::before) {
+    left: 11px;
+    top: 15px;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+  .embedded-atlas-wrap :global(.twin-turns li:first-child::after) {
+    left: 16px;
+    top: 27px;
+    bottom: -16px;
+    background: var(--accent-border);
+  }
+  .embedded-atlas-wrap :global(.twin-time) {
+    display: inline-block;
+    padding: 1px 8px;
+    margin-bottom: 6px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.74rem;
+  }
+  .embedded-atlas-wrap :global(.twin-turns strong) {
+    display: block;
+    margin-bottom: 3px;
+  }
+  .embedded-atlas-wrap :global(.twin-exchange) {
+    padding-inline: 10px;
+    background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    border-inline: 1px solid var(--soft);
+  }
+  .embedded-atlas-wrap :global(.twin-exchange span) {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ink-secondary);
+  }
+  .embedded-atlas-wrap :global(.twin-exchange i) {
+    background: var(--accent);
+    margin-top: 8px;
+  }
+  .embedded-atlas-wrap :global(.twin-assets) {
+    background: #fafafa;
+    border-left: 0;
+  }
+  .embedded-atlas-wrap :global(.twin-assets dl) {
+    display: grid;
+    gap: 0;
+    margin-top: 14px;
+  }
+  .embedded-atlas-wrap :global(.twin-assets dt),
+  .embedded-atlas-wrap :global(.twin-assets dd) {
+    margin: 0;
+  }
+  .embedded-atlas-wrap :global(.twin-assets dd:not(:last-child)) {
+    margin-bottom: 10px;
+  }
+  .embedded-atlas-wrap :global(.twin-assets dt) {
+    padding: 10px 14px 2px;
+    background: var(--atlas-paper);
+    border: 1px solid var(--atlas-line);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    color: var(--atlas-ink);
+    font-size: 0.9rem;
+  }
+  .embedded-atlas-wrap :global(.twin-assets dd) {
+    padding: 0 14px 11px;
+    background: var(--atlas-paper);
+    border: 1px solid var(--atlas-line);
+    border-top: 0;
+    border-radius: 0 0 10px 10px;
+    font-size: 0.84rem;
+    box-shadow: 0 1px 2px rgba(17, 17, 19, 0.03);
+  }
+  .embedded-atlas-wrap :global(.twin-assets dd + dt) {
+    border-top: 1px solid var(--atlas-line);
+    margin-top: 0;
+  }
+  .embedded-atlas-wrap :global(.twin-access) {
+    margin-top: 0;
+    border-color: var(--atlas-line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-xs);
+  }
+  .embedded-atlas-wrap :global(.twin-gates > div:first-child) {
+    padding: 12px 14px;
+    border: 1px solid var(--atlas-line);
+    border-radius: 10px;
+    background: #fafafa;
+  }
+  .embedded-atlas-wrap :global(.twin-gates > div:first-child .atlas-route-name) {
+    color: var(--accent);
+  }
+  .embedded-atlas-wrap :global(.twin-gates .atlas-outside) {
+    background: #ffffff;
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .embedded-atlas-wrap :global(.twin-gates .atlas-route-name) {
+    color: var(--ink-secondary);
+  }
+  .embedded-atlas-wrap :global(.twin-gates .atlas-edge > span) {
+    background: var(--atlas-paper);
+  }
+  .embedded-atlas-wrap :global(.hive-atlas .twin-close) {
+    margin-top: 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--ink);
+    border-radius: 0 10px 10px 0;
+    background: var(--atlas-paper);
+    border-top: 1px solid var(--atlas-line);
+    border-right: 1px solid var(--atlas-line);
+    border-bottom: 1px solid var(--atlas-line);
   }
   .embedded-atlas-wrap :global(.continuity-space) {
     background: #18181b;
     border-color: #27272d;
+    border-radius: 12px;
     color: #fafafa;
   }
   .embedded-atlas-wrap :global(.hive-atlas .continuity-space p) {
     color: #a1a1aa;
   }
+
+  /* 泳道与概念模块柔和入场动效 */
+  @media (prefers-reduced-motion: no-preference) {
+    .embedded-atlas-wrap :global(.atlas-band),
+    .embedded-atlas-wrap :global(.twin-identity),
+    .embedded-atlas-wrap :global(.twin-work),
+    .embedded-atlas-wrap :global(.twin-access) {
+      animation: atlas-band-enter 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .embedded-atlas-wrap :global(.atlas-band:nth-child(1)),
+    .embedded-atlas-wrap :global(.twin-identity) { animation-delay: 40ms; }
+    .embedded-atlas-wrap :global(.atlas-band:nth-child(2)),
+    .embedded-atlas-wrap :global(.twin-work) { animation-delay: 120ms; }
+    .embedded-atlas-wrap :global(.atlas-band:nth-child(3)),
+    .embedded-atlas-wrap :global(.twin-access) { animation-delay: 200ms; }
+    .embedded-atlas-wrap :global(.twin-exchange span:first-child i) {
+      animation: exchange-right 2.4s ease-in-out infinite;
+    }
+    .embedded-atlas-wrap :global(.twin-exchange span:last-child i) {
+      animation: exchange-left 2.4s ease-in-out infinite;
+    }
+    @keyframes exchange-right {
+      0%, 100% { transform: translateX(0); opacity: 0.75; }
+      50% { transform: translateX(4px); opacity: 1; }
+    }
+    @keyframes exchange-left {
+      0%, 100% { transform: translateX(0); opacity: 0.75; }
+      50% { transform: translateX(-4px); opacity: 1; }
+    }
+    @keyframes atlas-band-enter {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
   .diagram-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 14px; }
-  .diagram-links :global(a) { text-decoration: underline; text-underline-offset: .22em; }
 </style>

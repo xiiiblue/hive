@@ -21,13 +21,13 @@ const scenarios = [
       <a class="button primary" href={url('/capabilities/')}>查看功能架构图<Icon name="arrow" size={17} /></a>
     </div>
   </section>
-  <section class="container">
+  <section class="container" data-reveal>
     <ManualDiagram name="employee-digital-twin">
       <a class="inline-link" href={url('/docs/product/digital-twin/')}>理解数字分身核心概念<Icon name="arrow" size={16} /></a>
     </ManualDiagram>
   </section>
   <section class="section container">
-    <div class="section-heading">
+    <div class="section-heading" data-reveal>
       <div>
         <span class="eyebrow">日常工作流</span>
         <h2>从熟悉的工作开始</h2>
@@ -35,8 +35,8 @@ const scenarios = [
       <a class="inline-link" href={url('/docs/product/scenarios/')}>阅读完整场景指南<Icon name="arrow" size={16} /></a>
     </div>
     <div class="scenario-list">
-      {scenarios.map(scenario => (
-        <a href={url(scenario.link)}>
+      {scenarios.map((scenario, idx) => (
+        <a href={url(scenario.link)} data-reveal data-spotlight style={`--reveal-delay: ${idx * 70}ms`}>
           <span class="scenario-icon"><Icon name={scenario.icon} size={22} /></span>
           <div><h3>{scenario.title}</h3><p>{scenario.text}</p></div>
           <Icon name="chevron" size={18} />
@@ -46,7 +46,7 @@ const scenarios = [
   </section>
   <section class="section principles">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading" data-reveal>
         <div>
           <span class="eyebrow">适用边界</span>
           <h2>使用前需要确认什么</h2>
@@ -54,17 +54,17 @@ const scenarios = [
         <p>清晰区分平台职责、业务系统授权与员工核对义务，不把演示或单节点环境当作无边界承诺。</p>
       </div>
       <div class="boundary-grid">
-        <article>
+        <article data-reveal data-spotlight style="--reveal-delay: 0ms">
           <span class="boundary-badge">01 · 部署范围</span>
           <h3>单企业内网部署</h3>
           <p>蜂巢面向单企业内网单节点环境，不是公有云SaaS。模型与外部接口的实际访问范围由所在企业部署与网络策略决定。</p>
         </article>
-        <article>
+        <article data-reveal data-spotlight style="--reveal-delay: 80ms">
           <span class="boundary-badge">02 · 权限边界</span>
           <h3>平台管分配，业务管授权</h3>
           <p>员工只能使用所属能力组分配的模型、知识库、工具和系统；涉及具体业务数据时，仍由目标业务系统按本人账号鉴权。</p>
         </article>
-        <article>
+        <article data-reveal data-spotlight style="--reveal-delay: 160ms">
           <span class="boundary-badge">03 · 结果核对</span>
           <h3>执行完成不等于免检</h3>
           <p>任务状态仅代表智能体运行到哪一步。关键统计数字、导出文件与业务写入结果仍需由员工本人核对确认。</p>
@@ -73,7 +73,7 @@ const scenarios = [
     </div>
   </section>
   <section class="section container">
-    <div class="section-heading">
+    <div class="section-heading" data-reveal>
       <div>
         <span class="eyebrow">深入阅读</span>
         <h2>产品文档</h2>

@@ -29,6 +29,7 @@ const { scenes } = Astro.props;
       </figure>
     ))}
   </div>
+  <div class="hero-gallery-progress" aria-hidden="true"><span data-hero-progress></span></div>
   <div class="hero-gallery-controls" role="group" aria-label="切换首屏截图">
     {scenes.map((scene, index) => (
       <button type="button" data-hero-select aria-controls="hero-gallery-deck" aria-pressed={index === 0 ? 'true' : 'false'}>
@@ -45,15 +46,27 @@ const { scenes } = Astro.props;
   const gallery = document.querySelector<HTMLElement>('[data-hero-gallery]');
   const deck = gallery?.querySelector<HTMLElement>('[data-hero-deck]');
   const playback = gallery?.querySelector<HTMLButtonElement>('[data-hero-playback]');
+  const progressBar = gallery?.querySelector<HTMLElement>('[data-hero-progress]');
   if (gallery && deck && playback) {
     const slides = [...deck.querySelectorAll<HTMLElement>('[data-hero-position]')];
     const choices = [...gallery.querySelectorAll<HTMLButtonElement>('[data-hero-select]')];
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const DURATION = 6500;
     let current = 0;
     let playing = !reducedMotion.matches;
     let inView = false;
     let hovering = false;
     let timer: number | undefined;
+
+    function resetProgress(animate: boolean) {
+      if (!progressBar) return;
+      progressBar.style.transition = 'none';
+      progressBar.style.transform = 'scaleX(0)';
+      if (!animate) return;
+      void progressBar.offsetWidth;
+      progressBar.style.transition = `transform ${DURATION}ms linear`;
+      progressBar.style.transform = 'scaleX(1)';
+    }
 
     function show(index: number) {
       current = index;
@@ -69,11 +82,15 @@ const { scenes } = Astro.props;
 
     function schedule() {
       window.clearTimeout(timer);
-      if (!playing || !inView || hovering || document.hidden) return;
+      if (!playing || !inView || hovering || document.hidden) {
+        resetProgress(false);
+        return;
+      }
+      resetProgress(true);
       timer = window.setTimeout(() => {
         show((current + 1) % slides.length);
         schedule();
-      }, 6500);
+      }, DURATION);
     }
 
     const setPlaying = (value: boolean) => {
@@ -95,7 +112,17 @@ const { scenes } = Astro.props;
     });
     deck.addEventListener('pointerleave', () => {
       hovering = false;
+      deck.style.removeProperty('--tilt-x');
+      deck.style.removeProperty('--tilt-y');
       schedule();
+    });
+    deck.addEventListener('pointermove', event => {
+      if (event.pointerType !== 'mouse' || reducedMotion.matches) return;
+      const rect = deck.getBoundingClientRect();
+      const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      deck.style.setProperty('--tilt-x', (ny * -2.2).toFixed(2) + 'deg');
+      deck.style.setProperty('--tilt-y', (nx * 2.6).toFixed(2) + 'deg');
     });
     document.addEventListener('visibilitychange', schedule);
     reducedMotion.addEventListener('change', event => {

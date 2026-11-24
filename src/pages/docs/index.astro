@@ -13,7 +13,7 @@ import { sections, sectionDocs, docUrl, url } from '../../lib/content';
     </div>
   </section>
   <section class="container docs-index">
-    <nav class="library-summary" aria-label="跳到文档主题">
+    <nav class="library-summary" aria-label="跳到文档主题" data-reveal>
       {sections.map(section => (
         <a href={'#' + section.id}>
           <span>{section.title}</span>
@@ -22,14 +22,14 @@ import { sections, sectionDocs, docUrl, url } from '../../lib/content';
       ))}
     </nav>
     {sections.map(section => (
-      <section class="doc-index-section" id={section.id}>
+      <section class="doc-index-section" id={section.id} data-reveal>
         <header class="doc-index-heading">
           <h2>{section.title}</h2>
           <p>{section.description}</p>
         </header>
         <div class="doc-index-list">
           {sectionDocs(section.id).map(doc => (
-            <a href={docUrl(doc)}>
+            <a href={docUrl(doc)} data-spotlight>
               <div>
                 <strong>{doc.title}</strong>
                 <p>{doc.description}</p>

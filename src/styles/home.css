@@ -22,8 +22,41 @@ html:has(.home-page) {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(46% 52% at 84% 22%, rgba(37, 99, 235, 0.08), transparent 70%),
-    radial-gradient(36% 42% at 62% 76%, rgba(59, 130, 246, 0.05), transparent 70%);
+    radial-gradient(46% 52% at 84% 22%, rgba(37, 99, 235, 0.085), transparent 70%),
+    radial-gradient(36% 42% at 62% 76%, rgba(59, 130, 246, 0.055), transparent 70%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-aurora {
+    animation: hero-aurora-drift 14s ease-in-out infinite alternate;
+  }
+  @keyframes hero-aurora-drift {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(-18px, 12px, 0) scale(1.04); }
+  }
+  .hero-pill i {
+    animation: pill-pulse 2.4s ease-out infinite;
+  }
+  @keyframes pill-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
+    70% { box-shadow: 0 0 0 7px rgba(37, 99, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+  }
+  .hero-copy > * {
+    animation: hero-enter 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hero-copy > :nth-child(1) { animation-delay: 0ms; }
+  .hero-copy > :nth-child(2) { animation-delay: 70ms; }
+  .hero-copy > :nth-child(3) { animation-delay: 140ms; }
+  .hero-copy > :nth-child(4) { animation-delay: 210ms; }
+  .hero-copy > :nth-child(5) { animation-delay: 280ms; }
+  .hero-visual {
+    animation: hero-enter 640ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  }
+  @keyframes hero-enter {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 .hero::after {
@@ -136,6 +169,27 @@ html:has(.home-page) {
   grid-template-columns: minmax(0, 1fr);
   isolation: isolate;
   padding: 28px 28px 0 0;
+  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 240ms ease-out;
+}
+
+.hero-gallery-progress {
+  width: 100%;
+  max-width: 240px;
+  height: 2px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.hero-gallery-progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--ink) 0%, var(--accent) 100%);
+  transform-origin: left center;
+  transform: scaleX(0);
 }
 
 .hero-workspace {
@@ -380,10 +434,88 @@ html:has(.home-page) {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.bento-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(37, 99, 235, 0.06), transparent 65%);
+  transition: opacity 0.25s ease;
+}
+
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+.bento-card.b-dark::before {
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(147, 197, 253, 0.14), transparent 65%);
+}
+
 .bento-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow);
   border-color: var(--line-strong);
+}
+
+.bento-card:hover .b-files span,
+.bento-card:hover .b-chips span {
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+}
+
+.b-files span,
+.b-chips span {
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+.b-files span:nth-child(2),
+.b-chips span:nth-child(2) { transition-delay: 25ms; }
+.b-files span:nth-child(3),
+.b-chips span:nth-child(3) { transition-delay: 50ms; }
+.b-chips span:nth-child(4) { transition-delay: 75ms; }
+.b-chips span:nth-child(5) { transition-delay: 100ms; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .b-trust-chain i {
+    display: inline-block;
+    animation: trust-arrow-nudge 2s ease-in-out infinite;
+  }
+  .b-trust-chain i:nth-of-type(2) {
+    animation-delay: 0.4s;
+  }
+  @keyframes trust-arrow-nudge {
+    0%, 100% { transform: translateX(0); opacity: 0.7; }
+    50% { transform: translateX(3px); opacity: 1; }
+  }
+  .flow-steps li:hover .flow-n {
+    transform: scale(1.07);
+    background: var(--ink);
+    color: #ffffff;
+  }
+  .flow-n {
+    transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease;
+  }
+  .work-panel:not([hidden])[data-slide-from] .work-copy {
+    animation: work-copy-enter 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes work-copy-enter {
+    from { opacity: 0.35; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* 滚动触发渐显（仅在 JS 初始化 motion-ready 后生效，无 JS 或减少动态效果下默认可见） */
+html.motion-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 560ms cubic-bezier(0.22, 1, 0.36, 1), transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.motion-ready [data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .bento-card h3 {

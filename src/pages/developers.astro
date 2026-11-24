@@ -51,8 +51,8 @@ const paths = [
 
   <section class="container developer-paths">
     {
-      paths.map((path) => (
-        <article>
+      paths.map((path, idx) => (
+        <article data-reveal data-spotlight style={`--reveal-delay: ${idx * 70}ms`}>
           <div>
             <span class="eyebrow">
               {path.number} / {path.label}
@@ -66,12 +66,12 @@ const paths = [
               阅读对接指南<Icon name="arrow" size={18} />
             </a>
           </div>
-            <pre><code>{path.code}</code></pre>
+          <pre><code>{path.code}</code></pre>
         </article>
       ))
     }
 
-    <article class="developer-tool-feature">
+    <article class="developer-tool-feature" data-reveal data-spotlight style="--reveal-delay: 210ms">
       <div>
         <span class="eyebrow">04 / 桌面开发者工具</span>
         <h2>用HiveBridge一站式发布与管理</h2>
@@ -107,7 +107,7 @@ const paths = [
   </section>
 
   <section class="section principles">
-    <div class="container developer-note">
+    <div class="container developer-note" data-reveal data-spotlight>
       <Icon name="shield" size={36} />
       <div>
         <h2>

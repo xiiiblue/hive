@@ -80,24 +80,24 @@ const steps = [
             <a class="button" href={url('/handbooks/')}><Icon name="book" size={17} />操作手册</a>
           </div>
           <dl class="hero-stats">
-            <div><dt>62</dt><dd>项平台功能</dd></div>
-            <div><dt>2</dt><dd>种执行引擎</dd></div>
-            <div><dt>5</dt><dd>类消息渠道</dd></div>
+            <div><dt data-count="62">62</dt><dd>项平台功能</dd></div>
+            <div><dt data-count="2">2</dt><dd>种执行引擎</dd></div>
+            <div><dt data-count="5">5</dt><dd>类消息渠道</dd></div>
           </dl>
         </div>
         <div class="hero-visual home-hero">
           <HeroWorkspace scenes={examples} />
         </div>
-      </div>
+      </div >
     </section>
 
     <section class="section container" aria-labelledby="bento-title">
-      <div class="center-heading">
+      <div class="center-heading" data-reveal>
         <span class="eyebrow">为什么是蜂巢</span>
         <h2 id="bento-title">不是又一个聊天框，<br />而是一个能积累的工作环境</h2>
       </div>
-      <div class="bento">
-        <a class="bento-card b-wide b-mint" href={url('/docs/architecture/workspace/')}>
+      <div class="bento" data-bento-grid>
+        <a class="bento-card b-wide b-mint" data-reveal data-spotlight style="--reveal-delay: 0ms" href={url('/docs/architecture/workspace/')}>
           <span class="b-icon"><Icon name="workspace" size={22} /></span>
           <h3>独立、持久的工作空间</h3>
           <p>每人一个主目录与独占运行环境。上周的周报模板、装好的依赖、写好的脚本，下一次对话里都还在；团队共享目录支持多人协作。</p>
@@ -105,28 +105,28 @@ const steps = [
             <span>~/reports/工单周报.md</span><span>~/scripts/stat.py</span><span>/shared/客服组/</span>
           </div>
         </a>
-        <a class="bento-card b-indigo" href={url('/docs/employee/04-skills/')}>
+        <a class="bento-card b-indigo" data-reveal data-spotlight style="--reveal-delay: 70ms" href={url('/docs/employee/04-skills/')}>
           <span class="b-icon"><Icon name="book" size={22} /></span>
           <h3>做法沉淀成Skill</h3>
           <p>把验证过的步骤保存为个人Skill，或从技能市场安装企业发布的版本，连接MCP远程工具与岗位知识库。</p>
         </a>
-        <a class="bento-card b-sky" href={url('/docs/employee/05-systems-and-channels/')}>
+        <a class="bento-card b-sky" data-reveal data-spotlight style="--reveal-delay: 140ms" href={url('/docs/employee/05-systems-and-channels/')}>
           <span class="b-icon"><Icon name="layers" size={22} /></span>
           <h3>多渠道随处发起</h3>
           <p>除电脑与手机网页外，支持绑定企微、微信、钉钉、飞书与Telegram个人机器人。</p>
           <div class="b-chips" aria-hidden="true"><span>企微</span><span>钉钉</span><span>飞书</span><span>微信</span><span>TG</span></div>
         </a>
-        <a class="bento-card" href={url('/docs/employee/03-automation/')}>
+        <a class="bento-card" data-reveal data-spotlight style="--reveal-delay: 190ms" href={url('/docs/employee/03-automation/')}>
           <span class="b-icon"><Icon name="check" size={22} /></span>
           <h3>定时与来信自动化</h3>
           <p>验证好的工作流可设成定时计划或个人邮箱来信规则自动触发，历史状态随时可查。</p>
         </a>
-        <a class="bento-card" href={url('/docs/employee/06-panels/')}>
+        <a class="bento-card" data-reveal data-spotlight style="--reveal-delay: 240ms" href={url('/docs/employee/06-panels/')}>
           <span class="b-icon"><Icon name="grid" size={22} /></span>
           <h3>可视化业务面板</h3>
           <p>把高频查询与审批做成静态面板直连业务接口；员工可另存个人副本并用对话微调视图。</p>
         </a>
-        <a class="bento-card b-full b-dark" href={url('/docs/developers/identity/')}>
+        <a class="bento-card b-full b-dark" data-reveal data-spotlight style="--reveal-delay: 290ms" href={url('/docs/developers/identity/')}>
           <div class="b-dark-main">
             <span class="b-icon"><Icon name="shield" size={22} /></span>
             <div>
@@ -143,25 +143,25 @@ const steps = [
 
     <section class="flow-band" aria-labelledby="flow-title">
       <div class="container">
-        <div class="center-heading">
+        <div class="center-heading" data-reveal>
           <span class="eyebrow">工作方式</span>
           <h2 id="flow-title">三步完成工作，把成果留下来</h2>
         </div>
         <ol class="flow-steps">
-          {steps.map(s => (
-            <li><span class="flow-n">{s.n}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+          {steps.map((s, idx) => (
+            <li data-reveal style={`--reveal-delay: ${idx * 100}ms`}><span class="flow-n">{s.n}</span><h3>{s.title}</h3><p>{s.text}</p></li>
           ))}
         </ol>
       </div>
     </section>
 
     <section id="examples" class="home-work section container" aria-labelledby="examples-title">
-      <div class="center-heading">
+      <div class="center-heading" data-reveal>
         <span class="eyebrow">真实界面</span>
         <h2 id="examples-title">看看日常工作在蜂巢里的样子</h2>
         <p>截图来自真实运行的界面与合成演示数据。</p>
       </div>
-      <div class="work-showcase" data-tabs="gallery">
+      <div class="work-showcase" data-tabs="gallery" data-reveal>
         <div class="work-toolbar">
           <div class="work-tabs" role="tablist" aria-label="工作场景" aria-orientation="horizontal">
             {examples.map((example, index) => (
@@ -198,27 +198,27 @@ const steps = [
       </div>
     </section>
 
-    <section class="section container" id="workspace-continuity" aria-labelledby="continuity-title">
+    <section class="section container" id="workspace-continuity" aria-labelledby="continuity-title" data-reveal>
       <ManualDiagram name="workspace-continuity">
         <a class="inline-link" href={url('/docs/employee/07-workspace/')}>查看工作空间和文件管理<Icon name="arrow" size={16} /></a>
       </ManualDiagram>
     </section>
 
     <section class="section container roles" aria-labelledby="roles-heading">
-      <div class="center-heading">
+      <div class="center-heading" data-reveal>
         <span class="eyebrow">从这里开始</span>
         <h2 id="roles-heading">按你的角色找到入口</h2>
       </div>
       <nav class="role-grid" aria-label="按角色开始">
-        <a class="role-card" href={url('/docs/employee/overview/')}>
+        <a class="role-card" data-reveal style="--reveal-delay: 0ms" href={url('/docs/employee/overview/')}>
           <span class="b-icon"><Icon name="person" size={22} /></span>
           <strong>我是员工</strong><small>对话、文件、Skill、业务面板与自动化</small><span class="role-go">员工手册<Icon name="arrow" size={16} /></span>
         </a>
-        <a class="role-card" href={url('/docs/admin/overview/')}>
+        <a class="role-card" data-reveal style="--reveal-delay: 80ms" href={url('/docs/admin/overview/')}>
           <span class="b-icon"><Icon name="shield" size={22} /></span>
           <strong>我是管理员</strong><small>账号、能力组、模型与费用、运行与备份</small><span class="role-go">管理员手册<Icon name="arrow" size={16} /></span>
         </a>
-        <a class="role-card" href={url('/developers/')}>
+        <a class="role-card" data-reveal style="--reveal-delay: 160ms" href={url('/developers/')}>
           <span class="b-icon"><Icon name="code" size={22} /></span>
           <strong>我是开发者</strong><small>开放API、统一身份、MCP与HiveBridge</small><span class="role-go">对接指南<Icon name="arrow" size={16} /></span>
         </a>
@@ -226,7 +226,7 @@ const steps = [
     </section>
 
     <section class="home-next" aria-labelledby="next-title">
-      <div class="container home-next-inner">
+      <div class="container home-next-inner" data-reveal>
         <h2 id="next-title">准备好在企业内网中试试蜂巢了吗？</h2>
         <p>蜂巢面向单企业内网单节点部署。先确认所在环境已开通的能力，再跟着入门路线完成第一个小任务。</p>
         <div class="button-row">
@@ -237,3 +237,25 @@ const steps = [
     </section>
   </div>
 </SiteLayout>
+
+<script>
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  // 首屏数字平滑递增
+  const counters = [...document.querySelectorAll<HTMLElement>('[data-count]')];
+  if (!reducedMotion.matches && counters.length) {
+    counters.forEach(el => {
+      const target = Number(el.dataset.count);
+      if (!Number.isFinite(target) || target <= 0) return;
+      const start = performance.now();
+      const duration = 680;
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = String(Math.max(1, Math.round(eased * target)));
+        if (t < 1) requestAnimationFrame(tick);
+        else el.textContent = String(target);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+</script>

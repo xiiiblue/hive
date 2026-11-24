@@ -63,6 +63,11 @@ document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(group => {
     });
     selectedIndex = index;
     if (counter) counter.textContent = `${index + 1} / ${tabs.length}`;
+    if (panel) {
+      panel.classList.remove('is-tab-entering');
+      void panel.offsetWidth;
+      panel.classList.add('is-tab-entering');
+    }
   }
 
   function move(step: number) {
@@ -85,3 +90,31 @@ document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(group => {
 });
 const progress=document.querySelector<HTMLElement>('.reading-progress');if(progress)window.addEventListener('scroll',()=>{const top=document.querySelector<HTMLElement>('.doc-content')?.offsetTop??0;const end=document.querySelector<HTMLElement>('.doc-content')?.offsetHeight??1;progress.style.width=Math.max(0,Math.min(100,(window.scrollY-top+innerHeight*.3)/end*100))+'%';},{passive:true});
 const tocLinks=[...document.querySelectorAll<HTMLAnchorElement>('.doc-toc a')];if(tocLinks.length){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)tocLinks.forEach(link=>link.classList.toggle('active',decodeURIComponent(link.hash.slice(1))===entry.target.id));});},{rootMargin:'-10% 0px -70% 0px'});document.querySelectorAll('.doc-content h2,.doc-content h3').forEach(h=>observer.observe(h));}
+
+// 全站滚动渐显与卡片鼠标聚光灯（遵守减少动态效果偏好）
+const motionReduced = matchMedia('(prefers-reduced-motion: reduce)');
+const revealNodes = [...document.querySelectorAll<HTMLElement>('[data-reveal]')];
+if (revealNodes.length) {
+  if (motionReduced.matches || !('IntersectionObserver' in window)) {
+    revealNodes.forEach(node => node.classList.add('is-visible'));
+  } else {
+    document.documentElement.classList.add('motion-ready');
+    const revealObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    }, { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+    revealNodes.forEach(node => revealObserver.observe(node));
+  }
+}
+
+document.querySelectorAll<HTMLElement>('[data-spotlight]').forEach(card => {
+  card.addEventListener('pointermove', (event) => {
+    if (event.pointerType !== 'mouse' || motionReduced.matches) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+    card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+  });
+});
