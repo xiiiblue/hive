@@ -8,6 +8,9 @@ const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 const sourceRoot = process.env.HIVE_MANUAL_SOURCE
   ? path.resolve(process.env.HIVE_MANUAL_SOURCE)
   : path.resolve(websiteRoot, '../../telchina/hive-os');
+const hiveBridgeRoot = process.env.HIVE_BRIDGE_SOURCE
+  ? path.resolve(process.env.HIVE_BRIDGE_SOURCE)
+  : path.resolve(websiteRoot, '../../telchina/hive-bridge');
 const updated = '2026-11-22';
 const diagramDirectory = 'docs/11-手册/01-产品技术手册';
 const diagrams = [
@@ -164,13 +167,17 @@ for (const { source, file } of diagrams) {
   media.set(target, bytes);
 }
 
-// 发布指南只导入经过公开审阅的界面截图。
-for (const [directory, file] of [
-  ...['select.png', 'confirm.png', 'result.png'].map(file => ['tools/panel-publisher/images', file]),
-  ...['desktop-selection.png', 'desktop-confirm.png', 'desktop-skill.png', 'desktop-knowledge.png'].map(file => ['tools/hive-bridge/images', file]),
+// 发布指南只导入独立开源仓库HiveBridge经过公开审阅的2x高清界面截图。
+for (const file of [
+  'desktop-onboarding.png',
+  'desktop-selection.png',
+  'desktop-confirm.png',
+  'desktop-environments.png',
+  'desktop-skill.png',
+  'desktop-knowledge.png',
 ]) {
-  const origin = `${directory}/${file}`;
-  const bytes = await readFile(path.join(sourceRoot, origin));
+  const origin = `hive-bridge/images/${file}`;
+  const bytes = await readFile(path.join(hiveBridgeRoot, 'images', file));
   digest.update(`${origin}\n`).update(bytes);
   media.set(`/media/panel-publisher/${file}`, bytes);
 }

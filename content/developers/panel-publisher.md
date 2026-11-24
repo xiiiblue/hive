@@ -1,133 +1,117 @@
 ---
 title: 用HiveBridge发布面板、Skill和知识库文档
-description: HiveBridge 1.0的Windows和Mac图文指南，包含跨环境批量发布、Skill草稿、知识库文档替换和旧配置用法。
+description: HiveBridge（HiveOS开发者工具）的Windows和Mac图文指南，涵盖前置登录加密存储、多环境切换排序、业务面板远端同步与发布、企业Skill目录自动打包上传及知识库文档批量管理。
 section: developers
 order: 75
 updated: '2026-11-24'
 sources:
-  - tools/panel-publisher/README.md
-  - tools/hive-bridge/README.md
-  - tools/hive-bridge/publisher/cli.go
+  - hive-bridge/README.md
   - docs/02-设计/02-能力设计/CAP-034-业务面板发布工具.md
 ---
 
 # 用HiveBridge发布面板、Skill和知识库文档
 
-HiveBridge 1.0（蜂桥）是蜂巢的桌面资源发布工具。在自己的电脑上选择目标环境，就能批量发布业务面板、保存或发布企业Skill，以及更新知识库文档。向团队维护者领取分发包及环境配置。图中所有环境、资源和版本都是教学示例。
+HiveBridge（蜂桥）是面向HiveOS的跨平台原生桌面开发者工具，支持Windows与Mac，基于Wails、Go和Vue 3构建，已作为独立开源项目发布在[GitHub：xiiiblue/hive-bridge](https://github.com/xiiiblue/hive-bridge)。
 
-## 打开桌面版
+在自己的电脑上打开HiveBridge，就能在一个原生桌面窗口中完成多环境下的**业务面板发布**、**企业Skill双向管理（含选目录自动打包）**以及**知识库文档批量管理**，无需安装Go或Node.js，也不用手工打ZIP包或反复登录管理台。文中所有环境、资源和版本截图均来自合成教学数据。
 
-完整解压收到的压缩包，把随包配置`hivebridge.json`留在程序旁边。
+## 下载与启动
+
+从[HiveBridge Releases页面](https://github.com/xiiiblue/hive-bridge/releases)下载对应系统的压缩包并完整解压，无需配置运行环境，双击即可启动。
 
 |电脑|压缩包|解压后双击|
 |---|---|---|
-|Windows x64|`hive-bridge-1.0-windows.zip`|`hivebridge.exe`|
-|Mac（Apple Silicon或Intel）|`hive-bridge-1.0-macos.zip`|`HiveBridge.app`|
+|Mac（Apple Silicon或Intel通用）|`hive-bridge-1.0-macos.zip`|`HiveBridge.app`（可拖入“应用程序”目录）|
+|Windows x64|`hive-bridge-1.0-windows.zip`|`hivebridge.exe`（使用系统自带Microsoft Edge WebView2）|
 
-从旧桌面版升级时，可以点左下角“打开配置文件”选择原来的`hive-panel.json`。启动时优先读取程序旁的`hivebridge.json`，缺失时读取同目录的旧文件名。已经选过的业务源码根目录会保留。Windows使用系统的Microsoft Edge WebView2运行时。
+## 前置登录与本地加密凭据
 
-## 批量发布业务面板
+首次打开且尚未登录任何环境时，应用会先展示**前置登录引导页**。可以直接点击「添加新环境」填写名称、服务地址与管理员账号密码，也可以点击「导入配置」载入团队分发的`hivebridge.json`。
 
-1. 在左侧选“业务面板”。首次使用，点“选择文件夹”选业务仓库的根目录。打包会包含当前磁盘上尚未提交的改动。
-2. 搜索面板名或资源键。勾一个格子，就选定一个面板和一个环境。勾列头只选择当前筛选结果中可发布的项。底栏始终显示整批数量。待配目录的面板可点“选择上传目录”，选择并校验仓库内的子目录。
-3. 点“本地打包预览”可在登录前查文件。准备发布时，点“检查发布目标”，分别登录各环境。
+![HiveBridge首次启动前置登录引导页](/media/panel-publisher/desktop-onboarding.png)
 
-![桌面工作台逐格选择运行概览和工单列表](/media/panel-publisher/desktop-selection.png)
+管理员账号和密码校验通过后，会通过**AES-256-GCM**加密保存在当前用户的应用配置目录中（文件权限`0600`），重启应用或切换环境都无需重复输入。每次校验或发布结束后，工具会自动注销短期会话，不在服务端残留长期会话。
 
-确认窗口会列出每个目标的环境、实际资源键、源码目录和版本。下图里同一份“运行概览”在两个环境使用不同资源键。核对后点“确认发布”，逐项查看回执。“待核对”需要先去对应管理台查正式版本及草稿。返回重查可以重新打包修改过的源码。
+## 多环境切换与自定义排序
 
-![确认窗口列出三个就绪目标与各自版本](/media/panel-publisher/desktop-confirm.png)
+进入工作区后，左侧上方切换资源类型，左侧下方为**独立可滚动的环境切换列表**（适配4至10套以上环境）。单击任意环境即可切换右侧工作上下文；未登录项旁可直接点「登录」，已登录项悬停可打开账号与环境设置。
 
-## 上传企业Skill
+点击「环境」标题栏右侧的管理图标进入**环境管理**视图，支持按登录状态筛选、搜索、通过上移/下移按钮自定义环境排序、编辑名称与地址、开启「发布前显示强确认提示」（建议用于客户现场或生产环境）、退出登录、删除环境，以及一键在浏览器打开对应管理台。
 
-在“企业Skill”中选`SKILL.md`（文件名区分大小写，上限2 MiB）或技能ZIP包（上限15 MiB），登录目标环境后点“检查文件与目标”。新建时选适用的业务系统、核对显示名称和示例提问。同标识的已有Skill会按当前修订更新，有待发布草稿时先到管理台核对。默认只保存草稿，也可选择“保存后立即发布”。发布结果会显示读回的正式版本。
+![多环境管理与自定义排序视图](/media/panel-publisher/desktop-environments.png)
 
-![企业Skill默认保存草稿，新建前可核对适用范围](/media/panel-publisher/desktop-skill.png)
+## 业务面板同步与发布
 
-## 上传知识库文档
+切到左侧「业务面板」，表格聚焦展示当前选中环境的面板清单、本地上传目录、目标资源键与就绪状态，支持快捷键搜索（`⌘F`/`Ctrl+F`）和按目录状态筛选。
 
-在“知识库文档”中选Markdown、DOCX或可提取文字的PDF（最大10 MiB），登录后选择这个环境中的知识库。库里已有同名文档时，核对修订号后点“确认替换同名文档”。“可检索”表示服务端已完成该版本的处理。“处理中”或“处理失败”时可到管理台查看对应文档。
+- **同步远端与配置目标资源键**：点击顶部「同步远端」，可从当前已登录环境自动拉取启用的业务面板及目标资源键；点击顶部「添加面板」或直接点击表格中的目标资源键，可下拉选择远端面板、手工修改，或勾选「同时应用到全部环境」一次配齐。
+- **自由选择本机目录**：每个面板的上传目录既支持相对路径（位于顶部可选的「默认源码根目录」内，方便导出配置与团队共享），也支持选择本机**任意绝对路径**（散落在不同仓库或独立目录的面板可直接绑定并打包，无需凑到同一个根目录）。
+- **离线预览与核对发布**：点击「本地打包预览」会在内存中执行脱敏打包（自动剥离成对标注的本地测试脚本与弹窗调试身份，拒绝软链接和隐藏文件）；点击「检查发布目标」会复用已记住的加密凭据核对线上版本与草稿状态。
 
-![知识库同名文档的目标与替换提示](/media/panel-publisher/desktop-knowledge.png)
+![业务面板单环境发布列表](/media/panel-publisher/desktop-selection.png)
 
-## 使用原有的hive-panel命令行工具
+确认窗口会列出本次待发布目标的环境、资源键、源码目录、包体大小与线上版本（开启强确认保护的环境会额外显示醒目提示）。核对无误后点「确认发布」并逐项查看回执；若出现“待核对”，请先在对应管理台核对正式版本与草稿记录，切勿盲目重复上传。
 
-同一套业务代码要更新到两套蜂巢时，开发人员可以只选一次本地面板，由`hive-panel`打一次包，再分别上传、发布并核对版本。下面用“运行概览”和“工单列表”走一遍。三张图来自真实CLI连接本机演示服务的一次操作，环境、地址和版本号均为教学示例。
+![核对发布目标弹窗](/media/panel-publisher/desktop-confirm.png)
 
-### 解压后从哪里开始
+## 企业Skill双向管理与目录自动打包
 
-从团队的蜂巢维护者处领取对应系统的压缩包和已经配好的`hive-panel.json`，完整解压。把配置文件留在程序旁边。准备好业务面板的本地源码、目标管理台地址和本人在相应环境的管理员账号。
+切到左侧「企业Skill」，可直接查看当前环境下的Skill清单、正式版、待发布草稿与历史版本。顶部标签分为**有效 / 草稿 / 停用 / 全部**，默认只展示「有效」项，避免已停用的历史测试技能干扰视线。
 
-|电脑|启动方法|
-|---|---|
-|Windows x64|解压`hive-panel-windows.zip`，双击`hive-panel.exe`。|
-|Mac（Apple Silicon或Intel）|解压`hive-panel-macos.zip`，在解压目录打开终端，运行`./hive-panel`。|
+- **查看与下载**：选中任意Skill可查看适用业务系统、示例提问、技能说明和版本记录，支持一键**下载原包**（ZIP或`SKILL.md`）到本地修改。
+- **选目录自动打包上传**：点击顶部「上传目录」或详情区「目录更新」，直接选中包含`SKILL.md`的本地目录，工具会自动跳过`.DS_Store`、`Thumbs.db`、`__MACOSX`和`.git`，拒绝符号链接及`.env`等敏感隐藏文件，保留脚本可执行权限并在内存中安全打成ZIP包（上限15 MiB）进入核对。
+- **单文件与拖放上传**：点击「上传文件」或直接将整个Skill文件夹、`SKILL.md`（上限2 MiB）或ZIP包（上限15 MiB）拖入窗口即可自动识别技能标识，区分新建或更新，支持仅保存草稿或保存后立即发布。
+- **草稿发布与维护**：支持一键发布草稿、编辑显示名称/适用业务系统/示例提问，以及启用或停用Skill。
 
-开发电脑无需安装Go或Node.js。工具读取当前磁盘上的文件，包括尚未提交到Git的修改。
+![企业Skill双向管理与目录自动打包上传](/media/panel-publisher/desktop-skill.png)
 
-### 第一步：选环境，再选面板
+## 知识库与文档双栏管理
 
-菜单先问“选择蜂巢环境”，再列出这些环境可用的面板。每次输入编号后按回车。可以输入`1`选一项、`1,3`选多项、`*`全选当前列表，或输入`q`退出。面板名右侧列出它在哪些环境里有配置。
+切到左侧「知识库文档」，左栏展示当前环境的全部知识库，右栏展示所选知识库下的文档清单、大小、修订号及处理状态（`可检索`、`处理中`、`处理失败`）。
 
-![中文菜单中运行概览对应dev和test，工单列表仅对应dev](/media/panel-publisher/select.png)
+- **知识库维护**：支持新建、编辑知识库以及删除空知识库。
+- **多选与拖放批量上传**：点击「上传文档」多选文件，或直接将多个Markdown、DOCX或可提取文字的PDF（单文件上限10 MiB）拖入右侧区域；上传前会先汇总标出「新增文档」与「替换同名文档（含当前修订号）」，确认后批量提交。
+- **原件下载与失败重试**：支持下载文档原件、对解析失败文档一键重试，以及删除文档。
 
-图中两次都选了`*`。虽然选了两个环境和两个面板，最终只有**三个发布目标**。最后一行“跳过：test / tickets 未配置”表示工单列表没有绑定到测试环境，可以继续处理另外三项。
+![知识库双栏文档管理与批量上传](/media/panel-publisher/desktop-knowledge.png)
 
-### 第二步：登录，看清每一份代码发到哪里
+## 配置托管、导入与导出
 
-首次运行时，输入业务仓库在这台电脑上的根目录。比如配置中写着`panels/overview`，就选择能直接看到`panels`的那一层。工具记住的是这台电脑的路径。然后按提示登录每个目标环境的管理台，密码输入时没有回显，输完按回车。
+普通用户完全可以通过界面完成环境与面板配置，无需手工编辑JSON。点击左侧底部「导入配置」可载入团队分发的`hivebridge.json`，「导出配置」可将当前环境和面板映射导出分享给团队（导出的配置文件**不包含任何账号或密码**）。
 
-![发布前显示三个就绪目标，同一源目录在两个环境中分别指向overview-dev和overview-test](/media/panel-publisher/confirm.png)
-
-从左到右读第一行：环境是`dev`，本地源目录是`panels/overview`，要更新的资源是`ops/overview-dev`，**发布前**的版本是v4。第三行来自同一个本地目录，但在`test`对应`ops/overview-test`。确认环境、目标标识和项数都正确，再输入`y`并回车。需要调整时直接回车即可取消。
-
-### 第三步：按行核对生效版本
-
-![发布后，三个目标分别显示已发布、正式版本和员工打开链接](/media/panel-publisher/result.png)
-
-“已发布”表示工具读回了本次生效的正式版本。示例中的运行概览在`dev`从v4更新到v5，在`test`从v7更新到v8。复制对应行的链接，使用有面板访问权限的员工身份打开页面，检查刚改的内容。Windows双击启动的窗口会保留结果。
-
-|遇到的情况|接下来怎么做|
-|---|---|
-|有待发布草稿|先到该环境管理台查看草稿，与编辑人确认如何处理。工具会跳过这一项。|
-|仅保存草稿|按提示的草稿编号核对内容，再决定是否在管理台发布。|
-|待核对或超时|先查看该面板的正式版本和草稿记录。确认哪些项还需要处理，再单独选择它们重试。|
-|面板缺失或停用|请维护者核对所选环境的系统键、面板键和启用状态。中文名相同的面板也可能是不同资源。|
-
-### 只想预演或只发一个环境
-
-在PowerShell中进入解压目录后，可以直接运行下列命令。Mac将开头的`.\hive-panel.exe`换成`./hive-panel`。示例别名取自上图，实际操作请使用团队配置中的别名。
-
-```powershell
-# 只在本地打包并列出目标
-.\hive-panel.exe plan --env dev,test --panel overview,tickets
-
-# 登录test，只核对面板、当前版本和草稿
-.\hive-panel.exe check --env test --panel overview
-
-# 只向dev发布两个面板
-.\hive-panel.exe publish --env dev --panel overview,tickets
-```
-
-## 如何配置不同环境的面板标识
-
-HiveBridge使用`hivebridge.json`，旧CLI使用`hive-panel.json`。两者格式相同。在`panels`里登记面板的别名、中文名和本地目录，在每个环境的`bindings`里填这个环境实际使用的“系统键/面板键”。可从员工端面板地址`/panels/系统键/面板键`核对这两个值。下面这份配置对应三张图里的三个目标：
+配置文件托管在本机用户目录中，不要求程序目录可写：macOS位于`~/Library/Application Support/hive-panel/`，Windows位于`%AppData%\hive-panel\`。示例配置格式如下（详见开源仓库的`hivebridge.example.json`）：
 
 ```json
 {
   "panels": {
-    "overview": {"name": "运行概览", "source": "panels/overview"},
-    "tickets": {"name": "工单列表", "source": "panels/tickets"}
+    "overview": {
+      "name": "运行概览",
+      "source": "panels/overview"
+    },
+    "tickets": {
+      "name": "工单列表",
+      "source": "panels/tickets"
+    }
   },
   "environments": {
-    "dev": {"url": "http://dev.example.invalid", "bindings": {
-      "overview": "ops/overview-dev", "tickets": "ops/tickets"
-    }},
-    "test": {"url": "http://test.example.invalid", "bindings": {
-      "overview": "ops/overview-test"
-    }}
+    "开发环境": {
+      "url": "https://dev.hive.example.com",
+      "order": 1,
+      "bindings": {
+        "overview": "ops/overview-dev",
+        "tickets": "ops/tickets"
+      }
+    },
+    "生产环境": {
+      "url": "https://prod.hive.example.com",
+      "tag": "prod",
+      "order": 2,
+      "bindings": {
+        "overview": "ops/overview"
+      }
+    }
   }
 }
 ```
 
-把示例域名换成团队的蜂巢入口，在各环境中先建立目标资源，再运行`check`核对绑定。公共配置只保存地址和映射，管理员密码在登录时输入。关于入口HTML、`PANEL.md`和`api.json`的要求，见[开发业务面板](/docs/developers/panels/)。
+关于业务面板入口HTML、`PANEL.md`和`api.json`的规范要求，见[开发业务面板](/docs/developers/panels/)。
