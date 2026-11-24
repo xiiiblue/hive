@@ -24,7 +24,7 @@ sources:
 |让脚本访问现有业务API|[业务身份](/docs/developers/identity/)和[Skill开发](/docs/developers/skills/)|业务网关、账号关联与查询脚本|
 |把现有工具服务提供给智能体|[MCP接入](/docs/developers/mcp/)|只读Streamable HTTP服务|
 |提供设备列表、报表或操作页面|[业务面板](/docs/developers/panels/)|HTML或完整面板ZIP|
-|从本机更新多个环境的已有面板|[用hive-panel批量发布业务面板](/docs/developers/panel-publisher/)|Windows或Mac命令行工具、团队配置文件|
+|从本机更新多个环境的已有面板|[用HiveBridge发布面板、Skill和知识库文档](/docs/developers/panel-publisher/)|Windows或Mac桌面工具、团队配置文件|
 
 Skill是一份可带脚本、模板和参考资料的工作说明。MCP是一种让智能体发现和调用外部工具的协议。业务面板则是员工直接打开的页面。三者可以配合使用，分配其中一项不会自动分配其它能力。
 

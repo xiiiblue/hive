@@ -166,10 +166,10 @@ for (const { source, file } of diagrams) {
 
 // 发布指南只导入经过公开审阅的界面截图。
 for (const [directory, file] of [
-  ...['select.png', 'confirm.png', 'result.png'].map(file => ['images', file]),
-  ...['desktop-selection.png', 'desktop-confirm.png', 'desktop-skill.png', 'desktop-knowledge.png'].map(file => ['desktop/images', file]),
+  ...['select.png', 'confirm.png', 'result.png'].map(file => ['tools/panel-publisher/images', file]),
+  ...['desktop-selection.png', 'desktop-confirm.png', 'desktop-skill.png', 'desktop-knowledge.png'].map(file => ['tools/hivebridge/images', file]),
 ]) {
-  const origin = `tools/panel-publisher/${directory}/${file}`;
+  const origin = `${directory}/${file}`;
   const bytes = await readFile(path.join(sourceRoot, origin));
   digest.update(`${origin}\n`).update(bytes);
   media.set(`/media/panel-publisher/${file}`, bytes);

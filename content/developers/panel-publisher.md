@@ -1,23 +1,30 @@
 ---
-title: 用hive-panel批量发布业务面板
-description: 在Windows或Mac上批量发布业务面板、上传企业Skill和知识库文档。含桌面版图解与CLI用法。
+title: 用HiveBridge发布面板、Skill和知识库文档
+description: HiveBridge 1.0的Windows和Mac图文指南，包含跨环境批量发布、Skill草稿、知识库文档替换和旧配置用法。
 section: developers
 order: 75
 updated: '2026-11-24'
 sources:
   - tools/panel-publisher/README.md
-  - tools/panel-publisher/desktop/README.md
-  - tools/panel-publisher/internal/publisher/cli.go
+  - tools/hivebridge/README.md
+  - tools/hivebridge/publisher/cli.go
   - docs/02-设计/02-能力设计/CAP-034-业务面板发布工具.md
 ---
 
-# 用hive-panel批量发布业务面板
+# 用HiveBridge发布面板、Skill和知识库文档
 
-Hive Panel是开发人员在自己电脑上运行的发布工具。桌面版可以批量发业务面板，也能上传企业Skill和知识库文档。向团队维护者领取分发包及环境配置。图中所有环境、资源和版本都是教学示例。
+HiveBridge 1.0（蜂桥）是蜂巢的桌面资源发布工具。在自己的电脑上选择目标环境，就能批量发布业务面板、保存或发布企业Skill，以及更新知识库文档。向团队维护者领取分发包及环境配置。图中所有环境、资源和版本都是教学示例。
 
 ## 打开桌面版
 
-完整解压。Windows x64双击`hive-panel-desktop-2.0-windows.zip`中的`hive-panel.exe`，Mac双击`hive-panel-desktop-2.0-macos.zip`中的`Hive Panel.app`。配置文件`hive-panel.json`放在程序旁边。如提示找不到，点左下角“打开配置文件”手动选择。Windows使用系统的Microsoft Edge WebView2运行时。
+完整解压收到的压缩包，把随包配置`hivebridge.json`留在程序旁边。
+
+|电脑|压缩包|解压后双击|
+|---|---|---|
+|Windows x64|`hivebridge-1.0-windows.zip`|`hivebridge.exe`|
+|Mac（Apple Silicon或Intel）|`hivebridge-1.0-macos.zip`|`HiveBridge.app`|
+
+从旧桌面版升级时，可以点左下角“打开配置文件”选择原来的`hive-panel.json`。启动时优先读取程序旁的`hivebridge.json`，缺失时读取同目录的旧文件名。已经选过的业务源码根目录会保留。Windows使用系统的Microsoft Edge WebView2运行时。
 
 ## 批量发布业务面板
 
@@ -43,7 +50,7 @@ Hive Panel是开发人员在自己电脑上运行的发布工具。桌面版可�
 
 ![知识库同名文档的目标与替换提示](/media/panel-publisher/desktop-knowledge.png)
 
-## 使用命令行版
+## 使用原有的hive-panel命令行工具
 
 同一套业务代码要更新到两套蜂巢时，开发人员可以只选一次本地面板，由`hive-panel`打一次包，再分别上传、发布并核对版本。下面用“运行概览”和“工单列表”走一遍。三张图来自真实CLI连接本机演示服务的一次操作，环境、地址和版本号均为教学示例。
 
@@ -104,7 +111,7 @@ Hive Panel是开发人员在自己电脑上运行的发布工具。桌面版可�
 
 ## 如何配置不同环境的面板标识
 
-维护者在`hive-panel.json`的`panels`里登记面板的别名、中文名和本地目录，在每个环境的`bindings`里填这个环境实际使用的“系统键/面板键”。可从员工端面板地址`/panels/系统键/面板键`核对这两个值。下面这份配置对应三张图里的三个目标：
+HiveBridge使用`hivebridge.json`，旧CLI使用`hive-panel.json`。两者格式相同。在`panels`里登记面板的别名、中文名和本地目录，在每个环境的`bindings`里填这个环境实际使用的“系统键/面板键”。可从员工端面板地址`/panels/系统键/面板键`核对这两个值。下面这份配置对应三张图里的三个目标：
 
 ```json
 {
