@@ -179,7 +179,7 @@ for (const file of [
   const origin = `hive-bridge/images/${file}`;
   const bytes = await readFile(path.join(hiveBridgeRoot, 'images', file));
   digest.update(`${origin}\n`).update(bytes);
-  media.set(`/media/panel-publisher/${file}`, bytes);
+  media.set(`/media/hive-bridge/${file}`, bytes);
 }
 
 for (const file of brandAssets) {
