@@ -11,6 +11,8 @@ const links = [
   ['架构', '/architecture/'],
   ['操作手册', '/handbooks/'],
   ['开发对接', '/developers/'],
+  ['下载', '/downloads/'],
+  ['研发实践', '/library/'],
   ['文档中心', '/docs/'],
 ];
 const active = links.find(([, href]) => href === '/' ? path === url(href) : path.startsWith(url(href)))?.[1];

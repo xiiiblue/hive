@@ -94,6 +94,7 @@ try {
   for (const [path, name] of [
     ['/', 'home'], ['/product/', 'product'], ['/architecture/', 'architecture'],
     ['/handbooks/', 'handbooks'], ['/developers/', 'developers'], ['/docs/', 'docs'],
+    ['/downloads/', 'downloads'], ['/library/', 'library'],
     ['/docs/employee/02-conversations/', 'employee'], ['/docs/admin/overview/', 'admin'],
     ['/docs/developers/open-api/', 'api'], ['/capabilities/', 'capabilities'],
   ]) {
@@ -109,6 +110,16 @@ try {
   const desktopNav = page.getByRole('navigation', { name: '主导航' });
   assert.deepEqual((await desktopNav.getByRole('link').allTextContents()).slice(0, 2), ['首页', '产品']);
   assert.equal(await desktopNav.locator('[aria-current=page]').textContent(), '产品');
+  await desktopNav.getByRole('link', { name: '下载', exact: true }).click();
+  await page.waitForURL(origin + '/hive/downloads/');
+  assert.equal(await desktopNav.locator('[aria-current=page]').textContent(), '下载');
+  assert.equal(await page.getByRole('link', { name: '查看iOS项目' }).getAttribute('href'), 'https://github.com/xiiiblue/hive-ios');
+  assert(await page.getByText('暂无Release下载', { exact: true }).isVisible());
+  await desktopNav.getByRole('link', { name: '研发实践', exact: true }).click();
+  await page.waitForURL(origin + '/hive/library/');
+  assert.equal(await desktopNav.locator('[aria-current=page]').textContent(), '研发实践');
+  assert.equal(await page.getByRole('main').getByRole('link', { name: /查看ACDL手册/ }).getAttribute('href'), 'https://www.bluexiii.com/acdl/');
+  assert.equal(await page.getByRole('main').getByRole('link', { name: /查看HiveFlow案例/ }).getAttribute('href'), 'https://www.bluexiii.com/flow/');
   const desktopHome = desktopNav.getByRole('link', { name: '首页', exact: true });
   await desktopHome.click();
   await page.waitForURL(origin + '/hive/');
@@ -173,6 +184,7 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const [path, name] of [
     ['/', 'home'], ['/architecture/', 'architecture'], ['/handbooks/', 'handbooks'],
+    ['/downloads/', 'downloads'], ['/library/', 'library'],
     ['/docs/employee/02-conversations/', 'employee'], ['/docs/developers/identity/', 'identity'],
     ['/capabilities/', 'capabilities'],
   ]) {
@@ -198,6 +210,12 @@ try {
   await menu.click();
   const mobileNav = page.getByRole('navigation', { name: '手机导航' });
   assert(await mobileNav.getByRole('link', { name: '功能', exact: true }).isVisible());
+  await mobileNav.getByRole('link', { name: '下载', exact: true }).click();
+  await page.waitForURL(origin + '/hive/downloads/');
+  await menu.click();
+  await mobileNav.getByRole('link', { name: '研发实践', exact: true }).click();
+  await page.waitForURL(origin + '/hive/library/');
+  await menu.click();
   const mobileHome = mobileNav.getByRole('link', { name: '首页', exact: true });
   assert.equal(await mobileHome.getAttribute('aria-current'), null);
   await mobileHome.click();
@@ -206,6 +224,7 @@ try {
   assert.equal(await mobileHome.getAttribute('aria-current'), 'page');
   await shot('mobile-navigation');
   await menu.click();
+  checks.push('桌面与手机均可进入下载和研发实践，iOS指向项目仓库，ACDL和HiveFlow直达官网');
   await page.evaluate(() => localStorage.setItem('hive-site-theme', 'dark'));
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.reload();
@@ -252,12 +271,14 @@ try {
     assert.equal(await page.locator('.home-hero img[src*="/media/manuals/"]').count(), 3, '首页首屏轮播包含三张产品截图');
     assert.equal(await page.locator('.hero-gallery .brand-mark').count(), 0, '展示框不重复叠加Logo');
     if (width > 740) {
-      assert(await page.locator('.home-top').evaluate(section => {
-        const boundary = section.getBoundingClientRect().bottom - Number.parseFloat(getComputedStyle(section, '::before').bottom);
+      assert(await page.locator('.hero').evaluate(section => {
+        const bounds = section.getBoundingClientRect();
         const sides = [...section.querySelectorAll('[data-hero-position]:not([data-hero-position=front])')];
-        return sides.length === 2 && sides.every(side =>
-          getComputedStyle(side).opacity === '1' && side.getBoundingClientRect().bottom <= boundary);
-      }), width + 'px宽度下侧图外框不透底且位于深色区');
+        return sides.length === 2 && sides.every(side => {
+          const card = side.getBoundingClientRect();
+          return getComputedStyle(side).opacity === '1' && card.top >= bounds.top && card.bottom <= bounds.bottom;
+        });
+      }), width + 'px宽度下两张侧图可见且完整位于首页介绍区');
     }
     const distances = await page.locator('.hero-gallery-deck').evaluate(stage => {
       const top = stage.getBoundingClientRect().top;
@@ -270,7 +291,8 @@ try {
     });
     assert.equal(distances.page, 280, width + 'px宽度下立即完成普通滚动');
     assert(Math.abs(distances.stage - distances.page) < 1, '首屏截图随页面移动');
-    assert.equal(await page.evaluate(() => document.getAnimations().length), 0, '普通滚动没有动画');
+    assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior), 'auto',
+      '页面采用自然滚动，独立的内容渐显不会延迟滚动');
     const initialLayout = await sceneLayout();
     await nextScene.click();
     assert(await page.locator('#example-files').isVisible(), '切换后立即显示所选场景');
@@ -300,6 +322,7 @@ try {
   const heroDeck = hero.locator('.hero-gallery-deck');
   const front = hero.locator('[data-hero-position=front]');
   const selectedHero = hero.locator('[data-hero-select][aria-pressed=true]');
+  await page.locator('.hero-visual').evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
   const start = await heroDeck.boundingBox();
   assert.equal((await selectedHero.textContent()).trim(), '员工工作台');
   await front.getByRole('button', { name: '放大员工工作台的文件管理页面' }).waitFor({ timeout: 9000 });

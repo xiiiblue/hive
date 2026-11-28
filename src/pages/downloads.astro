@@ -1,0 +1,92 @@
+---
+import Icon from '../components/Icon.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { url } from '../lib/content';
+
+const tools = [
+  {
+    title: 'HiveMobile',
+    category: '手机客户端',
+    description: '在手机上打开蜂巢员工工作台，处理对话、文件和日常任务。',
+    links: [
+      { label: '下载Android版', href: 'https://github.com/xiiiblue/hive-android/releases/latest' },
+      { label: '查看iOS项目', href: 'https://github.com/xiiiblue/hive-ios', note: '暂无Release下载' },
+    ],
+  },
+  {
+    title: 'HiveDesktop',
+    category: '桌面客户端',
+    description: '在Windows或macOS上使用蜂巢员工工作台，快速切换已保存的服务器。',
+    links: [
+      { label: '下载桌面版', href: 'https://github.com/xiiiblue/hive-desktop/releases/latest' },
+    ],
+  },
+  {
+    title: 'HiveBridge',
+    category: '开发者工具',
+    description: '用Windows或macOS发布业务面板和企业Skill，批量管理知识库文档。',
+    links: [
+      { label: '下载HiveBridge', href: 'https://github.com/xiiiblue/hive-bridge/releases/latest' },
+      { label: '查看使用指南', href: url('/docs/developers/hive-bridge/') },
+    ],
+  },
+];
+---
+<SiteLayout title="下载 · 蜂巢" description="获取蜂巢的手机、桌面客户端与HiveBridge开发者工具，查看各平台的下载和项目入口。">
+  <section class="page-intro container">
+    <h1>下载</h1>
+    <p>下载蜂巢客户端和开发者工具。客户端首次打开时，填写团队提供的HiveOS工作台地址。</p>
+  </section>
+
+  <div class="container doc-card-grid downloads-grid">
+    {tools.map(({ title, category, description, links }) => (
+      <article class="doc-card" data-reveal>
+        <span class="card-kicker">{category}</span>
+        <h2>{title}</h2>
+        <p>{description}</p>
+        <ul class="download-links">
+          {links.map(({ label, href, note }) => (
+            <li>
+              <a class="inline-link" href={href}>{label}<Icon name={href.startsWith('https:') ? 'external' : 'arrow'} size={17} /></a>
+              {note && <span>{note}</span>}
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+</SiteLayout>
+
+<style>
+  .downloads-grid {
+    padding-bottom: clamp(46px, 6vw, 82px);
+  }
+
+  .download-links {
+    list-style: none;
+    margin: auto 0 0;
+    padding: 0;
+  }
+
+  .download-links li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 12px;
+    border-top: 1px solid var(--soft);
+    padding: 10px 0;
+  }
+
+  .download-links li:last-child {
+    padding-bottom: 0;
+  }
+
+  .download-links a {
+    padding-block: 4px;
+  }
+
+  .download-links span {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+</style>

@@ -176,7 +176,8 @@
   font-size: 0.94rem;
 }
 
-.doc-compact-navigation {
+.doc-compact-navigation,
+.mobile-doc-nav {
   display: none;
 }
 

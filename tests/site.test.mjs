@@ -9,7 +9,7 @@ const dist = path.join(root, 'dist');
 const content = path.join(root, 'content');
 const origin = 'https://www.bluexiii.com';
 const base = '/hive/';
-const mainRoutes = ['/', '/product/', '/capabilities/', '/architecture/', '/handbooks/', '/developers/', '/library/', '/docs/'];
+const mainRoutes = ['/', '/product/', '/capabilities/', '/architecture/', '/handbooks/', '/developers/', '/downloads/', '/library/', '/docs/'];
 let documents;
 let publicFiles;
 let htmlPages;
